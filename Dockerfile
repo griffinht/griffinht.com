@@ -1,3 +1,3 @@
 FROM scratch
 
-COPY /src/ /html/griffinht.com/
+COPY /src/ /griffinht.com/
