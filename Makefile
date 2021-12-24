@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 default: init build
 .PHONY: build # otherwise Make will relate the build target to the build output directory and won't run the build target
 
@@ -12,5 +13,8 @@ build:
 	./build.sh
 clean:
 	rm -rf build
+=======
+default:
+>>>>>>> 715cf1fe0a6fceacdf7b74bb904c811cd0e60741
 docker:
 	docker build --tag stzups/griffinht.com:latest .
