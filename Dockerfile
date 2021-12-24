@@ -1,5 +1,7 @@
 FROM node as build
 
+RUN npm install html-minifier -g;
+
 WORKDIR /usr/src
 # see .dockerignore
 COPY . .
