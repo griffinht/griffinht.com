@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 # install html-minifier
 if ! command -v html-minifier > /dev/null; then
   if [[ $(id -u) -ne 0 ]]; then
