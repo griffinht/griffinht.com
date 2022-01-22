@@ -5,7 +5,7 @@ RUN npm install html-minifier -g;
 WORKDIR /usr/src
 # see .dockerignore
 COPY . .
-RUN make
+RUN make build
 
 FROM scratch
 
