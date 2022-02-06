@@ -7,7 +7,7 @@
 article {
     width: 100%;
     max-width: 60em;
-    background-color: #ffe6ff;
+    background-color: var(--background);
     margin: 0 auto;
 }
 article > section {
@@ -17,17 +17,14 @@ article > section {
     padding: 1em;
 }
 article > section:hover {
-    background-color: #ffb3ff;
-}
-article > section > section:hover {
-    //background-color: #fff0ff:
+    background-color: var(--header);
 }
 .tags {
     display: flex;
     gap: 1em;
 }
 .tags > div {
-    background-color: #f0f;
+    background-color: var(--highlight);
     color: white;
     border-radius: 0.5em;
     display: flex;

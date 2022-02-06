@@ -1,5 +1,10 @@
+:root {
+    --background: #ffe6ff;
+    --header: #ffb3ff;
+    --highlight: #f0f;
+}
 body {
-    background-color: #ffe6ff;
+    background-color: var(--background);
     margin: 0;
     height: 100vh;
     background-image: url("background.png");
@@ -11,11 +16,11 @@ header > a {
     text-decoration: none;
 }
 header {
-    background-color: #ffb3ff;
+    background-color: var(--header);
 }
 footer {
     margin-top: auto;
     margin-right: auto;
-    background-color: #ffb3ff;
+    background-color: var(--header);
 }
 
