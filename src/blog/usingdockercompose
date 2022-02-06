@@ -1,0 +1,11 @@
+Using docker compose the right way
+
+Stop using docker-compose, use docker compose
+
+Ssh access is easy
+
+Bind mounts are useless
+It is easy to view a docker volume from your host just docker volume inspect for mountpoint
+
+.env for secrets, not secrets file (it is not moved wiih docker context)
+use docker context
