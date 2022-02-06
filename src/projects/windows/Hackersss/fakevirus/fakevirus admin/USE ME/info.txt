@@ -1,0 +1,5 @@
+FakeVirus V1.0 Information
+==========================
+FakeVirus Location: %appdata%\fakevirus
+
+Fakevirus is a fake virus that shuts down your computer after a series of fake propmts.

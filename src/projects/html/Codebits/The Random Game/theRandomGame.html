@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The Random Game</title>
+    <style>
+      .text {
+        font-family: arial;
+        color: black;
+      }
+      .button {
+        height: 50px;
+        font-size: 40px;
+        background-color: gray;
+        color: black;
+        border-radius: 10px;
+        border: black 2px solid;
+        box-shadow: 2px 2px 2px black;
+        font-family: arial;
+      }
+      .button[standardB] {
+        width: 100px;
+      }
+      .button[linked]{
+        text-decoration: none;
+      }
+      .button:active {
+        box-shadow: 0px 0px 0px black;
+        position: relative;
+        top: 2px;
+      }
+      .button:focus {
+        outline: 0;
+      }
+      #levelFrame {
+        border: 5px solid blue;
+        border-radius: 10px;
+        height: 810px;
+        width: 90%;
+        margin-left: 5%;
+        margin-top: 10px;
+      }
+      #levList {
+        width: 200px;
+      }
+    </style>
+    <script type="text/javascript">
+function levCon(){
+  var levelCount = 12;
+  levelCountin = document.getElementById("levelDisplay");
+  levelCountin.innerHTML = "There are currently "+levelCount+" levels.";
+}
+
+function start(level){
+  var levFrame = document.getElementById("levelFrame");
+  levFrame.setAttribute("src", level+".html");
+  var fullBtn = document.getElementById("fullscreenBtn");
+  fullBtn.innerHTML = "Fullscreen";
+  remove(levelCountin);
+  remove(document.getElementById("playButton"));
+}
+
+function remove(toaste){
+  var child = toaste
+  child.parentNode.removeChild(child);
+}
+
+function fullscreen(){
+  var currentLevFull = document.getElementById("levelFrame").getAttribute("src");
+  var nextLev = getFirstBit(currentLevFull);
+  window.open(nextLev + ".html");
+}
+
+function getFirstBit(link){
+  var length = link.length;
+  var a = length - 5;
+  var firstBit = link.substr(0, a);
+  return parseFloat(firstBit);
+}
+</script>
+  </head>
+  <body onload="levCon();" id="body">
+    <h1 class="text">The Random Game</h1>
+    <h2 id="levelDisplay" class="text">Error</h2>
+    <input onclick="start(1)" type="button" value="Play!" class="button" id="playButton" standardB>
+    <a type="button" id="levList" class="button" href="levellists.html" linked>Level List</a>
+    <a type="button" id="fullscreenBtn" class="button" onclick="fullscreen();" linked></a><br />
+    <iframe src="" id="levelFrame">Your browser does not support this</iframe>
+  </body>
+</html>

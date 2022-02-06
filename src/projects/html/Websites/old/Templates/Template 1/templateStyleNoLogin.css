@@ -1,0 +1,57 @@
+/*logo is for the Logo. The logo could also be an image*/
+.logo {
+  font-family: impact;
+  font-size: 80px;
+  color: #0101DF;
+  height: 80px;
+  width: 230px;
+  background-color: white;
+  margin-left: auto;
+  margin-right: auto;
+  text-decoration: none;
+}
+/*navBar is for the navigation bar below the logo*/
+.navBar {
+  height: 50px;
+  width: 100%;
+  color: #000000;
+  background-color: #cecece;
+  border-radius: 5px;
+}
+/*naveBarText and navBarLink is for the textt styling of the navigation bar.*/
+.navBarText {
+  font-family: arial;
+  font-size: 35px;
+  text-decoration: none;
+  color: black;
+}
+
+.navBarLink {
+  font-family: arial;
+  font-size: 35px;
+  text-decoration: none;
+  color: black;
+}
+/*For when the user hovers over one the the navigation bar text.*/
+.navBarLink:hover {
+  font-family: arial;
+  font-size: 35px;
+  text-decoration: none;
+  color: blue;
+  font-style: bold;
+}
+/*title and content are for the content that goes on the page*/
+.title {
+  font-family: arial;
+  color: black;
+}
+
+.content {
+  font-family: calibri, arial;
+  font-size: 20px;
+}
+/*pagetitle is for the text that appears under the navigation bar*/
+#pagetitle{
+  font-family: arial;
+  font-size: 35px;
+}

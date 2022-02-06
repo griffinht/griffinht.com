@@ -1,0 +1,40 @@
+body {
+	background-color:#bbbbbb;
+}
+
+#head1{
+	height: 40px;
+	width: 1352px;
+	background-color: blue;
+	color: #bbbbbb;
+	font-family: impact;
+	font-size: 30px;
+	color: black;
+}
+#head {
+	font-size: 30px;
+	font-family: impact;
+	text-decoration: none;
+	color: black;
+}
+
+#pagetitle {
+	font-family: impact;
+	color: black;
+}
+
+#serstat {
+	text-decoration: none;
+	font-family: arial;
+	color: black;
+}
+
+#fakevirus {
+	text-decoration: none;
+	font-family: arial;
+	color: black;
+}
+
+p {
+	font-family: arial;
+}

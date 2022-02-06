@@ -1,0 +1,243 @@
+
+<html id='html'>
+  <head>
+    <link rel="icon" type="image/png" href="blue2.png" sizes="32x32"/>
+    <title id='jstitle'>Please enable JavaScript!</title>
+    <style>
+#canvas{
+  border: 1px solid black;
+}
+#stats{
+  border: 1px solid black;
+  height: 5%;
+  width: 100%;
+}
+p{
+  font-family: Arial;
+  float: left;
+}
+    </style>
+  </head>
+  <body>
+    <h1 id='jsh1'>Please enable JavaScript!</h1>
+    <div id='game'>
+      <canvas id='canvas'></canvas>
+      <div id='stats'>
+        <p>Blue Health: &nbsp</p><p id='blueHealthP'></p>
+        <p>/100&nbsp Red Health: &nbsp</p><p id='redHealthP'></p><p>/100</p>
+      </div>
+    </div>
+  </body>
+  <script>
+document.getElementById('jstitle').innerHTML = "Ball Game";
+document.getElementById('jsh1').innerHTML = "";
+var c = document.getElementById("canvas");
+var ctx = c.getContext("2d");
+var noSlowDown = false;
+var keysPressed = new Array();
+window.addEventListener('keyup', function(event){keysPressed.splice(keysPressed.indexOf(event.key), 1);},false);
+window.addEventListener('keydown', function(event){if(keysPressed.indexOf(event.key)==-1){keysPressed.push(event.key);}},false);
+var cWid = window.innerWidth*.992;
+var cHei =  window.innerHeight*.93;
+canvas.width = cWid;
+canvas.height = cHei;
+var blueImg = new Image();
+blueImg.src = 'blue.png';
+var redImg = new Image();
+redImg.src = 'red.png';
+var blue={
+  health:0,
+  xPos:0,
+  yPos:0,
+  xVel:0,
+  yVel:0,
+  newHealth:function(change){
+    var oper=change.substring(0,1);
+    var chng=parseInt(change.substring(1,change.length), 10);
+    if(oper=='-'){
+      blue.health=blue.health-chng;
+    }else if(oper=='+'){
+      blue.health=blue.health+chng;
+    }else{alert('Error: Unhandled Exception - change not + or -');}
+    document.getElementById('blueHealthP').innerHTML=blue.health;
+  },
+  move:function(){
+    blue.xPos=blue.xPos+blue.xVel;
+    blue.yPos=blue.yPos+blue.yVel;
+    ctx.drawImage(blueImg,blue.xPos,blue.yPos,110,110);
+    ctx.beginPath();
+    blueHit.xPos = blue.xPos+55;
+    blueHit.yPos = blue.yPos+55;
+    ctx.arc(blueHit.xPos,blueHit.yPos,55,0*Math.PI,2*Math.PI);
+    ctx.strokeStyle = 'rgba(0,0,0,0)';
+    ctx.stroke();
+  }
+}
+var red={
+  health:0,
+  xPos:120,
+  yPos:0,
+  xVel:0,
+  yVel:0,
+  newHealth:function(change){
+    var oper=change.substring(0,1);
+    var chng=parseInt(change.substring(1,change.length), 10);
+    if(oper=='-'){
+      red.health=red.health-chng;
+    }else if(oper=='+'){
+      red.health=red.health+chng;
+    }else{alert('Error: Unhandled Exception - change not + or -');}
+    document.getElementById('redHealthP').innerHTML=red.health;
+  },
+  move:function(){
+    red.xPos=red.xPos+red.xVel;
+    red.yPos=red.yPos+red.yVel;
+    ctx.drawImage(redImg,red.xPos,red.yPos,110,110);
+    ctx.beginPath();
+    redHit.xPos = red.xPos+55;
+    redHit.yPos = red.yPos+55;
+    ctx.arc(redHit.xPos,redHit.yPos,55,0*Math.PI,2*Math.PI);
+    ctx.strokeStyle = 'rgba(0,0,0,0)';
+    ctx.stroke();
+  }
+}
+var redHit={
+  xPos:0,
+  yPos:0,
+}
+var blueHit={
+  xPos:0,
+  yPos:0,
+}
+red.newHealth('+100');
+blue.newHealth('+100');
+setInterval(function(){
+  var blueX = false;
+  var blueY = false;
+  var redX = false;
+  var redY = false;
+  var a = true;
+  var b = true;
+  if(blue.xPos+110>canvas.width){blue.xVel=-blue.xVel;a = false;pong();}
+  if(blue.xPos<0){blue.xVel=Math.abs(blue.xVel);a = false;pong();}
+  if(blue.yPos+110>canvas.height){blue.yVel=-blue.yVel;a = false;pong();}
+  if(blue.yPos<0){blue.yVel=Math.abs(blue.yVel);a = false;pong();}
+  if(a==true){
+    if(keysPressed.indexOf('w')!=-1){
+      blue.yVel = blue.yVel-.25;
+      blueY = true;
+    }
+    if(keysPressed.indexOf('s')!=-1){
+      blue.yVel = blue.yVel+.25;
+      blueY = true;
+    }
+    if(keysPressed.indexOf('d')!=-1){
+      blue.xVel = blue.xVel+.25;
+      blueX = true;
+    }
+    if(keysPressed.indexOf('a')!=-1){
+      blue.xVel = blue.xVel-.25;
+      blueX = true;
+    }
+    if(noSlowDown==false){
+      if(blueX==false){
+        if(Math.sign(blue.xVel)==1){
+          blue.xVel = blue.xVel-.25;
+        }else if(Math.sign(blue.xVel)==-1){
+          blue.xVel = blue.xVel+.25;
+        }
+      }
+      if(blueY==false){
+        if(Math.sign(blue.yVel)==1){
+          blue.yVel = blue.yVel-.25;
+        }else if(Math.sign(blue.yVel)==-1){
+          blue.yVel = blue.yVel+.25;
+        }
+      }
+    }
+  }
+  if(red.xPos+110>canvas.width){red.xVel=-red.xVel;b = false;pong(2);}
+  if(red.xPos<0){red.xVel=Math.abs(red.xVel);b = false;pong(2);}
+  if(red.yPos+110>canvas.height){red.yVel=-red.yVel;b = false;pong(2);}
+  if(red.yPos<0){red.yVel=Math.abs(red.yVel);b = false;pong(2);}
+  if(b==true){
+    if(keysPressed.indexOf('ArrowUp')!=-1){
+      red.yVel = red.yVel-.25;
+      redY = true;
+    }
+    if(keysPressed.indexOf('ArrowDown')!=-1){
+      red.yVel = red.yVel+.25;
+      redY = true;
+    }
+    if(keysPressed.indexOf('ArrowRight')!=-1){
+      red.xVel = red.xVel+.25;
+      redX = true;
+    }
+    if(keysPressed.indexOf('ArrowLeft')!=-1){
+      red.xVel = red.xVel-.25;
+      redX = true;
+    }
+    if(noSlowDown==false){
+      if(redX==false){
+        if(Math.sign(red.xVel)==1){
+          red.xVel = red.xVel-.25;
+        }else if(Math.sign(red.xVel)==-1){
+          red.xVel = red.xVel+.25;
+        }
+      }
+      if(redY==false){
+        if(Math.sign(red.yVel)==1){
+          red.yVel = red.yVel-.25;
+        }else if(Math.sign(red.yVel)==-1){
+          red.yVel = red.yVel+.25;
+        }
+      }
+    }
+  }
+  /*var one = redHit.xPos – blueHit.xPos;
+  var two = redHit.yPos – blueHit.yPos;
+  var distance = Math.sqrt(c*c+d*d);
+  if(distance<=110){
+    console.log('bump!')
+  }*/
+  ctx.clearRect(0,0,10000,10000);
+  red.move();
+  blue.move();
+}, 1000/60);
+setInterval(function(){
+  if(window.innerWidth!=cWid||window.innerHeight!=cHei){
+    canvas.width = window.innerWidth*.992;
+    canvas.height = window.innerHeight*.93;
+    ctx.clearRect(0,0,10000,10000);
+    red.move();
+    blue.move();
+  }
+}, 1000);
+function noslowdown(condition){
+  if(condition==true){noSlowDown=true;}else if(condition==false){noSlowDown=false;}
+  return noSlowDown;
+}
+function teleport(color, x, y){
+  if(!color||!x||!y){console.log('Error: No input');return;}
+  color = color.toLowerCase();
+  if(color.indexOf('blue')!=-1){
+    blue.xPos = x;
+    blue.yPos = y;
+  }else if(color.indexOf('red')!=-1){
+    red.xPos = x;
+    red.yPos = y;
+  }else{console.log('Error: Unhandled Exception - color '+color+' is not blue or red');return;}
+  console.log('Teleported '+color+' to ('+x+', '+y+')');
+}
+function tp(color, x, y){teleport(color, x, y);}
+function pong(a){
+  if(a==2){
+    var audio = new Audio('pong2.wav');
+      audio.play();
+  }else{
+    var audio = new Audio('pong.wav');
+    audio.play();
+  }
+}
+  </script>
+</html>

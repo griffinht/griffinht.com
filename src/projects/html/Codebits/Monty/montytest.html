@@ -1,0 +1,49 @@
+<html>
+<head>
+  <title>Monty Test</title>
+</head>
+<body>
+<button type='button' onclick='same();'>Test Same</button>
+<button type='button' onclick='different();'>Test Different</button><br/>
+<input type='number' id='testTimes' min='1'></input><button input='button' onclick='test();'>Test Custom Amount</button>
+<p>The amount right without changing your guess is: </p><p id='sameRight'>0</p><br/>
+<p>The amount wrong without changing your guess is: </p><p id='sameWrong'>0</p><br/>
+<p>The amount right when changing your guess is: </p><p id='diffRight'>0</p><br/>
+<p>The amount wrong when changing your guess is: </p><p id='diffWrong'>0</p><br/>
+<script>
+function rand(){
+  return Math.floor((Math.random() * 3) + 1);
+}
+var sameRight=0;
+var sameWrong=0;
+var diffRight=0;
+var diffWrong=0;
+function same(){
+  var choice = rand();
+  var correctChoice = rand();
+  var hostChoice = rand();
+  while(hostChoice==correctChoice||hostChoice==choice){hostChoice = rand();}
+  if(choice==correctChoice){sameRight++;}else if(choice!=correctChoice){sameWrong++}else{alert("Error: The choice is "+choice+". The right choice is "+correctChoice+". The host's choice is "+hostChoice+".");}
+  document.getElementById("sameRight").innerHTML = sameRight;
+  document.getElementById("sameWrong").innerHTML = sameWrong;
+}
+function different(){
+  var choice = rand();
+  var newChoice = choice;
+  var correctChoice = rand();
+  var hostChoice = rand();
+  while(hostChoice==correctChoice||hostChoice==choice){hostChoice = rand();}
+  while(newChoice==choice||newChoice==hostChoice){newChoice = rand();}
+  if(newChoice==correctChoice){diffRight++;}else if(newChoice!=correctChoice){diffWrong++}else{alert("Error: The choice is "+choice+". The right choice is "+correctChoice+". The host's choice is "+hostChoice+". The new choice is "+newChoice+".");}
+  document.getElementById("diffRight").innerHTML = diffRight;
+  document.getElementById("diffWrong").innerHTML = diffWrong;
+}
+function test(){
+  var times = document.getElementById("testTimes").value;
+  times++;
+  for(i=0;i<times;i++){same();}
+  for(i=0;i<times;i++){different();}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+.text {
+  font-family: arial;
+  color: black;
+}
+.link {
+  font-family: Aparajita;
+  color: black;
+  text-decoration: none;
+}
+.link:hover {
+  color: blue;
+}
+#navBarLink {
+  font-size: 25px;
+}
+#navBar {
+  height: 60%;
+  width: 22%;
+  border: 2.3px solid black;
+  float: left;
+  border-radius: 5px;
+}
+.navBarLink {
+  
+}
+body {
+  background-image: url("background.png");
+}

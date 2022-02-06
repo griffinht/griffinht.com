@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MC Chat Art - Put XL letters in Minecraft chat!</title>
+    <style>
+body {
+  font-family: arial;
+}
+    </style>
+  </head>
+  <body>
+    <h1>Put extra large letters in Minecraft chat!</h1>
+    <p>Input (A-Z, a-z, and 0-9):</p>
+    <input type="text" id="input">
+    <input type="button" value="Submit" id="submit"><br>
+    <p>Output:</p>
+    <input type="text" id="output">
+    <script>
+//Chat max is 256 (11 unusable so 245)
+//Each row is 35 chars long
+//Each letter is 5 chars wide, with a 1 wide space, so 5 characters per line
+//
+//゜
+//█
+var input = document.getElementById('input');
+var output = document.getElementById('output');
+var charsIn = 'abcdefghijklmnopqrstuvwxyz0123456789';
+var letters = {};
+function norm(string){
+  var str = '';
+  for(var i = 0; string.length>i; i++){
+    var a = string.substring(i,i+1);
+    if(a=='1'){
+      str = str+'█';
+    }else{
+      str = str+'゜';
+    }
+  }
+  return str;
+}
+function Letter(letter, line2, line3, line4, line5, line6){
+  this.letter = letter;
+  this.line1 = '゜゜゜゜゜';
+  this.line2 = line2;
+  this.line3 = line3;
+  this.line4 = line4;
+  this.line5 = line5;
+  this.line6 = line6;
+  this.line7 = '゜゜゜゜゜';
+  letters[letter] = this;
+}
+/*new Letter('','',
+               '',
+               '',
+               '',
+               '',);*/
+new Letter('a','00100',
+               '01010',
+               '11111',
+               '10001',
+               '10001',);
+new Letter('b','11110',
+               '10001',
+               '11110',
+               '10001',
+               '11110',);
+new Letter('c','01110',
+               '10001',
+               '10000',
+               '10001',
+               '01110',);
+new Letter('d','11110',
+               '10001',
+               '10001',
+               '10001',
+               '11110',);
+new Letter('e','',
+               '',
+               '',
+               '',
+               '',);
+new Letter('f','',
+               '',
+               '',
+               '',
+               '',);
+new Letter('g','',
+               '',
+               '',
+               '',
+               '',);
+new Letter('h','',
+               '',
+               '',
+               '',
+               '',);
+new Letter('i','',
+               '',
+               '',
+               '',
+               '',);
+new Letter('j','',
+               '',
+               '',
+               '',
+               '',);
+new Letter('k','',
+               '',
+               '',
+               '',
+               '',);
+new Letter('l','',
+               '',
+               '',
+               '',
+               '',);
+new Letter('m','',
+               '',
+               '',
+               '',
+               '',);
+new Letter('n','',
+               '',
+               '',
+               '',
+               '',);
+new Letter('o','',
+               '',
+               '',
+               '',
+               '',);
+document.getElementById('submit').addEventListener('click',function(){
+  var a = input.value.toLowerCase();
+  var b = output.value;
+  if(a.length<=5){
+    var out = '';
+    var line1 = '';
+    var line2 = '';
+    var line3 = '';
+    var line4 = '';
+    var line5 = '';
+    var line6 = '';
+    var line7 = '';
+    var blank = 'blank';
+    var first = true;
+    for(var i = 0; a.length>i; i++){
+      for(var x = 0; charsIn.length>x; x++){
+        var c = a.substring(i,i+1);
+        if(charsIn.substring(x,x+1)==c && first){
+          line1 = line1+'゜'+norm(letters[c].line1)+'゜';
+          line2 = line2+'゜'+norm(letters[c].line2)+'゜';
+          line3 = line3+'゜'+norm(letters[c].line3)+'゜';
+          line4 = line4+'゜'+norm(letters[c].line4)+'゜';
+          line5 = line5+'゜'+norm(letters[c].line5)+'゜';
+          line6 = line6+'゜'+norm(letters[c].line6)+'゜';
+          line7 = line7+'゜'+norm(letters[c].line7)+'゜';
+        }else if(charsIn.substring(x,x+1)==c){
+          line1 = line1+norm(letters[c].line1)+'゜';
+          line2 = line2+norm(letters[c].line2)+'゜';
+          line3 = line3+norm(letters[c].line3)+'゜';
+          line4 = line4+norm(letters[c].line4)+'゜';
+          line5 = line5+norm(letters[c].line5)+'゜';
+          line6 = line6+norm(letters[c].line6)+'゜';
+          line7 = line7+norm(letters[c].line7)+'゜';
+        }
+        var first = false;
+      }
+    }
+    for(var i = 35; i>(a.length*6)+1; i--){
+      line1 = line1+'゜';
+      line2 = line2+'゜';
+      line3 = line3+'゜';
+      line4 = line4+'゜';
+      line5 = line5+'゜';
+      line6 = line6+'゜';
+      line7 = line7+'゜';
+    }
+    output.value = line1+line2+line3+line4+line5+line6+line7;
+  }else{alert('Too long!');}
+  
+});
+    </script>
+  </body>
+</html>

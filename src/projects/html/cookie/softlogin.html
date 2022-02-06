@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel='stylesheet' href='softlogincss.css'/>
+	<title>ghtdude's Website</title>
+	<script language="JavaScript">
+	function showPass (form) {
+	    var user = form.username.value;
+	    var pass = form.pwd.value;
+	    var user1 = "LegoNightCrawler"
+	    var pass1 = "motd"
+		var user2 = "Annie_Bruner"
+	    var pass2 = "motd"
+		var user3 = "dstdude"
+	    var pass3 = "motd"
+		var user4 = "e1"
+	    var pass4 = "motddd"
+		var user5 = "e2"
+	    var pass5 = "motddd"
+		var admin = "ghtdude"
+	    var passadmin = "thgmotd"
+	    if(user == user1 && pass == pass1) {
+	        document.write("<a href='soft.html'>Success! Click Here</a>");
+	    }
+	    else{
+	       window.open = "softlogin.html"
+	    }
+	    if(user == user2 && pass == pass2) {
+	        document.write("<a href='soft.html'>Success! Click Here</a>");
+	    }
+	    else{
+	       window.open = "softlogin.html"
+	    }
+	    if(user == user3 && pass == pass3) {
+	        document.write("<a href='soft.html'>Success! Click Here</a>");
+	    }
+	    else{
+	       window.open = "softlogin.html"
+	    }
+	    if(user == user4 && pass == pass4) {
+	        document.write("<a href='soft.html'>Success! Click Here</a>");
+	    }
+	    else{
+	      window.open = "softlogin.html"
+	    }
+	    if(user == user5 && pass == pass5) {
+	        document.write("<a href='soft.html'>Success! Click Here</a>");
+	    }
+	    else{
+	       window.open = "softlogin.html"
+	    }
+			    if(user == admin && pass == passadmin) {
+	        document.write("<a href='soft.html'>Success! Click Here</a>");
+	    }
+	    else{
+	       window.open = "softlogin.html"
+	    }
+	}
+	</script>
+</head>
+<body>
+	<a id="cookiea" href="index.html"><img id="cookieimg" src="cookie.png"></a>
+	<div id="head1"><a id="head" href="homelogin.html">Home</a>|<a id="head" href="serverstatlogin.html">Server Status</a>|<a id="head" href="softlogin.html">Programs</a></div>
+	<h1 id="loginh1">Please Log In</h1>
+	<form>
+        Username: <input type="text" name="username" /><br /><br />
+        Password: <input type="password" name="pwd" /><br /><br />
+            <input type="button" value="Log In" onclick="showPass (form)" />
+    </form>
+</body>
+</html>

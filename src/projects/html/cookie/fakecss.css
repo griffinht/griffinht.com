@@ -1,0 +1,44 @@
+body {
+	background-color:#bbbbbb;
+}
+
+#head1{
+	height: 40px;
+	width: 1352px;
+	background-color: blue;
+	color: #bbbbbb;
+	font-family: impact;
+	font-size: 30px;
+	color: black;
+}
+#head {
+	font-size: 30px;
+	font-family: impact;
+	text-decoration: none;
+	color: black;
+}
+
+#pagetitle{
+	font-family: impact;
+	color: black;
+}
+
+#fake1A {
+	font-family: impact;
+	color: black;
+	text-decoration: none; 
+}
+
+#fake1D {
+	font-family: impact;
+	color: black;
+	text-decoration: none;
+}
+
+#fake1 {
+	font-family: impact;
+}
+
+#fakedesc {
+	font-family: arial;
+}

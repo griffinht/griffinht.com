@@ -1,0 +1,112 @@
+<!DOCTPYE html>
+<html>
+  <head>
+    <title>Tanks!</title>
+    <style>
+#menu {
+  display: block;
+}
+#game {
+  display: none;
+}
+#canvas {
+  border: 1px solid black;
+  border-radius: 5px;
+  image-rendering: pixelated; 
+}
+body {
+  font-family: Arial;
+}
+    </style>
+  </head>
+  <body>
+    <div id="menu">
+      <h1>Tanks!</h1>
+      <p id="menuerror"></p>
+      <input type="text" placeholder="Name" id="name"></input>
+      <input type="button" id="play" value="Play"></input>
+    </div>
+    <div id="game">
+      <canvas height="500" width="500" id="canvas"></canvas>
+      <p id="gameerror"></p>
+    </div>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script>
+var socket = io();
+var canvas = document.getElementById('canvas');
+var menu = document.getElementById('menu');
+var menuerror = document.getElementById('menuerror');
+var gameerror = document.getElementById('gameerror');
+var game = document.getElementById('game');
+ctx = canvas.getContext('2d');
+keysPressed = [];
+var myId;
+myBall = {};
+var red = new Image();
+red.src = 'red.png';
+//var blue = new Image();
+//blue.src = 'blue.png';
+var barrel = new Image();
+barrel.src = 'barrel.png';
+var barrelDegree = 0;
+document.getElementById('play').addEventListener('click',function(e){start();});
+function start(){
+  menu.style.display = 'none';
+  game.style.display = 'block';
+  socket.emit('newClient',{name:document.getElementById('name').value});
+  socket.on('newClient',function(data){
+    myId = data.id;
+    ctx.font = data.font;
+  });
+  document.addEventListener('keydown',function(e){
+    keysPressed[e.keyCode] = true;
+    socket.emit('keyUpdate',keysPressed);
+  });
+  document.addEventListener('keyup',function(e){
+    keysPressed[e.keyCode] = false;
+    socket.emit('keyUpdate',keysPressed);
+  });
+  canvas.addEventListener('mousemove',function(e){
+    var rect = canvas.getBoundingClientRect();
+    var x = ((e.clientX-rect.left)-(myBall.x+33))/33;
+    var y = ((e.clientY-rect.top)-(myBall.y+33))/33;
+    var a = Math.abs(x);
+    var b = Math.abs(y);
+    var c = a+b;
+    var d = a/c;
+    var e = b/c;
+    if(Math.sign(x)==-1){d = -d;}
+    if(Math.sign(y)==-1){e = -e;}
+    d *= 90;
+    e *= 90;
+    var f = d-e+90;
+    gameerror.innerHTML = '('+d+', '+e+')<br>'+f;
+  });
+}
+socket.on('move',function(data){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(var id in data){
+    if(id == myId){myBall = data[id];}
+    ctx.save();
+    ctx.translate(data[id].x+red.width/2, data[id].y+red.height/2);
+    ctx.rotate(data[id].degrees*Math.PI/180);
+    ctx.drawImage(red, -red.width/2, -red.height/2);
+    ctx.restore();
+    ctx.save();
+    ctx.translate(data[id].x+red.width/2, data[id].y+red.height/2);
+    ctx.rotate(data[id].barrel*Math.PI/180);
+    ctx.drawImage(barrel, -red.width/2, -red.height/2);
+    ctx.restore();
+    ctx.fillText(data[id].name, data[id].x+red.width/2-ctx.measureText(data[id].name).width/2, data[id].y-15);
+  }
+});
+socket.on('death',function(data){
+  if(data == myId){
+    menu.style.display = 'block';
+    game.style.display = 'none';
+    menuerror.innerHTML = 'You died!';
+  }
+});
+    </script>
+  </body>
+</html>

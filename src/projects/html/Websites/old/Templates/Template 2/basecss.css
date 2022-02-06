@@ -1,0 +1,32 @@
+body {
+	background-color:#bbbbbb;
+}
+
+#head1{
+	height: 40px;
+	width: 1352px;
+	background-color: blue;
+	color: #bbbbbb;
+	font-family: impact;
+	font-size: 30px;
+	color: black;
+}
+#head {
+	font-size: 30px;
+	font-family: impact;
+	text-decoration: none;
+	color: black;
+}
+
+#pagetitle {
+	font-family: impact;
+	color: black;
+}
+
+div {
+    height:100px;
+    width:100px;
+    background-color:#FF0000;
+    border-radius:5px;
+    margin-bottom:5px;
+}

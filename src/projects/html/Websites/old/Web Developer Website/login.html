@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>CookieWebDev - Login</title>
+<script language="javascript">
+var users = new Array();
+var passes = new Array();
+function init(){
+  users.push("appletree");
+  passes.push("kn1t");
+  users.push("admin");
+  passes.push("supasecret");
+  users.push("user3");
+  passes.push("pie");	
+}
+function login(){
+  for(var i = 0;i<users.length;i++){
+    if(document.getElementById("user").value == users[i]){
+      if(document.getElementById("pass").value == passes[i]){
+        document.getElementById("result").innerHTML = "You have logged in as "+users[i];	
+        document.getElementById("loginForm").innerHTML = "";
+        window.open(users[i]+".html");
+      }
+    }
+  }
+}
+</script>
+  </head>
+  <body onload="init();">
+    <div id="loginDiv">
+      <a href="login.html" id="loginLink">Log In</a>
+    </div>
+    <a  class="logo" href="index.html">
+      <div class="logo">CookieWebDev</div>
+    </a>
+    <div class="navBar">
+      <p class="navBarText">
+        <a href="index.html" class="navBarLink">Home</a> |
+        <a href="examples.html" class="navBarLink">Examples</a> |
+        <a href="contact.html" class="navBarLink">Contact Us</a> |
+        <a href="packages.html" class="navBarLink">Packages</a> |
+        <a href="about.html" class="navBarLink">About<a/>
+      </p>
+    </div>
+    <h1 id="pagetitle">Log In</h1>
+      <form id="loginForm" class="login">
+        Username <input type="text" id="user" /><br /><br />
+        Password <input type="password" id="pass" /><br /><br />
+        <input type="button" value="Submit" onClick="login();" />
+      </form>
+      <p id="result" class="login"></p>
+      <p id="test"></p>
+</html>

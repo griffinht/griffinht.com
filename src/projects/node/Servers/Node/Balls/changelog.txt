@@ -1,0 +1,50 @@
+v0.1
+  - First stable release of game, no objective, but fully functional movement
+  Optimizations
+    - Optimized client movements to send less movement packets each time - should help with large amounts of clients at once
+    
+v0.2
+  Changes
+    - Got rid of server file
+    - Updated package.json
+    - Added start screen
+    - Added changable name and colors
+  Bugfixes
+    - Fixed bug where server would crash when client sent key update before the client sent newClient
+    
+v0.3 - Unstable (death bug)
+  Changes
+    - Added bullets
+    - Added health
+    - Added death
+    - Added lag warning to server
+    - Added automatic reconnect once the server restarted
+  Optimizations
+    - Made it so 60 is divided by fps for movement at the beginning, not everytime
+    - Made client dumber, doesn't keep track of balls
+  Bugfixes
+    - Verified that the client ball color was a color on the list of possible colors
+    - Verified that newClient actually had data so it didn't crash the server
+    - Fixed gramatical error on the server-side connection console.log
+    
+v0.4
+  Changes
+    - Added control of bullet
+    - Your own bullets won't harm you
+    - Client keeps track of it's own ball's position
+    - Changed the lag message a bit, made it so it only triggers when the FPS 10% slower than what it should be
+    - Bullets die after hitting the wall twice
+  Bugfixes
+    - Fixed death so it only happens on the client who died, not all who are currently connected
+    - Fixed bullets going faster and faster as more clients connected
+    - Fixed all crashes when improper data was sent to the server
+    - Fixed client automatically connecting before you clicked play, thinking 
+  Optimizations
+    - Bullet doesn't have health value anymore
+    
+v0.5
+  Changes
+    - Gave the bullet-ball collision check the ability to adapt to any bullet or ball size
+  Bugfixes
+    -
+  

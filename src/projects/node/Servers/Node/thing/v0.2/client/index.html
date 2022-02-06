@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cards</title>
+    <style>
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script>
+var canvas = document.getElementById('canvas');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+var ctx = canvas.getContext('2d');
+var run = true;
+var targetFPS = 60;
+var fps = targetFPS;
+var lastFrame = new Date();
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+setInterval(function(){
+  var now = new Date();
+  ctx.clearRect(0,0, canvas.width, canvas.height);
+  fps = 1000/(now.getTime()-lastFrame.getTime());
+  lastFrame = now;
+  ctx.fillText(fps, 50, 50);
+},1000/targetFPS);
+    </script>
+  </body>
+</html>

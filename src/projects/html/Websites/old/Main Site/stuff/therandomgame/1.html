@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title id="title"></title>
+    <style>
+    .text {
+      font-family: arial;
+      color: black;
+    }
+    .optionLink {
+      height: 30px;
+      font-size: 30px;
+      background-color: blue;
+      color: black;
+      border-radius: 10px;
+      border: black 2px solid;
+      box-shadow: 2px 2px 2px black;
+      font-family: arial;
+    }
+    .optionLink[standard] {
+      width: 100px;
+    }
+    .optionLink:active {
+      box-shadow: 0px 0px 0px black;
+      position: relative;
+      top: 2px;
+    }
+    .optionLink[linked] {
+      text-decoration: none;
+    }
+    .optionLink[one]{
+      position: absolute;
+      top: 0px;
+      left: 415px;
+    }
+    .optionLink[two]{
+      position: absolute;
+      top: 25px;
+      left: 526px;
+    }
+    .optionLink[three]{
+      position: absolute;
+      top: 25px;
+      left: 665px;
+    }
+    .divText {
+      height: 30px;
+      font-size: 30px;
+      background-color: blue;
+      color: black;
+      border-radius: 10px;
+      border: black 2px solid;
+      box-shadow: 2px 2px 2px black;
+      font-family: arial;
+      width: 403px;
+    }
+    #topBar {
+      font-size: 30px;
+      font-family: arial;
+      background-color: grey;
+      border-radius: 10px;
+      height: 50px;
+      width: 100%;
+    }
+    [centerText] {
+      text-align: center;
+    }
+    #divAuto {
+      width: 195px;
+      position: absolute;
+      top: 0px;
+      left: 825px;
+    }
+    #nextLevLink {
+      font-size: 40px;
+      position: absolute;
+      top: 600px;
+      left: 300px;
+    }
+    .divvy {
+      position: absolute;
+    }
+    #redone {
+      top: 100px;
+      left: 50px;
+      width: 96.1%;
+      height: 200px;
+      background-color: red;
+    }
+    #redtwo {
+      top: 250px;
+      left: 80%;
+      width: 20%;
+      height: 250px;
+      background-color: red;
+    }
+    #redthree {
+      top: 320px;
+      left: 50px;
+      width: 96.1%;
+      height: 250px;
+      background-color: red;
+    }
+    #green {
+      top: 300px;
+      left: 77%;
+      width: 50px;
+      height: 20px;
+      background-color: green;
+    }
+    #blue {
+      top: 300px;
+      left: 50px;
+      width: 80%;
+      height: 20px;
+      background-color: blue;
+    }
+    </style>
+  </head>
+  <body id="body">
+    <div id="topBar">
+      <h2 class="divText" id="divTitle">Level 1 | The Random Game</h2>
+      <p class="optionLink" onclick="restart();" standard one>Restart</p>
+      <a class="optionLink" href="levellists.html" linked two>Level List</a>
+      <a class="optionLink" href="therandomgame.html" linked three>Main Menu</a>
+    </div>
+    <div id="gameDiv">
+      <a class="text" id="nextLevLink">Get to the green, don't touch the red.</a>
+      <div class="divvy" id="redone" onmouseover="out();"></div>
+      <div class="divvy" id="blue"></div>
+      <div class="divvy" id="green" onmouseover="nextLevel();"></div>
+      <div class="divvy" id="redtwo" onmouseover="out();"></div>
+      <div class="divvy" id="redthree" onmouseover="out();"></div>
+    </div>
+    <script>
+var currentLevel = 1;
+var title = document.getElementById("title");
+title.innerHTML = "Level "+currentLevel+" | The Random Game";
+function out(){
+  var body = document.getElementById("body");
+  body.setAttribute("onmouseover", "out();");
+  document.body.style.backgroundColor = "#CC0000";
+  removeTeAttr("redone", "onmousehover");
+  removeTeAttr("redtwo", "onmousehover");
+  removeTeAttr("redthree", "onmousehover");
+  removeTeAttr("green", "onmousehover");
+  var nextLevLink = document.getElementById("nextLevLink");
+  nextLevLink.innerHTML = "You Failed. Click to Restart";
+  nextLevLink.setAttribute("href", "1.html");
+}
+function nextLevel(){
+  var nextLev = document.getElementById("nextLevLink");
+  var nextLevL = currentLevel + 1;
+  nextLev.setAttribute("href", nextLevL+".html");
+  nextLev.innerHTML = "Next Level!";
+}
+function removeTeAttr(id, attrr){
+  document.getElementById(id).removeAttribute(attrr);
+}
+function restart(){
+  location.reload;
+}
+    </script>
+  </body>
+</html>
