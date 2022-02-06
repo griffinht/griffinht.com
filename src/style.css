@@ -23,4 +23,10 @@ footer {
     margin-right: auto;
     background-color: var(--header);
 }
-
+.fragment > a {
+    visibility: hidden;
+    text-decoration: none;
+}
+.fragment:hover > a {
+    visibility: visible;
+}
