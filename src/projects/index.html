@@ -22,17 +22,21 @@ article > section:hover {
 article > section > section:hover {
     //background-color: #fff0ff:
 }
-artcile > section > section > div {
-
+.tags {
+    display: flex;
+    gap: 1em;
 }
-article > section > section > div > span {
+.tags > div {
     background-color: #f0f;
     color: white;
-    border-radius: 1em;
-    width: 200px;
+    border-radius: 0.5em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.5em;
 }
-article > section > section > div > span > img {
-    height: 4em;
+.tags > div > * {
+    max-height: 3em;
 }
 </style>
 </head>
@@ -43,25 +47,37 @@ article > section > section > div > span > img {
 <article>
     <header>
         <h1>projects</h1>
+        <div class="tags">
+            <div>all</div>
+            <div>html</div>
+            <div>css</div>
+            <div>typescript</div>
+            <div>cli</div>
+            <div>rust</div>
+            <div><img src="docker.png">docker</div>
+        </div>
     </header>
     <section>
         <h2>2022</h2>
-        <section>
+        <section class="html css typescript docker">
             <h3>EdNotes</h3>
-            <div>
-                <span><p>html</p></span>
-                <span><p>css</p></span>
-                <span><p>typescript</p></span>
-                <span>
-                    <img src="docker.png">
-                    <p>docker</p>
-                </span>
+            <div class="tags">
+                <div>html</div>
+                <div>css</div>
+                <div>typescript</div>
+                <div><img src="docker.png">docker</div>
             </div>
             <p>EdNotes is a project</p>
             <a href="https://github.com/stzups/ednotes"><p>source</p></a>
         </section>
         <section>
             <h3>speedtest</h3>
+           <div class="tags">
+                <div>rust</div>
+                <div>html</div>
+                <div>http</div>
+                <div><img src="docker.png">docker</div>
+            </div>
             <p>Experimental HTTP speedtest server</p>
             <a href="https://github.com/stzups/ednotes"><p>source</p></a>
         </section>
@@ -70,11 +86,22 @@ article > section > section > div > span > img {
         <h2>2021</h2>
         <section>
             <h3>dockron</h3>
+           <div class="tags">
+                <div>rust</div>
+                <div>cli</div>
+                <div><img src="docker.png">docker</div>
+            </div>
             <p>Simple task scheduler/repeater</p>
             <a href="https://github.com/stzups/dockron"><p>source</p></a>
         </section>
         <section>
             <h3>ip-server</h3>
+           <div class="tags">
+                <div>rust</div>
+                <div>cli</div>
+                <div>networking</div>
+                <div><img src="docker.png">docker</div>
+            </div>
             <p>Simple server that returns client ip address</p>
             <a href="https://github.com/stzups/ip-server"><p>source</p></a>
         </section>
