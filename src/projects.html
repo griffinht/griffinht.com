@@ -9,6 +9,10 @@ body {
     padding: 0;
     background-image: url("background.png");
 }
+header > a {
+    color: black;
+    text-decoration: none;
+}
 header {
     background-color: #ffb3ff;
 }
@@ -19,16 +23,20 @@ article {
 }
 article > section {
     padding: 1em;
-    margin-top: 2em;
 }
-article > section > section {
-    
+article > section:hover {
+    background-color: #ffb3ff;
+}
+footer {
+    position: absolute;
+    bottom: 0;
+    background-color: #ffb3ff;
 }
 </style>
 </head>
 <body>
 <header>
-    <h1>griffinht.com</h1>
+    <a href="index.html"><h1>griffinht.com</h1></a>
 </header>
 <article>
     <header>
@@ -39,12 +47,12 @@ article > section > section {
         <section>
             <h3>EdNotes</h3>
             <p>EdNotes is a project</p>
-            <a href="https://github.com/stzups/ednotes">source code</a>
+            <a href="https://github.com/stzups/ednotes">source</a>
         </section>
         <section>
             <h3>speedtest</h3>
             <p>Experimental HTTP speedtest server</p>
-            <a href="https://github.com/stzups/ednotes">source code</a>
+            <a href="https://github.com/stzups/ednotes">source</a>
         </section>
     </section>
     <section>
@@ -52,14 +60,17 @@ article > section > section {
         <section>
             <h3>dockron</h3>
             <p>Simple task scheduler/repeater</p>
-            <a href="https://github.com/stzups/dockron">source code</a>
+            <a href="https://github.com/stzups/dockron">source</a>
         </section>
         <section>
             <h3>ip-server</h3>
             <p>Simple server that returns client ip address</p>
-            <a href="https://github.com/stzups/ip-server">source code</a>
+            <a href="https://github.com/stzups/ip-server">source</a>
         </section>
     </section>
 </article>
+<footer>
+    <a href="https://github.com/stzups/griffinht.com">source</a>
+</footer>
 </body>
 </html>
