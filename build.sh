@@ -1,28 +1,17 @@
-#!/bin/bash
-set -e
+#!/bin/sh
 
-# install html-minifier
-if ! command -v html-minifier > /dev/null; then
-  if [[ $(id -u) -ne 0 ]]; then
-      sudo npm install html-minifier -g;
+rm -r build/*
+for file in $(find src/*); do
+    short=$(echo "$file" | cut -c 4-);
+    if [ -d "$file" ]; then
+        mkdir -p build"$short"
     else
-      npm install html-minifier -g;
-    fi;
-fi;
-
-# build
-rm -rf build/*
-mkdir -p build
-for file in ./src/*.html; do
-    html-minifier \
-        --collapse-whitespace \
-        --remove-comments \
-        --remove-optional-tags \
-        --remove-redundant-attributes \
-        --remove-script-type-attributes \
-        --remove-tag-whitespace \
-        --use-short-doctype \
-        --minify-css true \
-        --minify-js true \
-        < "$file" > build/"$(basename $file)"
+        if [ "${file: -9}" == ".mustache" ]; then
+            echo template: "$file"
+            echo | mustache - "$file" > build/"$(echo $short | head -c -10)"
+        else
+            echo file: "$file"
+            cp "$file" build"$short"
+        fi
+    fi
 done
