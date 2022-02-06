@@ -5,9 +5,13 @@
 <link rel="stylesheet" type="text/css" href="../style.css">
 <style>
 article {
-    margin: 0 auto;
+    width: 100%;
     max-width: 60em;
     background-color: #ffe6ff;
+    margin: 0 auto;
+}
+article > section {
+    padding: 1em;
 }
 article > section {
     padding: 1em;
@@ -15,11 +19,20 @@ article > section {
 article > section:hover {
     background-color: #ffb3ff;
 }
-span {
+article > section > section:hover {
+    //background-color: #fff0ff:
+}
+artcile > section > section > div {
+
+}
+article > section > section > div > span {
     background-color: #f0f;
-    padding: 1em;
     color: white;
     border-radius: 1em;
+    width: 200px;
+}
+article > section > section > div > span > img {
+    height: 4em;
 }
 </style>
 </head>
@@ -35,10 +48,15 @@ span {
         <h2>2022</h2>
         <section>
             <h3>EdNotes</h3>
-            <span>html</span>
-            <span>css</span>
-            <span>typescript</span>
-            <span><img src="docker.png">docker</img></span>
+            <div>
+                <span><p>html</p></span>
+                <span><p>css</p></span>
+                <span><p>typescript</p></span>
+                <span>
+                    <img src="docker.png">
+                    <p>docker</p>
+                </span>
+            </div>
             <p>EdNotes is a project</p>
             <a href="https://github.com/stzups/ednotes"><p>source</p></a>
         </section>
