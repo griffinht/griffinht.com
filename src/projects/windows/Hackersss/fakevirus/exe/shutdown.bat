@@ -1,1 +1,0 @@
-shutdown -c "iluvu.v2.4 - Shutting Down. Have a nice day!" -s -t 30

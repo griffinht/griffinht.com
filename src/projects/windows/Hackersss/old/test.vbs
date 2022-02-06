@@ -1,1 +1,0 @@
-CreateObject("WScript.Shell").Run("""C:\Users\griffin\Desktop\My Files\Coding\Hackersss\fakevirus\shutdown.lnk""")

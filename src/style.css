@@ -1,0 +1,18 @@
+body {
+    background-color: #ffe6ff;
+    margin: 0;
+    padding: 0;
+    background-image: url("background.png");
+}
+header > a {
+    color: black;
+    text-decoration: none;
+}
+header {
+    background-color: #ffb3ff;
+}
+footer {
+    position: absolute;
+    bottom: 0;
+    background-color: #ffb3ff;
+}
