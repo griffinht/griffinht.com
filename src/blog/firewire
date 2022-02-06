@@ -4,6 +4,10 @@ Using the original camcorder allows for maximum quality.
 
 Touchscreen broke, USB transfer doesn't work.
 
+echo -1 > a random file for debug info
+dmesg --follow for debug info
+card doesnt even fit in pci slot
+
 Original firewire card did not work
 
 Why pay some person to do it?
