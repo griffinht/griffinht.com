@@ -10,7 +10,7 @@ build() {
             echo mustache: "$file"
         elif [ "${file: -5}" == ".html" ]; then
             echo template: "$file"
-            echo | mustache - "$file" > build/"$short"
+            echo | mustache - "$file" > build"$short"
         else
             echo file: "$file"
             cp "$file" build"$short"
@@ -21,6 +21,7 @@ build() {
 if [ -n "$1" ]; then
     build "$1"
 else
+    mkdir -p build
     rm -r build/*
     for file in $(find src/*); do
         build "$file"
