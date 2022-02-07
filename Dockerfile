@@ -1,11 +1,12 @@
-FROM node as build
+FROM toolbelt/mustache as build
 
-RUN npm install html-minifier -g;
+USER root
 
 WORKDIR /usr/src
-# see .dockerignore
-COPY . .
-RUN make build
+
+COPY src src
+COPY build.sh .
+RUN ./build.sh
 
 FROM scratch
 
