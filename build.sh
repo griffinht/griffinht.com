@@ -7,8 +7,10 @@ for file in $(find src/*); do
         mkdir -p build"$short"
     else
         if [ "${file: -9}" == ".mustache" ]; then
+            echo mustache: "$file"
+        elif [ "${file: -5}" == ".html" ]; then
             echo template: "$file"
-            echo | mustache - "$file" > build/"$(echo $short | head -c -10)"
+            echo | mustache - "$file" > build/"$short"
         else
             echo file: "$file"
             cp "$file" build"$short"
