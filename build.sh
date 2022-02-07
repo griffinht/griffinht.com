@@ -1,34 +1,37 @@
 #!/bin/sh
 
+SOURCE=src
+BUILD=build
+
 build() {
     file="$1"
-    short=$(echo "$file" | cut -c 4-);
+    short=$(echo "$file" | cut -c ${#SOURCE}-);
     if [ -d "$file" ]; then
-        mkdir -p build"$short"
+        mkdir -p "$BUILD""$short"
     else
         if [ "${file: -9}" == ".mustache" ]; then
             echo mustache: "$file"
         elif [ "${file: -5}" == ".html" ]; then
             echo template: "$file"
-            echo | mustache - "$file" > build"$short"
+            echo | mustache - "$file" > "$BUILD""$short"
         else
             echo file: "$file"
-            cp "$file" build"$short"
+            cp "$file" "$BUILD""$short"
         fi
     fi
 }
 
 if [ "$1" == "--watch" ]; then
-    inotifywait -r -m -e close_write --format %f src | 
+    inotifywait -r -m -e close_write --format %f "$SOURCE" | 
         while read -r file; 
             do ./build.sh "$file"; 
         done
 elif [ -n "$1" ]; then
     build "$1"
 else
-    mkdir -p build
-    rm -r build/*
-    for file in $(find src/*); do
+    mkdir -p "$BUILD"
+    rm -r "$BUILD"/*
+    for file in $(find "$SOURCE"/*); do
         build "$file"
     done
 fi
