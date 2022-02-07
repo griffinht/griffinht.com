@@ -22,7 +22,7 @@ build() {
 }
 
 if [ "$1" == "--watch" ]; then
-    inotifywait -r -m -e close_write --format %f "$SOURCE" | 
+    inotifywait -r -m -e close_write --format %w%f "$SOURCE" | 
         while read -r file; 
             do ./build.sh "$file"; 
         done
