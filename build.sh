@@ -18,7 +18,11 @@ build() {
     fi
 }
 
-rm -r build/*
-for file in $(find src/*); do
-    build "$file"
-done
+if [ -n "$1" ]; then
+    build "$1"
+else
+    rm -r build/*
+    for file in $(find src/*); do
+        build "$file"
+    done
+fi
