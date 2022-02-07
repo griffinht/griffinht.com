@@ -1,7 +1,7 @@
 #!/bin/sh
 
-rm -r build/*
-for file in $(find src/*); do
+build() {
+    file="$1"
     short=$(echo "$file" | cut -c 4-);
     if [ -d "$file" ]; then
         mkdir -p build"$short"
@@ -16,4 +16,9 @@ for file in $(find src/*); do
             cp "$file" build"$short"
         fi
     fi
+}
+
+rm -r build/*
+for file in $(find src/*); do
+    build "$file"
 done
