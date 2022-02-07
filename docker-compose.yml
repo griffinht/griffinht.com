@@ -7,4 +7,4 @@ services:
             - ./build:/app/build
             - ./build.sh:/app/build.sh
         working_dir: /app
-        entrypoint: ["sh", "-c", "sleep 100000 && ./build.sh"]
+        entrypoint: ["sh", "-c", "apk add inotify-tools && ./build.sh && ./build.sh --watch"]

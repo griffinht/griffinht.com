@@ -18,7 +18,12 @@ build() {
     fi
 }
 
-if [ -n "$1" ]; then
+if [ "$1" == "--watch" ]; then
+    inotifywait -r -m -e close_write --format %f src | 
+        while read -r file; 
+            do ./build.sh "$file"; 
+        done
+elif [ -n "$1" ]; then
     build "$1"
 else
     mkdir -p build
