@@ -3,15 +3,8 @@ services:
         image: toolbelt/mustache
         user: root
         volumes:
-#            - ./src:/app/src
-#            - ./build:/app/build
-#            - ./build.sh:/app/build.sh
-            - ./:/app
+            - ./src:/app/src
+            - ./build:/app/build
+            - ./build.sh:/app/build.sh
         working_dir: /app
         entrypoint: ["sh", "-c", "sleep 100000 && ./build.sh"]
-    nginx:
-        image: nginx
-        volumes:
-             - ./build:/usr/share/nginx/html
-        ports:
-            - 8080:80
