@@ -1,0 +1,9 @@
+- name: EdNotes
+  tags: 
+      - html
+      - css
+      - typescript
+      - docker
+  description: EdNotes is a project
+  links:
+      - <a href="https://github.com/stzups/ednotes">source</a>
