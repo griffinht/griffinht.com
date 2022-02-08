@@ -11,9 +11,17 @@ build() {
     else
         if [ "${file: -9}" == ".mustache" ]; then
             echo mustache: "$file"
+        elif [ "${file: -5}" == ".yml" ]; then
+            echo yml: "$file"
         elif [ "${file: -5}" == ".html" ]; then
             echo template: "$file"
-            echo | mustache - "$file" > "$BUILD""$short"
+            yml="$(echo $file | rev | cut -c 6- | rev)".yml
+            if [ ! -f "$yml" ]; then
+                yml='/dev/null'
+            else
+                echo '^ using yml ^'
+            fi
+            cat "$yml" | mustache - "$file" > "$BUILD""$short"
         else
             echo file: "$file"
             cp "$file" "$BUILD""$short"
