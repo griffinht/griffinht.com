@@ -25,7 +25,6 @@
     - name: dockron
       tags:
         - rust
-        - cli
         - docker
       description: Simple task scheduler/repeater
       links:
@@ -34,11 +33,39 @@
     - name: ip-server
       tags:
         - rust
-        - cli
         - networking
+        - http
         - docker
       description: Simple server that returns client ip address
       links:
         - href: https://github.com/stzups/ip-server
           text: source
-
+    - name: authenticator
+      tags:
+        - http
+        - web security/session management
+        - java
+        - gradle
+        - nginx
+        - docker
+    - name: hot
+      tags:
+        - docker
+        - docker-compose
+        - shell scripting
+        - wireguard
+    - name: home-fastled-controller
+    - name: tci
+    - name: scribbleshare
+      tags:
+        - java
+        - netty
+        - websockets
+        - typescript
+        - binary protocol networking
+        - docker
+        - docker-compose
+        - http authentication/session management/password crypto
+        - sql
+        - nginx
+        - gradle
