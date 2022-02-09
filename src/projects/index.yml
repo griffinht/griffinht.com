@@ -43,9 +43,8 @@
     - name: authenticator
       tags:
         - http
-        - web security/session management
+        - security
         - java
-        - gradle
         - nginx
         - docker
     - name: hot
@@ -62,10 +61,53 @@
         - netty
         - websockets
         - typescript
-        - binary protocol networking
+        - binary
         - docker
-        - docker-compose
-        - http authentication/session management/password crypto
+        - security
         - sql
         - nginx
         - gradle
+    - name: strawberryizer
+      tags:
+        - c++
+        - dlib
+        - opencv
+        - winsock
+    - name: truck cake thrower game
+      tags:
+        - html
+        - css
+        - javascript
+        - canvas
+    - name: SpaceGame
+      tags:
+        - c++
+        - direct3d
+        - win32
+    - name: compressor
+      tags:
+        - c++
+        - file i/o
+    - name: tanks
+      tags:
+        - java
+        - http
+        - websockets
+        - javascript
+    - name: BeaconProtect
+      tags:
+        - java
+        - bukkit
+    - name: Minecraft Generator
+      tags:
+        - javascript
+      links:
+        - href: https://www.reddit.com/r/Minecraft/comments/6bznqx-remember_111_chat_limit_is_op_i_made_a_copypaste/
+          text: reddit
+    - name: ball game
+    - name: fakevirus
+      tags:
+        - vbs
+        - batch
+    - name: nodejs stuff
+    - name: The Random Game
