@@ -50,6 +50,27 @@ article > section > section > div > div:hover {
         <header>
             <h1>projects</h1>
         </header>
+        {{#projects}}
+        <section>
+            <h2 id="{{year}}" class="fragment">{{year}}<a href="#{{year}}">#</a></h2>
+            {{#projects}}
+            <section>
+                <h3 id="{{name}}" class="fragment">{{name}}<a href="#{{name}}">#</a></h3>
+                <div>
+                {{#tags}}
+                    <div>{{.}}</div>
+                {{/tags}}
+                </div>
+                <p>{{description}}</p>
+                <p>
+                {{#links}}
+                    <a href="{{href}}">{{text}}</a>
+                {{/links}}
+                </p>
+            </section>
+            {{/projects}}
+        </section>
+        {{/projects}}
         <section>
             <h2 id="2022" class="fragment">2022<a href="#2022">#</a></h2>
             <section>

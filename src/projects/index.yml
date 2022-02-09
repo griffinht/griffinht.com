@@ -1,9 +1,13 @@
-- name: EdNotes
-  tags: 
-      - html
-      - css
-      - typescript
-      - docker
-  description: EdNotes is a project
-  links:
-      - <a href="https://github.com/stzups/ednotes">source</a>
+projects:
+  - year: 2022
+    projects:
+        - name: EdNotes
+          tags: 
+              - html
+              - css
+              - typescript
+              - docker
+          description: EdNotes is a project
+          links:
+              - href: https://github.com/stzups/ednotes
+                text: source
