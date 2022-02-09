@@ -1,13 +1,44 @@
-projects:
-  - year: 2022
-    projects:
-        - name: EdNotes
-          tags: 
-              - html
-              - css
-              - typescript
-              - docker
-          description: EdNotes is a project
-          links:
-              - href: https://github.com/stzups/ednotes
-                text: source
+- year: 2022
+  projects:
+    - name: EdNotes
+      tags: 
+        - html
+        - css
+        - typescript
+        - docker
+      description: EdNotes is a project
+      links:
+        - href: https://github.com/stzups/ednotes
+      text: source
+    - name: speedtest
+      tags:
+        - rust
+        - html
+        - http
+        - docker
+      description: Experimential HTTP speedtest server
+      links:
+        - href: https://github.com/stzups/ednotes
+          text: source
+- year: 2021
+  projects:
+    - name: dockron
+      tags:
+        - rust
+        - cli
+        - docker
+      description: Simple task scheduler/repeater
+      links:
+        - href: https://github.com/stzups/dockron
+          text: source
+    - name: ip-server
+      tags:
+        - rust
+        - cli
+        - networking
+        - docker
+      description: Simple server that returns client ip address
+      links:
+        - href: https://github.com/stzups/ip-server
+          text: source
+

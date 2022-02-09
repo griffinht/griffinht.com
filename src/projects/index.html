@@ -50,7 +50,7 @@ article > section > section > div > div:hover {
         <header>
             <h1>projects</h1>
         </header>
-        {{#projects}}
+        {{#.}}
         <section>
             <h2 id="{{year}}" class="fragment">{{year}}<a href="#{{year}}">#</a></h2>
             {{#projects}}
@@ -70,56 +70,7 @@ article > section > section > div > div:hover {
             </section>
             {{/projects}}
         </section>
-        {{/projects}}
-        <section>
-            <h2 id="2022" class="fragment">2022<a href="#2022">#</a></h2>
-            <section>
-                <h3 id="EdNotes" class="fragment">EdNotes<a href="#EdNotes">#</a></h3>
-                <div>
-                    <div>html</div>
-                    <div>css</div>
-                    <div>typescript</div>
-                    <div>docker</div>
-                </div>
-                <p>EdNotes is a project</p>
-                <p><a href="https://github.com/stzups/ednotes">source</a></p>
-            </section>
-            <section>
-                <h3>speedtest</h3>
-                <div>
-                    <div>rust</div>
-                    <div>html</div>
-                    <div>http</div>
-                    <div>docker</div>
-                </div>
-                <p>Experimental HTTP speedtest server</p>
-                <p><a href="https://github.com/stzups/ednotes">source</a></p>
-            </section>
-        </section>
-        <section>
-            <h2>2021</h2>
-            <section>
-                <h3>dockron</h3>
-                <div>
-                    <div>rust</div>
-                    <div>cli</div>
-                    <div>docker</div>
-                </div>
-                <p>Simple task scheduler/repeater</p>
-                <p><a href="https://github.com/stzups/dockron">source</a></p>
-            </section>
-            <section>
-                <h3>ip-server</h3>
-                <div>
-                    <div>rust</div>
-                    <div>cli</div>
-                    <div>networking</div>
-                    <div>docker</div>
-                </div>
-                <p>Simple server that returns client ip address</p>
-                <p><a href="https://github.com/stzups/ip-server">source</a></p>
-            </section>
-        </section>
+        {{/.}}
     </article>
     <footer>
         <a href="https://github.com/stzups/griffinht.com">source</a>
