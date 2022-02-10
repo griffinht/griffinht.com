@@ -36,10 +36,12 @@
         - networking
         - http
         - docker
-      description: Simple server that returns client ip address
+      description: "Simple server that returns client ip address docker run --rm stzups/ip-server -c griffinht.com:38234"
       links:
         - href: https://github.com/stzups/ip-server
           text: source
+        - href: http://griffinht.com:38234
+          text: demo
     - name: authenticator
       tags:
         - http
@@ -54,7 +56,6 @@
         - shell scripting
         - wireguard
     - name: home-fastled-controller
-    - name: tci
     - name: scribbleshare
       tags:
         - java
@@ -84,20 +85,12 @@
         - c++
         - direct3d
         - win32
-    - name: compressor
-      tags:
-        - c++
-        - file i/o
     - name: tanks
       tags:
         - java
         - http
         - websockets
         - javascript
-    - name: BeaconProtect
-      tags:
-        - java
-        - bukkit
     - name: Minecraft Generator
       tags:
         - javascript
