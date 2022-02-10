@@ -64,7 +64,10 @@ article > section > section > div > div:hover {
                     <div>{{.}}</div>
                 {{/tags}}
                 </div>
-                <p>{{description}}</p>
+                {{{raw}}}
+                {{#description}}
+                <p>{{.}}</p>
+                {{/description}}
                 <p>
                 {{#links}}
                     <a href="{{href}}">{{text}}</a>

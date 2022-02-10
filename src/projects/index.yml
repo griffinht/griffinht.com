@@ -36,7 +36,7 @@
         - networking
         - http
         - docker
-      description: "Simple server that returns client ip address docker run --rm stzups/ip-server -c griffinht.com:38234"
+      raw: "<p>Simple server that returns client ip address</p><code>docker run --rm stzups/ip-server -c griffinht.com:38234</code>"
       links:
         - href: https://github.com/stzups/ip-server
           text: source
