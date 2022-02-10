@@ -1,4 +1,3 @@
-
 <html id='html'>
   <head>
     <link rel="icon" type="image/png" href="blue2.png" sizes="32x32"/>
@@ -25,6 +24,11 @@ p{
       <div id='stats'>
         <p>Blue Health: &nbsp</p><p id='blueHealthP'></p>
         <p>/100&nbsp Red Health: &nbsp</p><p id='redHealthP'></p><p>/100</p>
+        <p id='trail'></p><p id='trails' onclick='trails();'></p>
+        <p id='slow'></p><p id='slows' onclick='noslowdown();'></p>
+        <p id='resizee' onclick='resize();'></p>
+        <p id='distt'></p><p id='distance'></p><p id='xDist'></p><p id='yDist'></p>
+        <p id='deg'></p>
       </div>
     </div>
   </body>
@@ -34,6 +38,9 @@ document.getElementById('jsh1').innerHTML = "";
 var c = document.getElementById("canvas");
 var ctx = c.getContext("2d");
 var noSlowDown = false;
+var Trails = false;
+var Dev = true;
+var first = true;
 var keysPressed = new Array();
 window.addEventListener('keyup', function(event){keysPressed.splice(keysPressed.indexOf(event.key), 1);},false);
 window.addEventListener('keydown', function(event){if(keysPressed.indexOf(event.key)==-1){keysPressed.push(event.key);}},false);
@@ -194,27 +201,60 @@ setInterval(function(){
       }
     }
   }
-  /*var one = redHit.xPos – blueHit.xPos;
-  var two = redHit.yPos – blueHit.yPos;
-  var distance = Math.sqrt(c*c+d*d);
-  if(distance<=110){
-    console.log('bump!')
-  }*/
-  ctx.clearRect(0,0,10000,10000);
+  if(!first){
+    var rx = redHit.xPos;
+    var bx = blueHit.xPos;
+    var ry = redHit.yPos;
+    var by = blueHit.yPos;
+    var xDist = rx-bx;
+    var yDist = ry-by;
+    var distance = Math.sqrt(((xDist)*(xDist))+((yDist)*(yDist)));
+    if(distance<=110){
+      pong();
+      pong(2);
+      var deg = 0;
+      if(Math.sign(xDist)==1&&Math.sign(yDist)==1){
+        console.log('a');//blue hits on red's top left
+        deg = xDist/110*-90+360;
+      }else if(Math.sign(xDist)==1&&Math.sign(yDist)==-1){
+        console.log('b');//blue hits on red's bottom left
+        deg = xDist/110*90+180;
+      }else if(Math.sign(xDist)==-1&&Math.sign(yDist)==-1){
+        console.log('c');//blue hits on red's bottom right
+        deg = yDist/110*-90+90;
+      }else if(Math.sign(xDist)==-1&&Math.sign(yDist)==1){
+        console.log('d');//blue hits on red's top right
+        deg = yDist/110*-90+90;
+      }
+      document.getElementById('deg').innerHTML='&nbsp Degree: &nbsp'+Math.round(deg);
+    }else{document.getElementById('deg').innerHTML='';}
+  }
+  if(Dev){
+    document.getElementById('distt').innerHTML = '&nbsp Distance:&nbsp';
+    document.getElementById('distance').innerHTML = Math.round(distance);
+    document.getElementById('trail').innerHTML = '&nbspTrails:&nbsp';
+    document.getElementById('trails').innerHTML = Trails;
+    document.getElementById('resizee').innerHTML = '&nbspResize';
+    document.getElementById('slow').innerHTML = '&nbspNo Slow Down:&nbsp';
+    document.getElementById('slows').innerHTML = noSlowDown;
+    document.getElementById('xDist').innerHTML = '&nbsp X:&nbsp'+Math.round(xDist)+'&nbsp';
+    document.getElementById('yDist').innerHTML = '&nbsp Y:&nbsp'+Math.round(yDist)+'&nbsp';
+  }
+  if(!Trails){
+    ctx.clearRect(0,0,10000,10000);
+  }
   red.move();
   blue.move();
+  first = false;
 }, 1000/60);
-setInterval(function(){
-  if(window.innerWidth!=cWid||window.innerHeight!=cHei){
+function resize(){
     canvas.width = window.innerWidth*.992;
     canvas.height = window.innerHeight*.93;
-    ctx.clearRect(0,0,10000,10000);
     red.move();
     blue.move();
-  }
-}, 1000);
-function noslowdown(condition){
-  if(condition==true){noSlowDown=true;}else if(condition==false){noSlowDown=false;}
+}
+function noslowdown(){
+  if(noSlowDown==true){noSlowDown=false;}else if(noSlowDown==false){noSlowDown=true;}
   return noSlowDown;
 }
 function teleport(color, x, y){
@@ -238,6 +278,14 @@ function pong(a){
     var audio = new Audio('pong.wav');
     audio.play();
   }
+}
+function trails(){
+  if(Trails==true){Trails=false;}else if(Trails==false){Trails=true;}
+  return Trails;
+}
+function dev(){
+  if(Dev==true){Dev=false;}else if(Dev==false){Dev=true;}
+  return Dev;
 }
   </script>
 </html>
