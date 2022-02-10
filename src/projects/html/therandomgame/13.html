@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title id="title">Please enable JavaScript</title>
+    <style>
+    .text {
+      font-family: arial;
+      color: black;
+    }
+    .optionLink {
+      height: 30px;
+      font-size: 30px;
+      background-color: blue;
+      color: black;
+      border-radius: 10px;
+      border: black 2px solid;
+      box-shadow: 2px 2px 2px black;
+      font-family: arial;
+    }
+    .optionLink[standard] {
+      width: 100px;
+    }
+    .optionLink:active {
+      box-shadow: 0px 0px 0px black;
+      position: relative;
+      top: 2px;
+    }
+    .optionLink[linked] {
+      text-decoration: none;
+    }
+    .optionLink[one]{
+      position: absolute;
+      top: 0px;
+      left: 415px;
+    }
+    .optionLink[two]{
+      position: absolute;
+      top: 25px;
+      left: 526px;
+    }
+    .optionLink[three]{
+      position: absolute;
+      top: 25px;
+      left: 665px;
+    }
+    .divText {
+      height: 30px;
+      font-size: 30px;
+      background-color: blue;
+      color: black;
+      border-radius: 10px;
+      border: black 2px solid;
+      box-shadow: 2px 2px 2px black;
+      font-family: arial;
+      width: 403px;
+    }
+    #topBar {
+      font-size: 30px;
+      font-family: arial;
+      background-color: grey;
+      border-radius: 10px;
+      height: 50px;
+      width: 100%;
+    }
+    [centerText] {
+      text-align: center;
+    }
+    #nextLevLink {
+      font-size: 40px;
+    }
+    .question {
+      background-color: grey;
+/*Change the font-size if needed*/
+      font-size: 90px;
+      width: 49%;
+      height: 200px;
+      font-family: arial;
+      border-radius: 10px;
+      margin-left: 6px;
+      margin-top: 0px;
+      float: left;
+    }
+    .question:active {
+      height: 195px;
+      width: 48.5%;
+    }
+    .link {
+      text-decoration: none;
+      color: black;
+    }
+    .link:hover {
+      color:blue;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="topBar">
+      <h2 class="divText" id="divTitle">Please enable JavaScript</h2>
+      <p class="optionLink" onclick="restart();" standard one>Restart</p>
+      <a class="optionLink" href="levellists.html" linked two>Level List</a>
+      <a class="optionLink" href="therandomgame.html" linked three>Main Menu</a>
+    </div>
+    <a class="text" id="nextLevLink">What is inside a banana peel?</a><br />
+    <div id="questions">
+    <!---Set onclick attribute to either function out() or nextLevel()-->
+      <p class="question" onclick="out();">Steak</p>
+      <p class="question" onclick="out();">Eggs</p>
+      <p class="question" onclick="out();">Chicken</p>
+      <p class="question" onclick="nextLevel();">Banananananana</p>
+    </div>
+    <script>
+<!--Set variable to level number-->
+var currentLevel = 13;
+var title = document.getElementById("title");
+title.innerHTML = "Level "+currentLevel+" | The Random Game";
+var divTitle = document.getElementById("divTitle");
+divTitle.innerHTML = "Level "+currentLevel+" | The Random Game";
+function restart(){
+  location.reload();
+}
+function out(){
+  var nextLevLink = document.getElementById("nextLevLink");
+  nextLevLink.innerHTML = "You Failed. Restarting...";
+  document.body.style.backgroundColor = "#CC0000";
+  restart = setTimeout(restart,3000)
+}
+
+function nextLevel(){
+  var nextLev = document.getElementById("nextLevLink");
+  var nextLevL = currentLevel + 1;
+  nextLev.setAttribute("href", nextLevL+".html");
+  nextLev.innerHTML = "Next Level!";
+}
+    </script>
+  </body>
+</html>

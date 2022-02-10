@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<!-
+This page © Copyright 2017, Lem0nPickles (lemonpickles1558@gmail.com)
+You may use this page and share this page as long as you do not claim any part of it as your own.
+->
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>MC Chat Art - Put XL letters in Minecraft chat!</title>
+    <style>
+body {
+  font-family: arial;
+}
+#example {
+  float: right;
+  height: 360px;
+  width: 640px;
+}
+    </style>
+  </head>
+  <body>
+    <h1>Put extra large letters in Minecraft chat!</h1>
+    <h3>Created by Lem0nPickles</h3>
+    <img src="example.png" id="example"/>
+    <p>Input:</p>
+      <input type="text" id="input">
+      <input type="button" value="Submit" id="submit"><br>
+    <p>Output: (Copy & Paste to Minecraft)</p>
+      <input type="text" id="output" size="100"><br>
+    <p>To copy and paste into Minecraft:</p>
+      <ol>
+        <li>Click the output text box</li>
+        <li>Ctrl+A to select everything</li>
+        <li>Ctrl+C to copy everything</li>
+        <li>Open Minecraft</li>
+        <li>Open chat (press t)</li>
+        <li>Ctrl+V to paste everything into Minecraft</li>
+        <li>Enter to send the chat message</li>
+      </ol>
+    <p>Allowed characters: (Can't be longer than 5 characters)</p>
+      <ul>
+        <li>A-Z</li>
+        <li>a-z</li>
+        <li>0-9</li>
+        <li>!</li>
+        <li>#</li>
+        <li>$</li>
+        <li>-</li>
+        <li>_</li>
+        <li>[</li>
+        <li>]</li>
+        <li>'</li>
+        <li>"</li>
+        <li>/</li>
+        <li>\</li>
+      </ul>
+      <img src="tracking/" style="display: none;">
+    <script>
+function submitTracking(value) {
+    let request = new XMLHttpRequest();
+    request.open("GET", "tracking/" + value);
+    request.send();
+}
+submitTracking("javascript");
+submitTracking("referrer/"+document.referrer);
+//Chat max is 256 (11 unusable so 245)
+//Each rｏw is 35 chars long
+//Each letter is 5 chars wide, with a 1 wide space, so 5 characters per line
+//゜
+//█
+var input = document.getElementById('input');
+var output = document.getElementById('output');
+var charsIn = 'abcdefghijklmnopqrstuvwxyz0123456789!#$?-_+=[]\'\"/\\';
+var letters = {};
+function norm(string){
+  var str = '';
+  for(var i = 0; string.length>i; i++){
+    var a = string.substring(i,i+1);
+    if(a=='1')
+    {
+      str = str+'█';
+    }
+    else
+    {
+      str = str+'゜';
+    }
+  }
+  return str;
+}
+function Letter(letter, line2, line3, line4, line5, line6){
+  this.letter = letter;
+  this.line1 ='゜゜゜゜゜';
+  this.line2 = line2;
+  this.line3 = line3;
+  this.line4 = line4;
+  this.line5 = line5;
+  this.line6 = line6;
+  this.line7 = '゜゜゜゜゜';
+  letters[letter] = this;
+}
+/*new Letter('','',
+               '',
+               '',
+               '',
+               '',);*/
+new Letter('a','00100',
+               '01010',
+               '11111',
+               '10001',
+               '10001',);
+new Letter('b','11110',
+               '10001',
+               '11110',
+               '10001',
+               '11110',);
+new Letter('c','01110',
+               '10001',
+               '10000',
+               '10001',
+               '01110',);
+new Letter('d','11110',
+               '10001',
+               '10001',
+               '10001',
+               '11110',);
+new Letter('e','11111',
+               '10000',
+               '11110',
+               '10000',
+               '11111',);
+new Letter('f','11111',
+               '10000',
+               '11110',
+               '10000',
+               '10000',);
+new Letter('g','01110',
+               '10000',
+               '10011',
+               '10001',
+               '01110',);
+new Letter('h','10001',
+               '10001',
+               '11111',
+               '10001',
+               '10001',);
+new Letter('i','11111',
+               '00100',
+               '00100',
+               '00100',
+               '11111',);
+new Letter('j','01110',
+               '00001',
+               '00001',
+               '10001',
+               '01110',);
+new Letter('k','10001',
+               '10010',
+               '11100',
+               '10010',
+               '10001',);
+new Letter('l','10000',
+               '10000',
+               '10000',
+               '10000',
+               '11111',);
+new Letter('m','10001',
+               '11011',
+               '10101',
+               '10001',
+               '10001',);
+new Letter('n','10001',
+               '11001',
+               '10101',
+               '10011',
+               '10001',);
+new Letter('o','01110',
+               '10001',
+               '10001',
+               '10001',
+               '01110',);
+new Letter('p','11110',
+               '10001',
+               '11110',
+               '10000',
+               '10000',);
+new Letter('q','01110',
+               '10001',
+               '10001',
+               '10001',
+               '01111',);
+new Letter('r','11110',
+               '10001',
+               '11110',
+               '10001',
+               '10001',);
+new Letter('s','11111',
+               '10000',
+               '11111',
+               '00001',
+               '11111',);
+new Letter('t','11111',
+               '00100',
+               '00100',
+               '00100',
+               '00100',);
+new Letter('u','10001',
+               '10001',
+               '10001',
+               '10001',
+               '01110',);
+new Letter('v','10001',
+               '10001',
+               '10001',
+               '01010',
+               '00100',);
+new Letter('w','10001',
+               '10101',
+               '10101',
+               '01110',
+               '01010',);
+new Letter('x','10001',
+               '01010',
+               '00100',
+               '01010',
+               '10001',);
+new Letter('y','10001',
+               '10001',
+               '01010',
+               '00100',
+               '00100',);
+new Letter('z','11111',
+               '00010',
+               '00100',
+               '01000',
+               '11111',);
+new Letter('0','01110',
+               '10001',
+               '10001',
+               '10001',
+               '01110',);
+new Letter('1','00100',
+               '01100',
+               '00100',
+               '00100',
+               '01110',);
+new Letter('2','11111',
+               '00001',
+               '11111',
+               '10000',
+               '11111',);
+new Letter('3','01110',
+               '00001',
+               '01110',
+               '00001',
+               '01110',);
+new Letter('4','10001',
+               '10001',
+               '11111',
+               '00001',
+               '00001',);
+new Letter('5','01111',
+               '10000',
+               '11111',
+               '00001',
+               '11111',);
+new Letter('6','01110',
+               '10000',
+               '11110',
+               '10001',
+               '01110',);
+new Letter('7','11110',
+               '00010',
+               '00010',
+               '00100',
+               '00100',);
+new Letter('8','01110',
+               '10001',
+               '01110',
+               '10001',
+               '01110',);
+new Letter('9','01110',
+               '10001',
+               '01110',
+               '00001',
+               '01110',);
+new Letter('!','00100',
+               '00100',
+               '00100',
+               '00000',
+               '00100',);
+new Letter('?','01110',
+               '00001',
+               '00110',
+               '00000',
+               '00100',);
+new Letter('#','01010',
+               '11111',
+               '01010',
+               '11111',
+               '01010',);
+new Letter('$','01110',
+               '10100',
+               '01110',
+               '00101',
+               '01110',);   
+new Letter('-','00000',
+               '00000',
+               '01110',
+               '00000',
+               '00000',);
+new Letter('_','00000',
+               '00000',
+               '00000',
+               '00000',
+               '11111',);
+new Letter('+','00100',
+               '00100',
+               '11111',
+               '00100',
+               '00100',);
+new Letter('=','00000',
+               '11111',
+               '00000',
+               '11111',
+               '00000',);
+new Letter('[','01100',
+               '01000',
+               '01000',
+               '01000',
+               '01100',);
+new Letter(']','00110',
+               '00010',
+               '00010',
+               '00010',
+               '00110',) ;
+new Letter('\'','00100',
+                '00100',
+                '00000',
+                '00000',
+                '00000',);
+new Letter('\"','01010',
+                '01010',
+                '00000',
+                '00000',
+                '00000',);
+new Letter('/','00001',
+               '00010',
+               '00100',
+               '01000',
+               '10000',);           
+new Letter('\\','10000',
+                '01000',
+                '00100',
+                '00010',
+                '00001',);       
+document.getElementById('submit').addEventListener('click',function( ) {
+  submitTracking("input/" + input.value);
+  var a = input.value.toLowerCase();
+  var b = output.value;
+  if(a.length<=5){
+    var out = '゜';
+    var line1 = '゜';
+    var line2 = '゜';
+    var line3 = '゜';
+    var line4 = '゜';
+    var line5 = '゜';
+    var line6 = '゜';
+    var line7 = '゜';
+    for(var i = 0; a.length>i; i++){
+      for(var x = 0; charsIn.length>x; x++){
+        var c = a.substring(i,i+1);
+        if(charsIn.substring(x,x +1) ==c){
+          line1 = line1+norm(letters[c].line1)+'゜';
+          line2 = line2+norm(letters[c].line2)+'゜';
+          line3 =line3+norm(letters[c].line3)+'゜';
+          line4 = line4+norm(letters[c].line4)+'゜';
+          line5 = line5+norm(letters[c].line5)+'゜';
+          line6 = line6+norm(letters[c].line6)+"゜";
+          line7 = line7+norm(letters[c].line7)+'゜'; 
+        }
+      }
+    }
+    for(var i = 35; i>(a.length*6)+1; i--){
+      line1 = line1+'゜';
+      line2 = line2+'゜';
+      line3 = line3+'゜';
+      line4 = line4+'゜';
+      line5 = line5+'゜';
+      line6 =line6+'゜';
+      line7 = line7+'゜';
+    }
+    output.value = line1+line2+line3+line4+line5+line6+line7;
+  }else{alert('Too long!');}
+});
+    </script>
+  </body>
+</html>

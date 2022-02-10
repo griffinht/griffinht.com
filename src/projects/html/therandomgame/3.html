@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title id="title"></title>
+    <style>
+    .text {
+      font-family: arial;
+      color: black;
+    }
+    .optionLink {
+      height: 30px;
+      font-size: 30px;
+      background-color: blue;
+      color: black;
+      border-radius: 10px;
+      border: black 2px solid;
+      box-shadow: 2px 2px 2px black;
+      font-family: arial;
+    }
+    .optionLink[standard] {
+      width: 100px;
+    }
+    .optionLink:active {
+      box-shadow: 0px 0px 0px black;
+      position: relative;
+      top: 2px;
+    }
+    .optionLink[linked] {
+      text-decoration: none;
+    }
+    .optionLink[one]{
+      position: absolute;
+      top: 0px;
+      left: 415px;
+    }
+    .optionLink[two]{
+      position: absolute;
+      top: 25px;
+      left: 526px;
+    }
+    .optionLink[three]{
+      position: absolute;
+      top: 25px;
+      left: 665px;
+    }
+    .divText {
+      height: 30px;
+      font-size: 30px;
+      background-color: blue;
+      color: black;
+      border-radius: 10px;
+      border: black 2px solid;
+      box-shadow: 2px 2px 2px black;
+      font-family: arial;
+      width: 403px;
+    }
+    #topBar {
+      font-size: 30px;
+      font-family: arial;
+      background-color: grey;
+      border-radius: 10px;
+      height: 50px;
+      width: 100%;
+    }
+    [centerText] {
+      text-align: center;
+    }
+    #nextLevLink {
+      font-size: 40px;
+    }
+    #gameDivOne {
+      left: 10px;
+      top: 210px;
+      background-color: brown;
+      width: 150px;
+      height: 200px;
+      border-radius: 10px;
+      position: absolute;
+    }
+    #gameDivTwo {
+      left: 170px;
+      top: 210px;
+      background-color: brown;
+      width: 150px;
+      height: 200px;
+      border-radius: 10px;
+      position: absolute;
+    }
+    #gameDivThree {
+      left: 330px;
+      top: 210px;
+      background-color: brown;
+      width: 150px;
+      height: 200px;
+      border-radius: 10px;
+      position: absolute;
+    }
+    #pebble {
+        background-color: grey;
+        position: absolute;
+        left: 230px;
+        top: 380px;
+        width: 30px;
+        height: 20px;
+        border-radius: 20px;
+    }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script>
+$(document).ready(function(){
+  $("#gameDivTwo").animate({top: '-=50px'});
+  $("#gameDivTwo").delay(1500).animate({top: '+=50px'}, 400, function(){
+    $("#gameDivTwo").animate({left: '-=160px'});
+    $("#pebble").animate({left: '-=160px'});
+    $("#gameDivOne").animate({left: '+=160px'}, 400, function(){
+      $("#gameDivThree").animate({left: '-=320px'});
+      $("#gameDivTwo").animate({left: '+=320px'});
+      $("#pebble").animate({left: '+=320px'}, 400, function(){
+        $("#gameDivOne").animate({left: '-=160px'});
+        $("#gameDivThree").animate({left: '+=160px'}, 400, function(){
+          $("#gameDivOne").click(function(){
+            out();
+          });
+          $("#gameDivTwo").click(function(){
+            nextLevel();
+          });
+          $("#gameDivThree").click(function(){
+            out();
+          });
+        });
+      });
+    });
+  });
+});
+    </script>
+  </head>
+  <body>
+    <div id="topBar">
+      <h2 class="divText" id="divTitle">Level 1 | The Random Game</h2>
+      <p class="optionLink" onclick="restart();" standard one>Restart</p>
+      <a class="optionLink" href="levellists.html" linked two>Level List</a>
+      <a class="optionLink" href="therandomgame.html" linked three>Main Menu</a>
+    </div>
+    </div>
+    <a class="text" id="nextLevLink">Find the pebble.</a>
+    <div id="gameDivOne">
+    </div>
+    <div id="pebble">
+    </div>
+    <div id="gameDivTwo">
+    </div>
+    <div id="gameDivThree">
+    </div>
+    <script>
+var currentLevel = 3;
+var title = document.getElementById("title");
+title.innerHTML = "Level "+currentLevel+" | The Random Game";
+var divTitle = document.getElementById("divTitle");
+divTitle.innerHTML = "Level "+currentLevel+" | The Random Game";
+function restart(){
+  location.reload();
+}
+function out(){
+  var nextLevLink = document.getElementById("nextLevLink");
+  nextLevLink.innerHTML = "You Failed. Restarting...";
+  document.body.style.backgroundColor = "#CC0000";
+  restart = setTimeout(restart,3000)
+}
+
+function nextLevel(){
+  var nextLev = document.getElementById("nextLevLink");
+  var nextLevL = currentLevel + 1;
+  nextLev.setAttribute("href", nextLevL+".html");
+  nextLev.innerHTML = "You Passed! Next Level!";
+}
+    </script>
+  </body>
+</html>

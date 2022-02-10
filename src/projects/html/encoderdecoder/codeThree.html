@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Encoder/Decoder</title>
+    <style>
+    .text {
+      font-family: arial;
+      color: black;
+    }
+    #pCheck {
+      position: absolute;
+      top: 67px;
+      left: 17%;
+    }
+    </style>
+  </head>
+  <body>
+    <form>
+      <fieldset>
+        <legend class="text">Encoder/Decoder</legend>
+        <p class="text">Use only lower-case letters (a-z) and spaces. Do not double space.</p>
+        <input type="text" id="codeInput" class="text"><input type="checkbox" onclick="check();" id="chkBox"><p class="text" id="pCheck" onclick="check;">Show/Hide Characters</p><br />
+        <input type="button" value="Encode" class="button" onclick="encode();">
+        <input type="button" value="Decode" class="button" onclick="decode();">
+      </fieldset>
+    </form>
+  <h1 id="codeOutput" class="text"></h1>
+  <script>
+var codeInput = document.getElementById("codeInput");
+var codeOutput = document.getElementById("codeOutput");
+var chkBoxx = document.getElementById("chkBox");
+function encode(){
+    var subO = 0;
+    var subT = 1;
+    var codeInputt = codeInput.value;
+    var encoded = "";
+    for(i = codeInputt.length; i != 0; i--){
+    var hello = codeInputt;
+    var sub = hello.substring(subO, subT);
+    if(sub == "a"){
+      encoded += "75";
+    } else if(sub == "b"){
+      encoded += "38";
+    } else if(sub == "c"){
+      encoded += "56";
+    } else if(sub == "d"){
+      encoded += "45";
+    } else if(sub == "e"){
+      encoded += "91";
+    } else if(sub == "f"){
+      encoded += "64";
+    } else if(sub == "g"){
+      encoded += "54";
+    } else if(sub == "h"){
+      encoded += "69";
+    } else if(sub == "i"){
+      encoded += "25";
+    } else if(sub == "j"){
+      encoded += "55";
+    } else if(sub == "k"){
+      encoded += "16";
+    } else if(sub == "l"){
+      encoded += "32";
+    } else if(sub == "m"){
+      encoded += "90";
+    } else if(sub == "n"){
+      encoded += "58";
+    } else if(sub == "o"){
+      encoded += "23";
+    } else if(sub == "p"){
+      encoded += "43";
+    } else if(sub == "q"){
+      encoded += "50";
+    } else if(sub == "r"){
+      encoded += "30";
+    } else if(sub == "s"){
+      encoded += "17";
+    } else if(sub == "t"){
+      encoded += "41";
+    } else if(sub == "u"){
+      encoded += "98";
+    } else if(sub == "v"){
+      encoded += "65";
+    } else if(sub == "w"){
+      encoded += "34";
+    } else if(sub == "x"){
+      encoded += "96";
+    } else if(sub == "y"){
+      encoded += "53";
+    } else if(sub == "z"){
+      encoded += "33";
+    } else if(sub == " "){
+      encoded += "12";
+    } else{
+      encoded += "11";
+    }
+    subO++
+    subT++
+  }
+  codeOutput.innerHTML = encoded;
+}
+function decode(){
+    var decoded = "";
+    var subOO = 0;
+    var subTT = 2;
+    var subOOO = 0;
+    var subTTT = 2;
+    var z = 0;
+    var b = 2;
+    codeInputtt = codeInput.value;
+    codeInpute = codeInputtt.length / 2;
+    for(i = codeInpute; i > 0; i--){
+    var helloo = codeInputtt;
+    var subr = helloo.substring(z, b);
+    var z = z + 2;
+    var b = b + 2;
+    if(subr == "75"){
+      decoded += "a";
+    } else if(subr == "38"){
+      decoded += "b";
+    } else if(subr == "56"){
+      decoded += "b";
+    } else if(subr == "45"){
+      decoded += "d";
+    } else if(subr == "91"){
+      decoded += "e";
+    } else if(subr == "64"){
+      decoded += "f";
+    } else if(subr == "54"){
+      decoded += "g";
+    } else if(subr == "69"){
+      decoded += "h";
+    } else if(subr == "25"){
+      decoded += "i";
+    } else if(subr == "55"){
+      decoded += "j";
+    } else if(subr == "16"){
+      decoded += "k";
+    } else if(subr == "32"){
+      decoded += "l";
+    } else if(subr == "90"){
+      decoded += "m";
+    } else if(subr == "58"){
+      decoded += "n";
+    } else if(subr == "23"){
+      decoded += "o";
+    } else if(subr == "43"){
+      decoded += "p";
+    } else if(subr == "50"){
+      decoded += "q";
+    } else if(subr == "30"){
+      decoded += "r";
+    } else if(subr == "17"){
+      decoded += "s";
+    } else if(subr == "41"){
+      decoded += "t";
+    } else if(subr == "98"){
+      decoded += "u";
+    } else if(subr == "65"){
+      decoded += "v";
+    } else if(subr == "34"){
+      decoded += "w";
+    } else if(subr == "96"){
+      decoded += "x";
+    } else if(subr == "53"){
+      decoded += "y";
+    } else if(subr == "33"){
+      decoded += "z";
+    } else if(subr == "12"){
+      decoded += " ";
+    } else if(subr == "11"){
+      decoded += "Error";
+    } else {
+      decode += "Error";
+    }
+    }
+  codeOutput.innerHTML = decoded;
+}
+
+function check(){
+  if(chkBoxx.checked === false){
+    codeInput.setAttribute("type", "text");
+  } else if(chkBoxx.checked === true){
+    codeInput.setAttribute("type", "password");
+  } else {
+  }
+}
+  </script>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Google Search</title>
+    <style type="text/css">
+    .text {
+      font-family: arial;
+      color: black;
+    }
+    </style>
+    <script type="text/javascript">
+    function searche(){
+      var search = document.getElementById("search").value;
+      var type = document.getElementById("type").value;
+      window.open("http://www.google.com/"+type+search);
+    }
+    </script>
+  </head>
+  <body>
+    <form class="text">
+      <fieldset>
+        <legend>Google Search</legend>
+        <input type="text" id="search" class="text">
+        <select id="type" class="text">
+          <option value="?#q=">Standard</option>
+          <option value="?q=">Typing In Search</option>
+          <option value="?#e=">Google (with nav. Bar)</option>
+        </select><br />
+        <input type="button" value="Search!" onclick="searche();">
+      </fieldset>
+    </form>
+   </body>
+</html>

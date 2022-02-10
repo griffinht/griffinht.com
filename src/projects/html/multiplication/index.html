@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Multiplication</title>
+    <style>
+    * {
+      font-family: arial;
+      color: black;
+    }
+    h3, h2, input {
+      position: absolute;
+    }
+    #cor {
+      top: 30px;
+    }
+    #right {
+      top: 30px;
+      left: 100px;;
+    }
+    #incor {
+      top: 30px;
+      left: 130px;
+    }
+    #wrong {
+      top: 30px;
+      left: 230px;
+    }
+    #numberOne {
+      top: 100px;
+    }
+    #numberTwo {
+      top: 100px;
+      left: 60px;
+    }
+    #time {
+      top: 100px;
+      left: 40px;
+    }
+    #equal {
+      top: 100px;
+      left: 90px;
+    }
+    #numberInput {
+      top: 122px;
+      left: 110px;
+      width: 25px;
+    }
+    #check {
+      top: 122px;
+      left: 140px;
+    }
+    </style>
+  </head>
+  <body onload="generateQ();">
+    <form>
+      <legend>Multiplication</legend>
+      <div id="counters">
+        <h3 id="cor">Correct: </h3><h3 id="right">0</h3>
+        <h3 id="incor">Incorrect: </h3><h3 id="wrong">0</h3>
+      </div><br />
+      <div id="question">
+        <h2 id="numberOne"></h2>
+        <h2 id="time">X</h2>
+        <h2 id="numberTwo"></h2>
+        <h2 id="equal">=</h2>
+      </div>
+      <input type="text" id="numberInput">
+      <input type="button" onclick="checkNumber();" value="Check" id="check">
+      <h1 id="post"></h1>
+    </form>
+    <script>
+var numberOne = document.getElementById("numberOne");
+var numberTwo = document.getElementById("numberTwo");
+var numberInput = document.getElementById("numberInput")
+var right = document.getElementById("right");
+var wrong = document.getElementById("wrong");
+var pots = document.getElementById("post");
+var stillShow = 0;
+var timesDone = 0;
+var stillShows = 0;
+function generateQ(){
+  numberInput.value = "";
+  numberOne.innerHTML = Math.floor((Math.random() * 11) + 2);
+  numberTwo.innerHTML = Math.floor((Math.random() * 11) + 2);
+}
+function checkNumber(){
+  if(stillShow === 1){
+    pots.innerHTML = "";
+    stillShow = 0;
+    stillShows = 1;
+  }
+  if(numberInput.value == numberOne.innerHTML * numberTwo.innerHTML){
+    var wight = parseInt(right.innerHTML);
+    wight++;
+    right.innerHTML = wight;
+    generateQ();
+  } else if(numberInput.value != numberOne.innerHTML * numberTwo.innerHTML){
+    incorect();
+  } else {
+    incorect();
+  }
+}
+function incorect(){
+var wong = parseInt(wrong.innerHTML);
+wong++;
+wrong.innerHTML = wong;
+if(stillShows === 1){
+  stillShows = 0;
+  return
+}
+timesDone++;
+if(timesDone >= 3){
+  pots.innerHTML = numberOne.innerHTML+" times "+numberTwo.innerHTML+" = "+numberOne.innerHTML * numberTwo.innerHTML;
+  timesDone = 0;
+  stillShow = 1;
+  generateQ();
+}
+}
+    </script>
+  </body>
+</html>
