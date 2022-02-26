@@ -4,7 +4,7 @@ import sys
 import os
 import subprocess
 import importlib
-import getopt
+import argparse
 
 NAME="build"
 VERSION="0.0.1"
@@ -70,36 +70,26 @@ def buildDirectory(input, output):
     for file in files:
       build(input, file, output)
 
-def init():
-  input = DEFAULT_INPUT
-  output = DEFAULT_OUTPUT
-  watch = False
+def main():
+  parser = argparse.ArgumentParser()
+  parser.add_argument("-v", "--version", action="version", version=NAME + " v" + VERSION + " by " + AUTHOR)
+  parser.add_argument("-o", "--output", default=DEFAULT_OUTPUT)
+  parser.add_argument("-w", "--watch", default=False)
+  parser.add_argument("REMAINDER", nargs=argparse.REMAINDER)
+  parsed = parser.parse_args(sys.argv[1:])
 
-  try:
-    options, args = getopt.gnu_getopt(sys.argv[1:], "hvow", ["help", "version", "output", "watch"])
-  except getopt.GetoptError as e:
-    print(e)
-    usage()
-    sys.exit(2)
-
-  for option, value in options:
-    if option in ("-v", "--version"):
-      print(NAME + " v" + VERSION + " by " + AUTHOR)
-      sys.exit(0)
-    if option in ("-h", "--help"):
-      usage()
-      sys.exit(0)
-    elif option in ("-o", "--output"):
-      print("output")
-    elif option in ("-w", "--watch"):
-      print("watch")
-    else:
-      print("unhandled")
-    sys.exit(0)
-  if (len(args) > 0):
-    input = args[0]
-    if (len(args) > 1):
-      print("warning: ignoring extraneous trailing arguments: " + str(args[1:]))
+  print(str(parsed))
+  #if parsed.version
+  output = parsed.output
+  watch = parsed.watch
+  length = len(parsed.REMAINDER)
+  if length == 0:
+    input = DEFAULT_INPUT
+  else:
+    input = parsed.REMAINDER[0]
+    if length > 1:
+      print("warning: ignoring extraneous arguments: " + str(parsed.REMAINDER[1:]))
+  sys.exit(0)
 
   print(input + ", " + output + ", " + str(watch))
 
@@ -117,4 +107,5 @@ def init():
     print("building " + os.getcwd())
     #buildDirectory("")
 
-init()
+if __name__ == '__main__':
+    main()
