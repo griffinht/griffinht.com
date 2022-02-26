@@ -9,11 +9,11 @@ build() {
     if [ -d "$file" ]; then
         mkdir -p "$BUILD""$short"
     else
-        if [ "${file: -9}" == ".mustache" ]; then
+        if [ "${file: -9}" = ".mustache" ]; then
             echo mustache: "$file"
-        elif [ "${file: -5}" == ".yml" ]; then
+        elif [ "${file: -4}" = ".yml" ]; then
             echo yml: "$file"
-        elif [ "${file: -5}" == ".html" ]; then
+        elif [ "${file: -5}" = ".html" ]; then
             echo template: "$file"
             yml="$(echo $file | rev | cut -c 6- | rev)".yml
             if [ ! -f "$yml" ]; then
@@ -29,7 +29,7 @@ build() {
     fi
 }
 
-if [ "$1" == "--watch" ]; then
+if [ "$1" = "--watch" ]; then
     inotifywait -r -m -e close_write --format %w%f "$SOURCE" | 
         while read -r file; 
             do ./build.sh "$file"; 
@@ -38,7 +38,7 @@ elif [ -n "$1" ]; then
     build "$1"
 else
     mkdir -p "$BUILD"
-    rm -r "$BUILD"/*
+    rm -r ."$BUILD"/*
     for file in $(find "$SOURCE"/*); do
         build "$file"
     done
