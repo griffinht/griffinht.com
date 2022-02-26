@@ -92,11 +92,15 @@
         - websockets
         - javascript
     - name: Minecraft Generator
+      href: html/minecraftgenerator/index.html
+      description: Originally hosted on https://lemonpickles.net/generator, then https://stzups.net/generator
       tags:
         - javascript
       links:
-        - href: https://www.reddit.com/r/Minecraft/comments/6bznqx-remember_111_chat_limit_is_op_i_made_a_copypaste/
+        - href: https://www.reddit.com/r/Minecraft/comments/6bznqx/remember_111_chat_limit_is_op_i_made_a_copypaste/
           text: reddit
+        - href: https://hypixel.net/threads/forge-1-8-9-256chat-mod-v1-1b-now-actually-starts-up-edition.1959635/#post-14848866
+          text: forum
     - name: ball game
     - name: fakevirus
       tags:

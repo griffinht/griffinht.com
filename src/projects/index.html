@@ -58,7 +58,7 @@ article > section > section > div > div:hover {
             <h2 id="{{year}}" class="fragment">{{year}}<a href="#{{year}}">#</a></h2>
             {{#projects}}
             <section>
-                <h3 id="{{name}}" class="fragment">{{name}}<a href="#{{name}}">#</a></h3>
+                <h3 id="{{name}}" {{#href}}href="{{.}}"{{/href}} class="fragment">{{name}}<a href="#{{name}}">#</a></h3>
                 <div>
                 {{#tags}}
                     <div>{{.}}</div>

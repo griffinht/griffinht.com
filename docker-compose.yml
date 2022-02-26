@@ -6,4 +6,4 @@ services:
             - ./build:/app/build
             - ./scripts:/app/scripts
         working_dir: /app
-        entrypoint: ["sh", "-c", "pip install  pyinotify && ./scripts/build.py src && ./scripts/build.py --watch src"]
+        entrypoint: ["sh", "-c", "pip install  pyinotify && ./scripts/build.py --quiet src && ./scripts/build.py --watch src"]

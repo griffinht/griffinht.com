@@ -40,15 +40,18 @@ def build():
 """
 
 
-def build(input, file, output):
-  print(input + os.path.sep + file + ": ", end = "")
+def build(verbose, input, file, output):
+  if verbose:
+    print(input + os.path.sep + file + ": ", end = "")
   if (os.path.isdir(input + os.path.sep + file)):
-    print("making directories")
+    if verbose:
+      print("making directories")
     os.makedirs(input + os.path.sep + file, exist_ok=True)
   else:
-    print("building file")
+    if verbose:
+      print("building file")
 
-def watch(input, output):
+def watch(verbose, input, output):
   print("import pyinotify")
   pyinotify = importlib.import_module("pyinotify")
 
@@ -63,22 +66,25 @@ def watch(input, output):
   notifier = pyinotify.Notifier(wm)
   notifier.loop()
 
-def buildDirectory(input, output):
+def buildDirectory(verbose, input, output):
   for path, directories, files in os.walk(input):
     for directory in directories:
-      build(path, directory, output)
+      build(verbose, path, directory, output)
     for file in files:
-      build(input, file, output)
+      build(verbose, input, file, output)
 
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument("-v", "--version", action="version", version=NAME + " v" + VERSION + " by " + AUTHOR)
   parser.add_argument("-o", "--output", default=DEFAULT_OUTPUT)
-  parser.add_argument("-w", "--watch", default=False)
+  parser.add_argument("-w", "--watch", default=False, action='store_true')
+  parser.add_argument("-q", "--quiet", default=False, action='store_true')
   parser.add_argument("REMAINDER", nargs=argparse.REMAINDER)
   parsed = parser.parse_args(sys.argv[1:])
 
   output = parsed.output
+  isWatch = parsed.watch
+  verbose = not parsed.quiet
   length = len(parsed.REMAINDER)
   if length == 0:
     input = DEFAULT_INPUT
@@ -87,12 +93,12 @@ def main():
     if length > 1:
       print("warning: ignoring extraneous arguments: " + str(parsed.REMAINDER[1:]))
 
-  if parsed.watch:
+  if isWatch:
     print("watching " + os.getcwd() + os.path.sep + input)
-    watch(input, output)
+    watch(verbose, input, output)
   else:
     print("building " + os.getcwd() + os.path.sep + input)
-    buildDirectory(input, output)
+    buildDirectory(verbose, input, output)
 
 if __name__ == '__main__':
     main()
