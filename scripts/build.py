@@ -78,8 +78,6 @@ def main():
   parser.add_argument("REMAINDER", nargs=argparse.REMAINDER)
   parsed = parser.parse_args(sys.argv[1:])
 
-  print(str(parsed))
-  #if parsed.version
   output = parsed.output
   watch = parsed.watch
   length = len(parsed.REMAINDER)
@@ -89,23 +87,13 @@ def main():
     input = parsed.REMAINDER[0]
     if length > 1:
       print("warning: ignoring extraneous arguments: " + str(parsed.REMAINDER[1:]))
-  sys.exit(0)
 
-  print(input + ", " + output + ", " + str(watch))
-
-  if (len(sys.argv) > 1):
-    if (sys.argv[1] == "--watch"):
-      directory = ""
-      if (len(sys.argv) > 2):
-        directory = sys.argv[2]
-      print("watching " + os.getcwd() + os.path.sep + directory)
-      watch(directory)
-    else:
-      print("building " + sys.argv[1])
-      #buildDirectory(sys.argv[1])
+  if watch:
+    print("watching " + os.getcwd() + os.path.sep + input)
+    watch(input, output)
   else:
-    print("building " + os.getcwd())
-    #buildDirectory("")
+    print("building " + os.getcwd() + os.path.sep + input)
+    buildDirectory(input, output)
 
 if __name__ == '__main__':
     main()
