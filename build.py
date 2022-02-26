@@ -1,9 +1,14 @@
-#!/bin/sh
+#!/usr/bin/env python
 
-SOURCE=src
-BUILD=build
+import sys
+import os
+import subprocess
 
-build() {
+SOURCE="src"
+BUILD="build"
+
+"""
+def build():
     file="$1"
     short=$(echo "$file" | cut -c $((${#SOURCE}+1))-);
     if [ -d "$file" ]; then
@@ -27,9 +32,9 @@ build() {
             cp "$file" "$BUILD""$short"
         fi
     fi
-}
-
-if [ "$1" = "--watch" ]; then
+"""
+"""
+if (sys.argv[1] == "--watch" ):
     inotifywait -r -m -e close_write --format %w%f "$SOURCE" | 
         while read -r file; 
             do ./build.sh "$file"; 
@@ -43,3 +48,24 @@ else
         build "$file"
     done
 fi
+"""
+def build(directory):
+  print(directory)
+
+def setup():
+  print(setup)
+  print("installing pyinotify with pip...")
+  completedProcess = subprocess.run(["dpip", "install", "pyinotify"])
+  if (completedProcess.returncode != 0):
+    print("error installing pyinotify" + completedProcess.returncode)
+
+setup()
+
+if (len(sys.argv) > 1):
+  if (sys.argv[1] == "--watch"):
+    directory = ""
+    if (len(sys.argv) > 2):
+      directory = sys.argv[2]
+    print("watching " + os.getcwd() + "/" + directory)
+  else:
+    print("building " + sys.argv[1])

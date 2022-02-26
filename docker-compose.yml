@@ -1,10 +1,9 @@
 services:
     mustache:
-        image: toolbelt/mustache
-        user: root
+        image: python
         volumes:
             - ./src:/app/src
             - ./build:/app/build
-            - ./build.sh:/app/build.sh
+            - ./build.py:/app/build.py
         working_dir: /app
-        entrypoint: ["sh", "-c", "apk add inotify-tools && ./build.sh && ./build.sh --watch"]
+        entrypoint: ["./build.py", "--watch", "asd"]
