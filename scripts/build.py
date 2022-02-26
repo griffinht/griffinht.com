@@ -11,6 +11,7 @@ VERSION="0.0.1"
 AUTHOR="griffinht"
 DEFAULT_INPUT=""
 DEFAULT_OUTPUT="build"
+DEFAULT_TEMPLATE_EXTENSION=["template"]
 
 """
 def build():
@@ -40,24 +41,38 @@ def build():
 """
 
 
-def build(verbose, input, file, output):
+def build(verbose, copy, template_extension, input, file, output):
   if verbose:
     print(input + os.path.sep + file + ": ", end = "")
   if (os.path.isdir(input + os.path.sep + file)):
     if verbose:
-      print("making directories")
+      print("directory - making directories")
     os.makedirs(input + os.path.sep + file, exist_ok=True)
   else:
-    if verbose:
-      print("building file")
+    extension = os.path.splitext(file)[1]
+    if extension in ["yml", "yaml", "json"]:
+      if verbose:
+        print("template data - ignoring")
+    elif extension.split(".")[0] == template_extension:
+      print("template - parsing with mustache")
+    else:
+      if verbose:
+        print("other file - ", end = "")
+      if copy:
+        if verbose:
+          print("copying")
+      else:
+        if verbose:
+          print("linking")
 
-def watch(verbose, input, output):
+
+def watch(verbose, copy, template_extension, input, output):
   print("import pyinotify")
   pyinotify = importlib.import_module("pyinotify")
 
   def update(update):
     sys.stdout.flush()
-    build(update.path + update.name)
+    build(verbose, copy, template_extension, update.path, update.name, output)
 
   wm = pyinotify.WatchManager()
   wm.add_watch(input, pyinotify.IN_CLOSE_WRITE | pyinotify.IN_CREATE | pyinotify.IN_DELETE | pyinotify.IN_MODIFY, update, rec=True)
@@ -66,12 +81,12 @@ def watch(verbose, input, output):
   notifier = pyinotify.Notifier(wm)
   notifier.loop()
 
-def buildDirectory(verbose, input, output):
+def buildDirectory(verbose, copy, template_extension, input, output):
   for path, directories, files in os.walk(input):
     for directory in directories:
-      build(verbose, path, directory, output)
+      build(verbose, copy, template_extension, path, directory, output)
     for file in files:
-      build(verbose, input, file, output)
+      build(verbose, copy, template_extension, input, file, output)
 
 def main():
   parser = argparse.ArgumentParser()
@@ -79,12 +94,16 @@ def main():
   parser.add_argument("-o", "--output", default=DEFAULT_OUTPUT)
   parser.add_argument("-w", "--watch", default=False, action='store_true')
   parser.add_argument("-q", "--quiet", default=False, action='store_true')
+  parser.add_argument("-c", "--copy", default=False, action='store_true')#todo description
+  parser.add_argument("-t", "--template_extension", default=DEFAULT_TEMPLATE_EXTENSION)
   parser.add_argument("REMAINDER", nargs=argparse.REMAINDER)
   parsed = parser.parse_args(sys.argv[1:])
 
   output = parsed.output
   isWatch = parsed.watch
   verbose = not parsed.quiet
+  copy = parsed.copy
+  template_extension = parsed.template_extension
   length = len(parsed.REMAINDER)
   if length == 0:
     input = DEFAULT_INPUT
@@ -95,10 +114,10 @@ def main():
 
   if isWatch:
     print("watching " + os.getcwd() + os.path.sep + input)
-    watch(verbose, input, output)
+    watch(verbose, copy, template_extension, input, output)
   else:
     print("building " + os.getcwd() + os.path.sep + input)
-    buildDirectory(verbose, input, output)
+    buildDirectory(verbose, copy, template_extension, input, output)
 
 if __name__ == '__main__':
     main()
