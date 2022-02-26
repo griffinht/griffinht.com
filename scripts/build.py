@@ -41,14 +41,14 @@ def build():
 
 
 def build(input, file, output):
-  print(file + ": ", end = "")
+  print(input + os.path.sep + file + ": ", end = "")
   if (os.path.isdir(input + os.path.sep + file)):
     print("making directories")
     os.makedirs(input + os.path.sep + file, exist_ok=True)
   else:
     print("building file")
 
-def watch(directory):
+def watch(input, output):
   print("import pyinotify")
   pyinotify = importlib.import_module("pyinotify")
 
@@ -57,7 +57,7 @@ def watch(directory):
     build(update.path + update.name)
 
   wm = pyinotify.WatchManager()
-  wm.add_watch(directory, pyinotify.IN_CLOSE_WRITE | pyinotify.IN_CREATE | pyinotify.IN_DELETE | pyinotify.IN_MODIFY, update, rec=True)
+  wm.add_watch(input, pyinotify.IN_CLOSE_WRITE | pyinotify.IN_CREATE | pyinotify.IN_DELETE | pyinotify.IN_MODIFY, update, rec=True)
   print("looping")
   sys.stdout.flush()
   notifier = pyinotify.Notifier(wm)
@@ -79,7 +79,6 @@ def main():
   parsed = parser.parse_args(sys.argv[1:])
 
   output = parsed.output
-  watch = parsed.watch
   length = len(parsed.REMAINDER)
   if length == 0:
     input = DEFAULT_INPUT
@@ -88,7 +87,7 @@ def main():
     if length > 1:
       print("warning: ignoring extraneous arguments: " + str(parsed.REMAINDER[1:]))
 
-  if watch:
+  if parsed.watch:
     print("watching " + os.getcwd() + os.path.sep + input)
     watch(input, output)
   else:
