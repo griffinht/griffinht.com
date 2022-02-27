@@ -43,24 +43,27 @@ def watch(copy, input, output):
   asyncinotify = importlib.import_module("asyncinotify")
   asyncio = importlib.import_module("asyncio")
   async def _loop():
-
+    print("adding recursive watches...")
     with asyncinotify.Inotify() as inotify:
-      inotify.add_watch(input, asyncinotify.Mask.CLOSE_WRITE | asyncinotify.Mask.CREATE | asyncinotify.Mask.DELETE | asyncinotify.Mask.MODIFY | asyncinotify.Mask.MOVE)
-
-      async for events in inotify:
-        print(events)
-        if (events.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
+      mask = asyncinotify.Mask.CLOSE_WRITE | asyncinotify.Mask.CREATE | asyncinotify.Mask.DELETE | asyncinotify.Mask.MODIFY | asyncinotify.Mask.MOVE
+      inotify.add_watch(input, mask)
+      for path, directories, files in os.walk(input):
+        for directory in directories:
+          inotify.add_watch(path + os.path.sep + directory, mask)
+      print("watches added")
+      sys.stdout.flush()
+      async for event in inotify:
+        print(event)
+        if (event.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
           print("CLOSE_WRITE")
-          post_path = ""
-          file = "index.html"
-          build(copy, input + post_path, file, output + post_path)
-        elif (events.mask & asyncinotify.Mask.CREATE) > 0:
+          build(copy, input, str(event.name), output + input[len(str(input)):])
+        elif (event.mask & asyncinotify.Mask.CREATE) > 0:
           print("CREATE")
-        elif (events.mask & asyncinotify.Mask.DELETE) > 0:
+        elif (event.mask & asyncinotify.Mask.DELETE) > 0:
           print("DELETE")
-        elif (events.mask & asyncinotify.Mask.MODIFY) > 0:
+        elif (event.mask & asyncinotify.Mask.MODIFY) > 0:
           print("MODIFY")
-        elif (events.mask & asyncinotify.Mask.MOVE) > 0:
+        elif (event.mask & asyncinotify.Mask.MOVE) > 0:
           print("MOVE")
 
         sys.stdout.flush()
