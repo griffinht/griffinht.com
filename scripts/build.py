@@ -56,8 +56,7 @@ def watch(copy, input, output):
         file = str(event.name)
         _input = str(event.path)[:-len(file) - 1]
         _output = output + input[len(_input):]
-        print(event)
-        print(_input, file, _output)
+        print(_input, file, _output, end=" ")
         sys.stdout.flush()
         if (event.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
           print("CLOSE_WRITE")
