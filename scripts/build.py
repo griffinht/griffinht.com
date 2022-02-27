@@ -22,7 +22,7 @@ def build_template(input_path, template_path, output_path):
       template = yaml.safe_load(stream)
       with open(input_path, "r") as input:
         with open(output_path, "w") as output:
-          output.write(chevron.render(input, template))
+          output.write(chevron.render(input, template, partials_path=input_path))
     except yaml.YAMLError as e:
       print(e)
       return
