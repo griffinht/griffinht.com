@@ -53,18 +53,30 @@ def watch(copy, input, output):
       print("watches added")
       sys.stdout.flush()
       async for event in inotify:
+        file = str(event.name)
+        _input = str(event.path)[:-len(file) - 1]
+        _output = output + input[len(_input):]
         print(event)
+        print(_input, file, _output)
+        sys.stdout.flush()
         if (event.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
           print("CLOSE_WRITE")
-          build(copy, input, str(event.name), output + input[len(str(input)):])
+          build(copy, _input, file, _output)
         elif (event.mask & asyncinotify.Mask.CREATE) > 0:
           print("CREATE")
+          build(copy, _input, file, _output)
         elif (event.mask & asyncinotify.Mask.DELETE) > 0:
           print("DELETE")
+          os.remove(_output + os.path.sep + file)
         elif (event.mask & asyncinotify.Mask.MODIFY) > 0:
           print("MODIFY")
-        elif (event.mask & asyncinotify.Mask.MOVE) > 0:
-          print("MOVE")
+          build(copy, _input, file, _output)
+        elif (event.mask & asyncinotify.Mask.MOVED_FROM) > 0:
+          print("MOVED_FROM")
+          os.remove(_output + os.path.sep + file)
+        elif (event.mask & asyncinotify.Mask.MOVED_TO) > 0:
+          print("MOVED_TO")
+          build(copy, _input, file, _output)
 
         sys.stdout.flush()
 
