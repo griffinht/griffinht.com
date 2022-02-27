@@ -11,9 +11,12 @@ body {
     display: flex;
     flex-direction: column;
 }
-header > a {
+h1 > a, h2 > a, h3 > a, h4 > a, h5 > a, h6 > a {
     color: black;
     text-decoration: none;
+}
+h1 > a:hover, h2 > a:hover, h3 > a:hover, h4 > a:hover, h5 > a:hover, h6 > a:hover {
+    text-decoration: underline;
 }
 header {
     background-color: var(--header);
@@ -23,10 +26,12 @@ footer {
     margin-right: auto;
     background-color: var(--header);
 }
-.fragment > a {
+
+.fragment > .fragmentAnchor {
+    color: initial;
     visibility: hidden;
     text-decoration: none;
 }
-.fragment:hover > a {
+.fragment:hover > .fragmentAnchor {
     visibility: visible;
 }

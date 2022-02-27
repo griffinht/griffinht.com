@@ -45,9 +45,11 @@ article > section > section > div > div:hover {
 </head>
 <body>
     <header>
-        <a href="../index.html">
-        <h1>griffinht.com</h1>
-        </a>
+        <h1>
+            <a href="../index.html">
+                griffinht.com
+            </a>
+        </h1>
     </header>
     <article>
         <header>
@@ -55,10 +57,13 @@ article > section > section > div > div:hover {
         </header>
         {{#.}}
         <section>
-            <h2 id="{{year}}" class="fragment">{{year}}<a href="#{{year}}">#</a></h2>
+            <h2 id="{{year}}" class="fragment">{{year}}<a class="fragmentAnchor" href="#{{year}}">#</a></h2>
             {{#projects}}
             <section>
-                <h3 id="{{name}}" {{#href}}href="{{.}}"{{/href}} class="fragment">{{name}}<a href="#{{name}}">#</a></h3>
+                <h3 id="{{name}}" class="fragment">
+                    {{#href}}<a href="{{.}}">{{/href}}{{name}}{{#href}}</a>{{/href}}
+                    <a class="fragmentAnchor" href="#{{name}}">#</a>
+                </h3>
                 <div>
                 {{#tags}}
                     <div>{{.}}</div>
