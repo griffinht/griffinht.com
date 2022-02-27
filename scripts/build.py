@@ -56,6 +56,11 @@ def watch(copy, input, output):
         file = str(event.name)
         _input = str(event.path)[:-len(file) - 1]
         _output = output + input[len(_input):]
+        build_directory(copy, _input, _output)
+        """
+        file = str(event.name)
+        _input = str(event.path)[:-len(file) - 1]
+        _output = output + input[len(_input):]
         print(_input, file, _output, end=" ")
         sys.stdout.flush()
         if (event.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
@@ -78,6 +83,7 @@ def watch(copy, input, output):
           build(copy, _input, file, _output)
 
         sys.stdout.flush()
+        """
 
   loop = asyncio.new_event_loop()
   asyncio.set_event_loop(loop)
