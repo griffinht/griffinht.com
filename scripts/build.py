@@ -15,9 +15,6 @@ AUTHOR="griffinht"
 DEFAULT_INPUT=""
 DEFAULT_OUTPUT=""
 
-def build_directory(verbose, input_path, output_path):
-  os.makedirs(output_path, exist_ok=True)
-
 def build_template(verbose, input_path, template_path, output_path):
   print(input_path + " + "  + template_path + " -> " + output_path)
   with open(template_path, "r") as stream:
@@ -42,30 +39,48 @@ def build_file(verbose, copy, input_path, output_path):
       raise e
 
 def watch(verbose, copy, input, output):
-  print("import pyinotify")
-  pyinotify = importlib.import_module("pyinotify")
+  print("import asyncinotify")
+  asyncinotify = importlib.import_module("asyncinotify")
+  asyncio = importlib.import_module("asyncio")
+  async def _loop():
 
-  def update(update):
-    sys.stdout.flush()
-    #buildDirectory(verbose, copy, update.path, update.name, output)
+    with asyncinotify.Inotify() as inotify:
+      inotify.add_watch(input, asyncinotify.Mask.CLOSE_WRITE | asyncinotify.Mask.CREATE | asyncinotify.Mask.DELETE | asyncinotify.Mask.MODIFY | asyncinotify.Mask.MOVE)
 
-  wm = pyinotify.WatchManager()
-  wm.add_watch(input, pyinotify.IN_CLOSE_WRITE | pyinotify.IN_CREATE | pyinotify.IN_DELETE | pyinotify.IN_MODIFY, update, rec=True)
-  print("looping")
-  sys.stdout.flush()
-  notifier = pyinotify.Notifier(wm)
-  notifier.loop()
+      async for events in inotify:
+        print(events)
+        if (events.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
+          print("CLOSE_WRITE")
+        elif (events.mask & asyncinotify.Mask.CREATE) > 0:
+          print("CREATE")
+        elif (events.mask & asyncinotify.Mask.DELETE) > 0:
+          print("DELETE")
+        elif (events.mask & asyncinotify.Mask.MODIFY) > 0:
+          print("MODIFY")
+        elif (events.mask & asyncinotify.Mask.MOVE) > 0:
+          print("MOVE")
 
-def buildDirectory(verbose, copy, input, output):
+        sys.stdout.flush()
+
+  loop = asyncio.new_event_loop()
+  asyncio.set_event_loop(loop)
+  try:
+      loop.run_until_complete(_loop())
+  except KeyboardInterrupt:
+      print('shutting down')
+  finally:
+      loop.run_until_complete(loop.shutdown_asyncgens())
+      loop.close()
+
+def build_directory(verbose, copy, input, output):
   length = len(input)
   for path, directories, files in os.walk(input):
     post_path  = path[length:]
 
     for directory in directories:
-      input_path = path + os.path.sep + directory
       output_path = output + post_path + os.path.sep + directory
 
-      build_directory(verbose, input_path, output_path)
+      os.makedirs(output_path, exist_ok=True)
     for file in files:
       input_path = path + os.path.sep + file
       output_path = output + post_path + os.path.sep + file
@@ -106,7 +121,7 @@ def main():
     watch(verbose, copy, input, output)
   else:
     print("building " + os.getcwd() + os.path.sep + input)
-    buildDirectory(verbose, copy, input, output)
+    build_directory(verbose, copy, input, output)
 
 if __name__ == '__main__':
     main()
