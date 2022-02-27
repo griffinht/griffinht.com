@@ -1,6 +1,6 @@
 title: pictures
 root: ../
-location: blog/index.yml
+location: pictures/index.html
 pictures:
   - name: cookiejar
     thumbnail: 0.jpg

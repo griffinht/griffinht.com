@@ -1,3 +1,6 @@
+title: cookiejar
+root: ../../
+location: pictures/cookiejar/index.html
 pictures:
   - src: 0.jpg
   - src: 1.jpg
