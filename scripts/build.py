@@ -42,31 +42,28 @@ def build():
 
 
 def build(verbose, copy, template_extension, input, file, output):
-  if verbose:
-    print(input + os.path.sep + file + ": ", end = "")
+  def vprint(*string, **a):
+    if verbose:
+      print(*string, **a)
+  vprint(input + os.path.sep + file + ": ", end = "")
 
   input_path = input + os.path.sep + file
   output_path = output + os.path.sep + file
   if os.path.isdir(input_path):
-    if verbose:
-      print("directory - making directories")
+    vprint("directory - making directories")
     os.makedirs(output_path, exist_ok=True)
   else:
     extension = file.split(".")
     if extension[-1] in ["yml", "yaml", "json"]:
-      if verbose:
-        print("template data - ignoring")
+      vprint("template data - ignoring")
     elif template_extension in extension:
       print("template - parsing with mustache")
     else:
-      if verbose:
-        print("file - ", end = "")
+      vprint("file - ", end = "")
       if copy:
-        if verbose:
-          print("copying")
+        vprint("copying")
       else:
-        if verbose:
-          print("linking")
+        vprint("linking")
 
 
 def watch(verbose, copy, template_extension, input, output):
