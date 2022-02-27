@@ -42,9 +42,9 @@ def build():
 
 
 def build(verbose, copy, template_extension, input, file, output):
-  def vprint(*string, **a):
+  def vprint(*a, **b):
     if verbose:
-      print(*string, **a)
+      print(*a, **b)
   vprint(input + os.path.sep + file + ": ", end = "")
 
   input_path = input + os.path.sep + file
