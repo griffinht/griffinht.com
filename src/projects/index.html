@@ -1,8 +1,6 @@
 <html>
 <head>
     {{> ../head}}
-    <title>griffinht.com | projects</title>
-    <link rel="stylesheet" type="text/css" href="../style.css">
     <style>
 article {
     width: 100%;
@@ -55,7 +53,7 @@ article > section > section > div > div:hover {
         <header>
             <h1>projects</h1>
         </header>
-        {{#.}}
+        {{#projects}}
         <section>
             <h2 id="{{year}}" class="fragment">{{year}}<a class="fragmentAnchor" href="#{{year}}">#</a></h2>
             {{#projects}}
@@ -81,7 +79,7 @@ article > section > section > div > div:hover {
             </section>
             {{/projects}}
         </section>
-        {{/.}}
+        {{/projects}}
     </article>
     <footer>
         <a href="https://github.com/stzups/griffinht.com">source</a>
