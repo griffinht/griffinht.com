@@ -8,7 +8,7 @@
         - docker
       description: EdNotes is a project
       links:
-        - href: https://github.com/stzups/ednotes
+        - href: https://github.com/griffinht/ednotes
       text: source
     - name: speedtest
       tags:
@@ -18,7 +18,7 @@
         - docker
       description: Experimential HTTP speedtest server
       links:
-        - href: https://github.com/stzups/ednotes
+        - href: https://github.com/griffinht/ednotes
           text: source
 - year: 2021
   projects:
@@ -28,7 +28,7 @@
         - docker
       description: Simple task scheduler/repeater
       links:
-        - href: https://github.com/stzups/dockron
+        - href: https://github.com/griffinht/dockron
           text: source
     - name: ip-server
       tags:
@@ -38,7 +38,7 @@
         - docker
       raw: "<p>Simple server that returns client ip address</p><code>docker run --rm stzups/ip-server -c griffinht.com:38234</code>"
       links:
-        - href: https://github.com/stzups/ip-server
+        - href: https://github.com/griffinht/ip-server
           text: source
         - href: http://griffinht.com:38234
           text: demo
