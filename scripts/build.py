@@ -41,40 +41,31 @@ def build():
     fi
 """
 
+def build_directory(verbose, input_path, output_path):
+  if verbose:
+    print("directory - making directories")
+  os.makedirs(output_path, exist_ok=True)
 
-def build(verbose, copy, template_extension, input, file, output):
-  def vprint(*a, **b):
+def build_template(verbose, template_extension, input_path, output_path):
+  if verbose:
+    print("template - parsing with mustache")
+
+def build_file(verbose, copy, input_path, output_path):
+  if verbose:
+    print("file - ", end = "")
+  if copy:
     if verbose:
-      print(*a, **b)
-
-  input_path = input + os.path.sep + file
-  output_path = output + os.path.sep + file
-
-  vprint(input_path + "->" + output_path + ": ", end = "")
-
-  if os.path.isdir(input_path):
-    vprint("directory - making directories")
-    os.makedirs(output_path, exist_ok=True)
+      print("copying")
+    shutil.copyfile(input_path, output_path)
   else:
-    extension = file.split(".")
-    if extension[-1] in ["yml", "yaml", "json"]:
-      vprint("template data - ignoring")
-    elif template_extension in extension:
-      vprint("template - parsing with mustache")
-    else:
-      vprint("file - ", end = "")
-      if copy:
-        vprint("copying")
-        shutil.copyfile(input_path, output_path)
-      else:
-        vprint("linking")
-        try:
-          os.readlink(output_path)
-        except FileNotFoundError:
-          os.symlink(os.getcwd() + os.path.sep + input_path, output_path)
-        except Exception as e:
-          raise e
-
+    if verbose:
+      print("linking")
+    try:
+      os.readlink(output_path)
+    except FileNotFoundError:
+      os.symlink(os.getcwd() + os.path.sep + input_path, output_path)
+    except Exception as e:
+      raise e
 
 def watch(verbose, copy, template_extension, input, output):
   print("import pyinotify")
@@ -95,10 +86,33 @@ def buildDirectory(verbose, copy, template_extension, input, output):
   length = len(input)
   for path, directories, files in os.walk(input):
     post_path  = path[length:]
+
+
+
     for directory in directories:
-      build(verbose, copy, template_extension, path, directory, output + post_path)
+      input_path = path + os.path.sep + directory
+      output_path = output + post_path + os.path.sep + directory
+
+      if verbose:
+        print(input_path + "->" + output_path + ": ", end = "")
+
+      build_directory(verbose, input_path, output_path)
     for file in files:
-      build(verbose, copy, template_extension, path, file, output + post_path)
+      input_path = path + os.path.sep + file
+      output_path = output + post_path + os.path.sep + file
+
+      if verbose:
+        print(input_path + "->" + output_path + ": ", end = "")
+
+      extension = file.split(".")
+      if extension[-1] in ["yml", "yaml", "json"]:
+        if verbose:
+          print("template data - ignoring")
+      elif template_extension in extension:
+        if verbose:
+          print("template - parsing with mustache")
+      else:
+        build_file(verbose, copy, input_path, output_path)
 
 def main():
   parser = argparse.ArgumentParser()
