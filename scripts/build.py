@@ -89,13 +89,15 @@ def watch(copy, input, output):
       loop.run_until_complete(loop.shutdown_asyncgens())
       loop.close()
 
-def build(copy, input, file, output):
+def build(copy, input, file, output, files=None):
   if os.path.isdir(input + os.path.sep + file):
     os.makedirs(output + os.path.sep + file, exist_ok=True)
   else:
     extension = file.split(".")
     if extension[-1] == "yml":
-      for f in os.listdir(input):
+      if files == None:
+        files = os.listdir(input)
+      for f in files:
         if f.split(".")[0] == extension[0]:
           build_template(input + os.path.sep + f, input + os.path.sep + file, output + os.path.sep + f)
           break
@@ -110,7 +112,7 @@ def build_directory(copy, input, output):
     for directory in directories:
       build(copy, path, directory, _output)
     for file in files:
-      build(copy, path, file, _output)
+      build(copy, path, file, _output, files)
 
 def main():
   parser = argparse.ArgumentParser()
