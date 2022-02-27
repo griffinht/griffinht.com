@@ -19,21 +19,18 @@ def build_directory(verbose, input_path, output_path):
   os.makedirs(output_path, exist_ok=True)
 
 def build_template(verbose, input_path, template_path, output_path):
-  print("template found" + template_path)
-  if os.path.exists(template_path):
-    with open(template_path, "r") as stream:
-      try:
-        template = yaml.safe_load(stream)
-        print(template)
-        if verbose:
-          print("template .yml - parsing with mustache")
-      except yaml.YAMLError as e:
-        print(e)
-        return
-  else:
-    print("template with no data .yml - parsing with mustache")
-    if verbose:
-      print("template - parsing with mustache")
+  print("template found" + input_path + " + "  + template_path + " -> " + output_path)
+  with open(template_path, "r") as stream:
+    try:
+      template = yaml.safe_load(stream)
+      if verbose:
+        print("template .yml - parsing with mustache")
+      with open(input_path, "r") as input:
+        with open(output_path, "w") as output:
+          output.write(chevron.render(input, template))
+    except yaml.YAMLError as e:
+      print(e)
+      return
 
 def build_file(verbose, copy, input_path, output_path):
   if copy:
@@ -79,7 +76,10 @@ def buildDirectory(verbose, copy, input, output):
       if extension[-1] == "yml":
         if verbose:
           print(input_path + "->" + output_path + ": ", end = "")
-        build_template(verbose, input_path, path + os.path.sep + file + ".yml", output_path)
+        for f in files:
+          if f.split(".")[0] == extension[0]:
+            build_template(verbose, path + os.path.sep + f, input_path, output + post_path + os.path.sep + f)
+            break
       elif not extension[-1] == "mustache":
         build_file(verbose, copy, input_path, output_path)
 
