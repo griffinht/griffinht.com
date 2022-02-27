@@ -1,12 +1,10 @@
-FROM toolbelt/mustache as build
-
-USER root
+FROM python as build
 
 WORKDIR /usr/src
 
 COPY src src
-COPY build.sh .
-RUN ./build.sh
+COPY scripts/ scripts/
+RUN pip install asyncinotify chevron pyyaml && ./scripts/build.py --output build src
 
 FROM scratch
 
