@@ -10,8 +10,8 @@ NAME="build"
 VERSION="0.0.1"
 AUTHOR="griffinht"
 DEFAULT_INPUT=""
-DEFAULT_OUTPUT="build"
-DEFAULT_TEMPLATE_EXTENSION=["template"]
+DEFAULT_OUTPUT=""
+DEFAULT_TEMPLATE_EXTENSION="template"
 
 """
 def build():
@@ -44,20 +44,23 @@ def build():
 def build(verbose, copy, template_extension, input, file, output):
   if verbose:
     print(input + os.path.sep + file + ": ", end = "")
-  if (os.path.isdir(input + os.path.sep + file)):
+
+  input_path = input + os.path.sep + file
+  output_path = output + os.path.sep + file
+  if os.path.isdir(input_path):
     if verbose:
       print("directory - making directories")
-    os.makedirs(input + os.path.sep + file, exist_ok=True)
+    os.makedirs(output_path, exist_ok=True)
   else:
-    extension = os.path.splitext(file)[1]
-    if extension in ["yml", "yaml", "json"]:
+    extension = file.split(".")
+    if extension[-1] in ["yml", "yaml", "json"]:
       if verbose:
         print("template data - ignoring")
-    elif extension.split(".")[0] == template_extension:
+    elif template_extension in extension:
       print("template - parsing with mustache")
     else:
       if verbose:
-        print("other file - ", end = "")
+        print("file - ", end = "")
       if copy:
         if verbose:
           print("copying")
