@@ -30,6 +30,9 @@ def build_template(input, file, template, output):
     except FileNotFoundError as e:
       print(e)
       return
+    except IsADirectoryError as e:
+      print(e)
+      return
 
 def build_file(copy, input_path, output_path):
   if copy:
