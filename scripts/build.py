@@ -19,12 +19,10 @@ def build_directory(verbose, input_path, output_path):
   os.makedirs(output_path, exist_ok=True)
 
 def build_template(verbose, input_path, template_path, output_path):
-  print("template found" + input_path + " + "  + template_path + " -> " + output_path)
+  print(input_path + " + "  + template_path + " -> " + output_path)
   with open(template_path, "r") as stream:
     try:
       template = yaml.safe_load(stream)
-      if verbose:
-        print("template .yml - parsing with mustache")
       with open(input_path, "r") as input:
         with open(output_path, "w") as output:
           output.write(chevron.render(input, template))
@@ -74,8 +72,6 @@ def buildDirectory(verbose, copy, input, output):
 
       extension = file.split(".")
       if extension[-1] == "yml":
-        if verbose:
-          print(input_path + "->" + output_path + ": ", end = "")
         for f in files:
           if f.split(".")[0] == extension[0]:
             build_template(verbose, path + os.path.sep + f, input_path, output + post_path + os.path.sep + f)
