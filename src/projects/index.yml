@@ -1,5 +1,6 @@
 title: projects
 root: ../
+location: projects/index.html
 projects:
   - year: 2022
     projects:
