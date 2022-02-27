@@ -112,7 +112,7 @@ def build_directory(copy, input, output):
     for directory in directories:
       build(copy, path, directory, _output)
     for file in files:
-      build(copy, path, file, _output, files)
+      build(copy, path, file, _output, files=files)
 
 def main():
   parser = argparse.ArgumentParser()
