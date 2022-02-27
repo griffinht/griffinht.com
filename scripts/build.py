@@ -72,29 +72,27 @@ def watch(copy, input, output):
       loop.run_until_complete(loop.shutdown_asyncgens())
       loop.close()
 
-def build():
+def build(copy, input, file, output):
+  extension = file.split(".")
+  if extension[-1] == "yml":
+    for f in os.listdir(input):
+      if f.split(".")[0] == extension[0]:
+        build_template(input + os.path.sep + f, input + os.path.sep + file, output + os.path.sep + f)
+        break
+  elif not extension[-1] == "mustache":
+    build_file(copy, input + os.path.sep + file, output + os.path.sep + file)
 
 def build_directory(copy, input, output):
-  length = len(input)
+  input_length = len(input)
   for path, directories, files in os.walk(input):
-    post_path  = path[length:]
+    post_path = path[input_length:]
 
     for directory in directories:
       output_path = output + post_path + os.path.sep + directory
 
       os.makedirs(output_path, exist_ok=True)
     for file in files:
-      input_path = path + os.path.sep + file
-      output_path = output + post_path + os.path.sep + file
-
-      extension = file.split(".")
-      if extension[-1] == "yml":
-        for f in files:
-          if f.split(".")[0] == extension[0]:
-            build_template(path + os.path.sep + f, input_path, output + post_path + os.path.sep + f)
-            break
-      elif not extension[-1] == "mustache":
-        build_file(copy, input_path, output_path)
+      build(copy, path, file, output + post_path)
 
 def main():
   parser = argparse.ArgumentParser()
