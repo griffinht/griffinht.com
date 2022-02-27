@@ -46,14 +46,23 @@ def build(copy, input, file, output, files=None):
   if os.path.isdir(input + os.path.sep + file):
     os.makedirs(output + os.path.sep + file, exist_ok=True)
   else:
-    extension = file.split(".")
-    if not extension[-1] == "mustache" and not extension[-1] == "yml":
+    file_extension = file.split(".")
+    if not file_extension[-1] == "mustache":
       if files == None:
         files = os.listdir(input)
       for f in files:
         f_extension = f.split(".")
-        if f_extension[0] == extension[0] and f_extension[-1] == "yml":
-          build_template(input + os.path.sep + file, input + os.path.sep + f, output + os.path.sep + file)
+        if f_extension[0] == file_extension[0]:
+          if file_extension[-1] == "yml":
+            _file = f
+            _template = file
+          elif f_extension[-1] == "yml":
+            _file = file
+            _template = f
+          else:
+            continue
+          sys.stdout.flush()
+          build_template(input + os.path.sep + _file, input + os.path.sep + _template, output + os.path.sep + _file)
           return
       build_file(copy, input + os.path.sep + file, output + os.path.sep + file)
 
