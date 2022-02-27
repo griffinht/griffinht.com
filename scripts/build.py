@@ -51,6 +51,9 @@ def watch(copy, input, output):
         print(events)
         if (events.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
           print("CLOSE_WRITE")
+          post_path = ""
+          file = "index.html"
+          build(copy, input + post_path, file, output + post_path)
         elif (events.mask & asyncinotify.Mask.CREATE) > 0:
           print("CREATE")
         elif (events.mask & asyncinotify.Mask.DELETE) > 0:
@@ -73,26 +76,30 @@ def watch(copy, input, output):
       loop.close()
 
 def build(copy, input, file, output):
-  extension = file.split(".")
-  if extension[-1] == "yml":
-    for f in os.listdir(input):
-      if f.split(".")[0] == extension[0]:
-        build_template(input + os.path.sep + f, input + os.path.sep + file, output + os.path.sep + f)
-        break
-  elif not extension[-1] == "mustache":
-    build_file(copy, input + os.path.sep + file, output + os.path.sep + file)
+  if os.path.isdir(input + os.path.sep + file):
+    os.makedirs(output + os.path.sep + file, exist_ok=True)
+  else:
+    extension = file.split(".")
+    if extension[-1] == "yml":
+      for f in os.listdir(input):
+        if f.split(".")[0] == extension[0]:
+          build_template(input + os.path.sep + f, input + os.path.sep + file, output + os.path.sep + f)
+          break
+    elif not extension[-1] == "mustache":
+      build_file(copy, input + os.path.sep + file, output + os.path.sep + file)
 
 def build_directory(copy, input, output):
   input_length = len(input)
   for path, directories, files in os.walk(input):
-    post_path = path[input_length:]
+    _output = output + path[input_length:]
 
     for directory in directories:
-      output_path = output + post_path + os.path.sep + directory
+      build(copy, path, directory, _output)
+      #output_path = output + post_path + os.path.sep + directory
 
-      os.makedirs(output_path, exist_ok=True)
+      #os.makedirs(output_path, exist_ok=True)
     for file in files:
-      build(copy, path, file, output + post_path)
+      build(copy, path, file, _output)
 
 def main():
   parser = argparse.ArgumentParser()
