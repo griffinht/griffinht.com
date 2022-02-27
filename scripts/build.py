@@ -57,7 +57,7 @@ def build(verbose, copy, template_extension, input, file, output):
     if extension[-1] in ["yml", "yaml", "json"]:
       vprint("template data - ignoring")
     elif template_extension in extension:
-      print("template - parsing with mustache")
+      vprint("template - parsing with mustache")
     else:
       vprint("file - ", end = "")
       if copy:
