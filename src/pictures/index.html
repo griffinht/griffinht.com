@@ -3,6 +3,16 @@
     {{> ../head}}
 </head>
 <body>
-{{> ../footer}}
+    {{#pictures}}
+    <a href="{{name}}/index.html">
+        <article>
+            <header>
+                <h1>{{name}}</h1>
+            </header>
+            <img src="{{name}}/{{thumbnail}}">
+        </article>
+    </a>
+    {{/pictures}}
+    {{> ../footer}}
 </body>
 </html>

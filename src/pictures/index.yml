@@ -1,3 +1,8 @@
 title: pictures
 root: ../
 location: blog/index.yml
+pictures:
+  - name: cookiejar
+    thumbnail: 0.jpg
+  - name: scotchtape
+    thumbnail: 0.jpg
