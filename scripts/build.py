@@ -27,6 +27,9 @@ def build_template(input_path, template_path, output_path):
     except yaml.YAMLError as e:
       print(e)
       return
+    except FileNotFoundError as e:
+      print(e)
+      return
 
 def build_file(copy, input_path, output_path):
   if copy:
@@ -44,14 +47,14 @@ def build(copy, input, file, output, files=None):
     os.makedirs(output + os.path.sep + file, exist_ok=True)
   else:
     extension = file.split(".")
-    if extension[-1] == "yml":
+    if not extension[-1] == "mustache" and not extension[-1] == "yml":
       if files == None:
         files = os.listdir(input)
       for f in files:
-        if f.split(".")[0] == extension[0]:
-          build_template(input + os.path.sep + f, input + os.path.sep + file, output + os.path.sep + f)
-          break
-    elif not extension[-1] == "mustache":
+        f_extension = f.split(".")
+        if f_extension[0] == extension[0] and f_extension[-1] == "yml":
+          build_template(input + os.path.sep + file, input + os.path.sep + f, output + os.path.sep + file)
+          return
       build_file(copy, input + os.path.sep + file, output + os.path.sep + file)
 
 def build_directory(copy, input, output):
@@ -82,31 +85,35 @@ def watch(copy, input, output):
         file = str(event.name)
         _input = str(event.path)[:-len(file) - 1]
         _output = output + _input[len(input):]
-        print(event.mask, _input, file, _output), end=" ")
+        print(event.mask, _input, file, _output, end=" ")
         sys.stdout.flush()
-
-        def update():
-          for file in os.list(_input)
-          build(copy, _input, file, _output)
 
         if (event.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
           print("CLOSE_WRITE")
-          update()
+          build(copy, _input, file, _output)
         elif (event.mask & asyncinotify.Mask.CREATE) > 0:
           print("CREATE")
-          update()
+          build(copy, _input, file, _output)
         elif (event.mask & asyncinotify.Mask.DELETE) > 0:
           print("DELETE")
-          os.remove(_output + os.path.sep + file)
+          try:
+            os.remove(_output + os.path.sep + file)
+          except FileNotFoundError as e:
+            print(e)
+            continue
         elif (event.mask & asyncinotify.Mask.MODIFY) > 0:
           print("MODIFY")
-          update()
+          build(copy, _input, file, _output)
         elif (event.mask & asyncinotify.Mask.MOVED_FROM) > 0:
           print("MOVED_FROM")
-          os.remove(_output + os.path.sep + file)
+          try:
+            os.remove(_output + os.path.sep + file)
+          except FileNotFoundError as e:
+            print(e)
+            continue
         elif (event.mask & asyncinotify.Mask.MOVED_TO) > 0:
           print("MOVED_TO")
-          update()
+          build(copy, _input, file, _output)
         sys.stdout.flush()
 
   loop = asyncio.new_event_loop()
