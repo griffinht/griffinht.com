@@ -16,14 +16,14 @@ AUTHOR="griffinht"
 DEFAULT_INPUT=""
 DEFAULT_OUTPUT=""
 
-def build_template(input_path, template_path, output_path):
-  print(input_path + " + "  + template_path + " -> " + output_path)
-  with open(template_path, "r") as stream:
+def build_template(input, file, template, output):
+  print(input, file, template, output)
+  with open(input + os.path.sep + template, "r") as template_stream:
     try:
-      template = yaml.safe_load(stream)
-      with open(input_path, "r") as input:
-        with open(output_path, "w") as output:
-          output.write(chevron.render(input, template, partials_path=input_path))
+      template_yaml = yaml.safe_load(template_stream)
+      with open(input + os.path.sep + file, "r") as input_stream:
+        with open(output + os.path.sep + file, "w") as output_stream:
+          output_stream.write(chevron.render(input_stream, template_yaml, partials_path=input))
     except yaml.YAMLError as e:
       print(e)
       return
@@ -68,7 +68,7 @@ def build(copy, input, file, output, files=None):
           else:
             continue
           sys.stdout.flush()
-          build_template(input + os.path.sep + _file, input + os.path.sep + _template, output + os.path.sep + _file)
+          build_template(input, _file, _template, output)
           return
       build_file(copy, input + os.path.sep + file, output + os.path.sep + file)
 
