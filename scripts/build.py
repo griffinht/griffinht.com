@@ -95,9 +95,6 @@ def build_directory(copy, input, output):
 
     for directory in directories:
       build(copy, path, directory, _output)
-      #output_path = output + post_path + os.path.sep + directory
-
-      #os.makedirs(output_path, exist_ok=True)
     for file in files:
       build(copy, path, file, _output)
 
