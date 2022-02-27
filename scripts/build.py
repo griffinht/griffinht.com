@@ -45,10 +45,12 @@ def build(verbose, copy, template_extension, input, file, output):
   def vprint(*a, **b):
     if verbose:
       print(*a, **b)
-  vprint(input + os.path.sep + file + ": ", end = "")
 
   input_path = input + os.path.sep + file
   output_path = output + os.path.sep + file
+
+  vprint(input_path + "->" + output_path + ": ", end = "")
+
   if os.path.isdir(input_path):
     vprint("directory - making directories")
     os.makedirs(output_path, exist_ok=True)
@@ -84,7 +86,7 @@ def watch(verbose, copy, template_extension, input, output):
 def buildDirectory(verbose, copy, template_extension, input, output):
   for path, directories, files in os.walk(input):
     for directory in directories:
-      build(verbose, copy, template_extension, path, directory, output)
+      build(verbose, copy, template_extension, path, directory, output + path[len(input):])
     for file in files:
       build(verbose, copy, template_extension, input, file, output)
 
