@@ -6,6 +6,8 @@ import subprocess
 import importlib
 import argparse
 import shutil
+import chevron
+import yaml
 
 NAME="build"
 VERSION="0.0.1"
@@ -14,52 +16,29 @@ DEFAULT_INPUT=""
 DEFAULT_OUTPUT=""
 DEFAULT_TEMPLATE_EXTENSION="mustache"
 
-"""
-def build():
-    file="$1"
-    short=$(echo "$file" | cut -c $((${#SOURCE}+1))-);
-    if [ -d "$file" ]; then
-        mkdir -p "$BUILD""$short"
-    else
-        if [ "${file: -9}" = ".mustache" ]; then
-            echo mustache: "$file"
-        elif [ "${file: -4}" = ".yml" ]; then
-            echo yml: "$file"
-        elif [ "${file: -5}" = ".html" ]; then
-            echo template: "$file"
-            yml="$(echo $file | rev | cut -c 6- | rev)".yml
-            if [ ! -f "$yml" ]; then
-                yml='/dev/null'
-            else
-                echo '^ using yml ^'
-            fi
-            cat "$yml" | mustache - "$file" > "$BUILD""$short"
-        else
-            echo file: "$file"
-            cp "$file" "$BUILD""$short"
-        fi
-    fi
-"""
-
 def build_directory(verbose, input_path, output_path):
-  if verbose:
-    print("directory - making directories")
   os.makedirs(output_path, exist_ok=True)
 
-def build_template(verbose, template_extension, input_path, output_path):
-  if verbose:
-    print("template - parsing with mustache")
-
-def build_file(verbose, copy, input_path, output_path):
-  if verbose:
-    print("file - ", end = "")
-  if copy:
-    if verbose:
-      print("copying")
-    shutil.copyfile(input_path, output_path)
+def build_template(verbose, input_path, template_path, output_path):
+  if os.path.exists(template_path):
+    print("template found")
+    with open(template_path, "r") as stream:
+      try:
+        template = yaml.safe_load(stream)
+        print(template)
+        if verbose:
+          print("template - parsing with mustache")
+      except yaml.YAMLError as e:
+        print(e)
+        return
   else:
     if verbose:
-      print("linking")
+      print("template - parsing with mustache")
+
+def build_file(verbose, copy, input_path, output_path):
+  if copy:
+    shutil.copyfile(input_path, output_path)
+  else:
     try:
       os.readlink(output_path)
     except FileNotFoundError:
@@ -73,7 +52,7 @@ def watch(verbose, copy, template_extension, input, output):
 
   def update(update):
     sys.stdout.flush()
-    build(verbose, copy, template_extension, update.path, update.name, output)
+    #buildDirectory(verbose, copy, template_extension, update.path, update.name, output)
 
   wm = pyinotify.WatchManager()
   wm.add_watch(input, pyinotify.IN_CLOSE_WRITE | pyinotify.IN_CREATE | pyinotify.IN_DELETE | pyinotify.IN_MODIFY, update, rec=True)
@@ -93,9 +72,6 @@ def buildDirectory(verbose, copy, template_extension, input, output):
       input_path = path + os.path.sep + directory
       output_path = output + post_path + os.path.sep + directory
 
-      if verbose:
-        print(input_path + "->" + output_path + ": ", end = "")
-
       build_directory(verbose, input_path, output_path)
     for file in files:
       input_path = path + os.path.sep + file
@@ -105,12 +81,17 @@ def buildDirectory(verbose, copy, template_extension, input, output):
         print(input_path + "->" + output_path + ": ", end = "")
 
       extension = file.split(".")
-      if extension[-1] in ["yml", "yaml", "json"]:
+      if extension[-1] in ["yml"]:
+        if verbose:
+          print(input_path + "->" + output_path + ": ", end = "")
         if verbose:
           print("template data - ignoring")
       elif template_extension in extension:
         if verbose:
+          print(input_path + "->" + output_path + ": ", end = "")
+        if verbose:
           print("template - parsing with mustache")
+        build_template(verbose, input_path, path + os.path.sep + file + ".yml", output_path)
       else:
         build_file(verbose, copy, input_path, output_path)
 
