@@ -33,7 +33,13 @@ def build_template(input_path, template_path, output_path):
 
 def build_file(copy, input_path, output_path):
   if copy:
-    shutil.copyfile(input_path, output_path)
+    try:
+      shutil.copyfile(input_path, output_path)
+    except FileNotFoundError as e:
+      print(e)
+      return
+    except Exception as e:
+      raise e
   else:
     try:
       os.readlink(output_path)
