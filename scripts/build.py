@@ -129,6 +129,9 @@ def watch(copy, input, output):
           except FileNotFoundError as e:
             print(e)
             continue
+          except IsADirectoryError as e:
+            print(e)
+            continue
         elif (event.mask & asyncinotify.Mask.MOVED_TO) > 0:
           print("MOVED_TO")
           build(copy, _input, file, _output)
