@@ -8,6 +8,7 @@ import argparse
 import shutil
 import chevron
 import yaml
+import time
 
 NAME="build"
 VERSION="0.0.1"
@@ -38,63 +39,6 @@ def build_file(copy, input_path, output_path):
     except Exception as e:
       raise e
 
-def watch(copy, input, output):
-  print("import asyncinotify")
-  asyncinotify = importlib.import_module("asyncinotify")
-  asyncio = importlib.import_module("asyncio")
-  async def _loop():
-    print("adding recursive watches...")
-    with asyncinotify.Inotify() as inotify:
-      mask = asyncinotify.Mask.CLOSE_WRITE | asyncinotify.Mask.CREATE | asyncinotify.Mask.DELETE | asyncinotify.Mask.MODIFY | asyncinotify.Mask.MOVE
-      inotify.add_watch(input, mask)
-      for path, directories, files in os.walk(input):
-        for directory in directories:
-          inotify.add_watch(path + os.path.sep + directory, mask)
-      print("watches added")
-      sys.stdout.flush()
-      async for event in inotify:
-        file = str(event.name)
-        _input = str(event.path)[:-len(file) - 1]
-        _output = output + input[len(_input):]
-        build_directory(copy, _input, _output)
-        """
-        file = str(event.name)
-        _input = str(event.path)[:-len(file) - 1]
-        _output = output + input[len(_input):]
-        print(_input, file, _output, end=" ")
-        sys.stdout.flush()
-        if (event.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
-          print("CLOSE_WRITE")
-          build(copy, _input, file, _output)
-        elif (event.mask & asyncinotify.Mask.CREATE) > 0:
-          print("CREATE")
-          build(copy, _input, file, _output)
-        elif (event.mask & asyncinotify.Mask.DELETE) > 0:
-          print("DELETE")
-          os.remove(_output + os.path.sep + file)
-        elif (event.mask & asyncinotify.Mask.MODIFY) > 0:
-          print("MODIFY")
-          build(copy, _input, file, _output)
-        elif (event.mask & asyncinotify.Mask.MOVED_FROM) > 0:
-          print("MOVED_FROM")
-          os.remove(_output + os.path.sep + file)
-        elif (event.mask & asyncinotify.Mask.MOVED_TO) > 0:
-          print("MOVED_TO")
-          build(copy, _input, file, _output)
-
-        sys.stdout.flush()
-        """
-
-  loop = asyncio.new_event_loop()
-  asyncio.set_event_loop(loop)
-  try:
-      loop.run_until_complete(_loop())
-  except KeyboardInterrupt:
-      print('shutting down')
-  finally:
-      loop.run_until_complete(loop.shutdown_asyncgens())
-      loop.close()
-
 def build(copy, input, file, output, files=None):
   if os.path.isdir(input + os.path.sep + file):
     os.makedirs(output + os.path.sep + file, exist_ok=True)
@@ -119,6 +63,61 @@ def build_directory(copy, input, output):
       build(copy, path, directory, _output)
     for file in files:
       build(copy, path, file, _output, files=files)
+
+def watch(copy, input, output):
+  print("import asyncinotify")
+  asyncinotify = importlib.import_module("asyncinotify")
+  asyncio = importlib.import_module("asyncio")
+  async def _loop():
+    print("adding recursive watches...")
+    with asyncinotify.Inotify() as inotify:
+      mask = asyncinotify.Mask.CLOSE_WRITE | asyncinotify.Mask.CREATE | asyncinotify.Mask.DELETE | asyncinotify.Mask.MODIFY | asyncinotify.Mask.MOVE
+      inotify.add_watch(input, mask)
+      for path, directories, files in os.walk(input):
+        for directory in directories:
+          inotify.add_watch(path + os.path.sep + directory, mask)
+      print("watches added")
+      sys.stdout.flush()
+      async for event in inotify:
+        file = str(event.name)
+        _input = str(event.path)[:-len(file) - 1]
+        _output = output + _input[len(input):]
+        print(event.mask, _input, file, _output), end=" ")
+        sys.stdout.flush()
+
+        def update():
+          for file in os.list(_input)
+          build(copy, _input, file, _output)
+
+        if (event.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
+          print("CLOSE_WRITE")
+          update()
+        elif (event.mask & asyncinotify.Mask.CREATE) > 0:
+          print("CREATE")
+          update()
+        elif (event.mask & asyncinotify.Mask.DELETE) > 0:
+          print("DELETE")
+          os.remove(_output + os.path.sep + file)
+        elif (event.mask & asyncinotify.Mask.MODIFY) > 0:
+          print("MODIFY")
+          update()
+        elif (event.mask & asyncinotify.Mask.MOVED_FROM) > 0:
+          print("MOVED_FROM")
+          os.remove(_output + os.path.sep + file)
+        elif (event.mask & asyncinotify.Mask.MOVED_TO) > 0:
+          print("MOVED_TO")
+          update()
+        sys.stdout.flush()
+
+  loop = asyncio.new_event_loop()
+  asyncio.set_event_loop(loop)
+  try:
+      loop.run_until_complete(_loop())
+  except KeyboardInterrupt:
+      print('shutting down')
+  finally:
+      loop.run_until_complete(loop.shutdown_asyncgens())
+      loop.close()
 
 def main():
   parser = argparse.ArgumentParser()
