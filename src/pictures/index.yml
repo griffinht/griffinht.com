@@ -2,7 +2,7 @@ title: pictures
 root: ../
 location: pictures/index.html
 pictures:
-  - name: cookiejar
+  - title: cookiejar
     thumbnail: 0.jpg
-  - name: scotchtape
+  - title: scotchtape
     thumbnail: 0.jpg
