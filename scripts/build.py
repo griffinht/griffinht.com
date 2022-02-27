@@ -5,13 +5,14 @@ import os
 import subprocess
 import importlib
 import argparse
+import shutil
 
 NAME="build"
 VERSION="0.0.1"
 AUTHOR="griffinht"
 DEFAULT_INPUT=""
 DEFAULT_OUTPUT=""
-DEFAULT_TEMPLATE_EXTENSION="template"
+DEFAULT_TEMPLATE_EXTENSION="mustache"
 
 """
 def build():
@@ -64,8 +65,15 @@ def build(verbose, copy, template_extension, input, file, output):
       vprint("file - ", end = "")
       if copy:
         vprint("copying")
+        shutil.copyfile(input_path, output_path)
       else:
         vprint("linking")
+        try:
+          os.readlink(output_path)
+        except FileNotFoundError:
+          os.symlink(os.getcwd() + os.path.sep + input_path, output_path)
+        except Exception as e:
+          raise e
 
 
 def watch(verbose, copy, template_extension, input, output):
@@ -84,11 +92,13 @@ def watch(verbose, copy, template_extension, input, output):
   notifier.loop()
 
 def buildDirectory(verbose, copy, template_extension, input, output):
+  length = len(input)
   for path, directories, files in os.walk(input):
+    post_path  = path[length:]
     for directory in directories:
-      build(verbose, copy, template_extension, path, directory, output + path[len(input):])
+      build(verbose, copy, template_extension, path, directory, output + post_path)
     for file in files:
-      build(verbose, copy, template_extension, input, file, output)
+      build(verbose, copy, template_extension, path, file, output + post_path)
 
 def main():
   parser = argparse.ArgumentParser()
