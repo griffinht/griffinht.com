@@ -2,8 +2,7 @@ FROM python as build
 
 WORKDIR /usr/src
 
-COPY src src
-COPY scripts/ scripts/
+COPY . .
 RUN pip install asyncinotify chevron pyyaml && ./scripts/build.py --output build src
 
 FROM scratch
