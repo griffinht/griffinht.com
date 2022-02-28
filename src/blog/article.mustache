@@ -4,12 +4,14 @@
 </head>
 <body>
   <article>
-    <header>
-      <h1>{{title}}</h1>
-    </header>
+    <h1>{{title}}</h1>
+    <date datetime="{{datetime}}">{{datetime}}</date>
+    {{#sections}}
     <section>
+      {{#header}}<h2>{{.}}</h2>{{/header}}
       {{content}}
     </section>
+    {{/sections}}
   </article>
   {{> ../footer}}
 </body>

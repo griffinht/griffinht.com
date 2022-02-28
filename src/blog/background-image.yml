@@ -1,4 +1,11 @@
 title: What is this background image?
 root: ../
 location: background-image.html
-content: "hello"
+datetime: 2022-02-27
+sections:
+  - header: "hello"
+    content: >
+      One day I was playing BeamNG.drive and encountered some serious graphical artifcating.
+      My screen had been painted in various shades of pink.
+      I took a screenshot and put the result in to Paint.NET (link),
+      where I cut and copied away until I had what I think is a pretty wall paper
