@@ -1,3 +1,6 @@
 title: blog
 root: ../
 location: blog/index.yml
+articles:
+  - title: What is this background image?
+    href: background-image.html

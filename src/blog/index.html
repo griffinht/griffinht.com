@@ -3,6 +3,15 @@
     {{> ../head}}
 </head>
 <body>
+    {{#articles}}
+    <a href="{{href}}">
+        <article>
+            <header>
+                <h1>{{title}}</h1>
+            </header>
+        </article>
+    </a>
+    {{/articles}}
     {{> ../footer}}
 </body>
 </html>
