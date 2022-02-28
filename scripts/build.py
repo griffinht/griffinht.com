@@ -24,13 +24,7 @@ def build_template(input, file, template, output):
       with open(input + os.path.sep + file, "r") as input_stream:
         with open(output + os.path.sep + file, "w") as output_stream:
           output_stream.write(chevron.render(input_stream, template_yaml, partials_path=input))
-    except yaml.YAMLError as e:
-      print(e)
-      return
-    except FileNotFoundError as e:
-      print(e)
-      return
-    except IsADirectoryError as e:
+    except Exception as e:
       print(e)
       return
 
