@@ -1,6 +1,7 @@
 title: cookiejar
 root: ../
-location: pictures/cookiejar.html
+footer:
+  source: pictures/cookiejar.html
 pictures:
   - src: 0.jpg
   - src: 1.jpg

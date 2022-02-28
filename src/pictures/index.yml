@@ -1,6 +1,7 @@
 title: pictures
 root: ../
-location: pictures/index.html
+footer:
+  source: pictures/index.html
 pictures:
   - title: cookiejar
     thumbnail: 0.jpg

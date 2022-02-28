@@ -1,6 +1,7 @@
 title: scotchtape
 root: ../
-location: pictures/scotchtape.html
+footer:
+  source: pictures/scotchtape.html
 pictures:
   - src: 0.jpg
   - src: 1.jpg

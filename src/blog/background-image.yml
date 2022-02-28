@@ -1,6 +1,7 @@
 title: What is this background image?
 root: ../
-location: background-image.html
+footer:
+  source: blog/background-image.html
 datetime: 2022-02-27
 sections:
   - header: "hello"
