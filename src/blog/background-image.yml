@@ -4,9 +4,11 @@ footer:
   source: blog/background-image.html
 datetime: 2022-02-27
 sections:
-  - header: "hello"
-    contentt: >
-      One day I was playing BeamNG.drive and encountered some serious graphical artifcating.
-      My screen had been painted in various shades of pink.
-      I took a screenshot and put the result in to Paint.NET (link),
-      where I cut and copied away until I had what I think is a pretty wall paper
+  - header: hello
+    content: >
+      This background image is the result of some visual artififacts I encountered while playing BeamNG.Drive.
+  - img: background.png
+    content: >
+      After capturing this image, I editied in Paint.NET to create my own special wallpaper.
+      I have used this image as my desktop background for a few years now.
+      Now, it is available to everyone who visits this website.
