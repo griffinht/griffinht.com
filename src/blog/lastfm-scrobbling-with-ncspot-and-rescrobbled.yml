@@ -34,13 +34,13 @@ content:
         To use rescrobbled with Last.Fm, get an API account at <a href="https://www.last.fm/api/account/create">https://www.last.fm/api/account/create</a>. Only the <code>Application name</code> field is required, the rest of the fields can be left blank.
         Then, play the lastfm-key and lastfm-secret.
         <code>~/.config/rescrobbled/config.toml</code>
-    - code: >
+    - code: |
         lastfm-key = "xxx"
         lastfm-secret = "xxx"
     - paragraph: >
         After this, consider creating a <code>systemd</code> unit file so rescrobbled can run as a daemon in the background when the computer starts.  
         <code>~/.config/systemd/user/rescrobbled.service</code>
-    - code: >
+    - code: |
         [Unit]
         Description=An MPRIS scrobbler
         Documentation=https://github.com/InputUsername/rescrobbled

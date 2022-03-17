@@ -1,14 +1,14 @@
 title: What is this background image?
 root: ../
 footer:
-  source: blog/background-image.html
+    source: blog/background-image.html
 datetime: 2022-02-27
-sections:
-  - header: hello
-    content: >
-      This background image is the result of some visual artififacts I encountered while playing BeamNG.Drive.
-  - img: background.png
-    content: >
-      After capturing this image, I editied in Paint.NET to create my own special wallpaper.
-      I have used this image as my desktop background for a few years now.
-      Now, it is available to everyone who visits this website.
+content:
+    - header: hello
+    - paragraph: >
+        This background image is the result of some visual artififacts I encountered while playing BeamNG.Drive.
+    - img: background.png
+    - paragraph: >
+        After capturing this image, I editied in Paint.NET to create my own special wallpaper.
+        I have used this image as my desktop background for a few years now.
+        Now, it is available to everyone who visits this website.
