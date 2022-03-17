@@ -3,5 +3,7 @@ root: ../
 footer:
   source: blog/index.yml
 articles:
+  - title: Last.FM scrobbling with ncspot and rescrobbled
+    href: lastfm-scrobbling-with-ncspot-and-rescrobbled.html
   - title: What is this background image?
     href: background-image.html
