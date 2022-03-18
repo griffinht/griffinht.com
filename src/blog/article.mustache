@@ -11,13 +11,7 @@ article {
     <article>
         <h1>{{title}}</h1>
         <date datetime="{{datetime}}">{{datetime}}</date>
-        {{#content}}
-        {{#header}}<h2>{{.}}</h2>{{/header}}
-        {{#subheader}}<h3>{{.}}</h3>{{/subheader}}
-        {{#img}}<img src="{{root}}{{.}}">{{/img}}
-        {{#code}}<pre><code>{{.}}</code></pre>{{/code}}
-        {{#paragraph}}<p>{{{.}}}</p>{{/paragraph}}
-        {{/content}}
+        {{{content}}}
     </article>
     {{> ../footer}}
 </body>

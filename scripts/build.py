@@ -16,13 +16,11 @@ AUTHOR="griffinht"
 DEFAULT_INPUT=""
 DEFAULT_OUTPUT=""
 
-def build_template(input, file, template, output):
+def build_template(input, file, template, content, output):
   print(input, file, template, output)
   with open(input + os.path.sep + template, "r") as template_stream:
     try:
       template_yaml = yaml.safe_load(template_stream)
-      if os.path.exists(input + os.path.sep + "md"):
-        print("ehllo")
       with open(input + os.path.sep + file, "r") as input_stream:
         with open(output + os.path.sep + file, "w") as output_stream:
           output_stream.write(chevron.render(input_stream, template_yaml, partials_path=input))
@@ -47,29 +45,37 @@ def build_file(link, input_path, output_path):
     except Exception as e:
       raise e
 
+def build_directory(output):
+  os.makedirs(output, exist_ok=True)
+
 def build(link, input, file, output, files=None):
   if os.path.isdir(input + os.path.sep + file):
-    os.makedirs(output + os.path.sep + file, exist_ok=True)
+    build_directory(output + os.path.sep + file)
   else:
-    file_extension = file.split(".")
-    if not file_extension[-1] == "mustache":
-      if files == None:
-        files = os.listdir(input)
-      for f in files:
-        f_extension = f.split(".")
-        if f_extension[0] == file_extension[0]:
-          if file_extension[-1] == "yml":
-            _file = f
-            _template = file
-          elif f_extension[-1] == "yml":
-            _file = file
-            _template = f
-          else:
-            continue
-          sys.stdout.flush()
-          build_template(input, _file, _template, output)
-          return
+    _file = None
+    template = None
+    content = None
+   
+    # can be cached by previous function caller
+    if files == None:
+      files = os.listdir(input)
+    
+    for f in files:
+      f_split = f.split(".")
+      if f_split[0] != file:
+        continue
+
+      if f_split[-1] == "yml":
+        template = f
+      elif f_split[-1] == "md":
+        content = f
+      elif not f_split[-1] == "mustache":
+        _file = f
+        break
+    if _file == None:
       build_file(link, input + os.path.sep + file, output + os.path.sep + file)
+    else:
+      build_template(link, input + os.path.sep + file, output + os.path.sep + file, output)
 
 def build_directory(link, input, output):
   input_length = len(input)
