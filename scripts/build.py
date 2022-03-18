@@ -21,6 +21,8 @@ def build_template(input, file, template, output):
   with open(input + os.path.sep + template, "r") as template_stream:
     try:
       template_yaml = yaml.safe_load(template_stream)
+      if os.path.exists(input + os.path.sep + "md"):
+        print("ehllo")
       with open(input + os.path.sep + file, "r") as input_stream:
         with open(output + os.path.sep + file, "w") as output_stream:
           output_stream.write(chevron.render(input_stream, template_yaml, partials_path=input))

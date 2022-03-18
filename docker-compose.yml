@@ -1,9 +1,7 @@
 services:
     mustache:
-        image: python
+        build:
+          dockerfile: dev.Dockerfile
         volumes:
             - ./src:/app/src
             - ./build:/app/build
-            - ./scripts:/app/scripts
-        working_dir: /app
-        entrypoint: ["sh", "-c", "pip install asyncinotify chevron pyyaml && rm -rf build/* && ./scripts/build.py --output build src && ./scripts/build.py --watch --output build src"]

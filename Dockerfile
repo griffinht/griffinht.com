@@ -1,9 +1,9 @@
-FROM python as build
+FROM python:alpine as build
 
 WORKDIR /usr/src
 
 COPY . .
-RUN pip install asyncinotify chevron pyyaml && ./scripts/build.py --output build src
+RUN ./scripts/build.py --output build src
 
 FROM scratch
 
