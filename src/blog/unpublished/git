@@ -1,0 +1,12 @@
+most git servers are complicated 
+
+i wanted to self host my git repositories, and i wanted to avoid the "do it all" git servers
+
+read only access via my website and `git clone`
+read+write via private file server
+
+clone all of your github directories to working directory
+
+replace $USER with your github user
+requires `curl jq git`
+curl https://api.github.com/users/"$USER"/repos | jq -r '.[].html_url' | while read -r url; do git clone "$url"; done
