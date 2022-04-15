@@ -1,7 +1,7 @@
 services:
     mustache:
         build:
-          dockerfile: dev.Dockerfile
+            dockerfile: dev.Dockerfile
         volumes:
             - ./src:/app/src
             - ./build:/app/build
