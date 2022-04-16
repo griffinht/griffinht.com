@@ -40,6 +40,17 @@ def build_file(input_path, output_path):
 def build_directory(output_path):
     os.makedirs(output_path, exist_ok=True)
 
+def strip_extension(file):
+    index = file.rfind(".")
+    if (index == -1):
+        # file -> file
+        return file
+    else:
+        # file.extension -> file
+        # file.file.extension -> file.file
+        return file[0:index]
+    
+
 def build(input_dir, file, output_dir, files=None):
     if os.path.isdir(input_dir + os.path.sep + file):
         build_directory(output_dir + os.path.sep + file)
@@ -50,7 +61,7 @@ def build(input_dir, file, output_dir, files=None):
             files = os.listdir(input_dir)
 
         for f in files:
-            f_split = f.split(".")
+            shutil.copyfile(input_dir + os.path.sep + file, output_dir + os.path.sep + file)
             #print(f)
             #print(f_split[0:len(f_split) - 1])
             #if f_split[0] != file:
@@ -78,18 +89,10 @@ def _build_directory(input_dir, output_dir):
             build(input_path, directory, output_path)
         
         files_set = set()
+
         for file in files:
-            index = file.rfind(".")
-            _file = None
-            if (index == -1):
-                # file -> file
-                _file = file
-            else:
-                # file.extension -> file
-                # file.file.extension -> file.file
-                _file = file[0:index]
-            files_set.add(_file)
-        print(files, "\n", list(dict.fromkeys(files_set)))
+            files_set.add(strip_extension(file))
+
         for file in files_set:
             build(input_path, file, output_path, files=files)
 
