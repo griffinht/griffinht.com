@@ -60,36 +60,47 @@ def build(input_dir, name, output_dir, files=None):
             files = os.listdir(input_dir)
 
         file = None
-        template = None
+        yaml = None
         content = None
+        mustache = False
         
         for f in files:
             if not f.startswith(name):
                 continue
 
             extension = f.split(".")[-1]
-            if extension == "yml":
-                template = f
+            if extension == "yml" or extension == "yaml":
+                yaml = f
             elif extension == "md":
                 content = f
+            elif extension == "mustache":
+                mustache = True
             elif file == None:
                 file = f
 
-        # file does not have an extension
+        # file either has no extension or is a mustache file
+        # file or file.mustache
         if file == None:
-            file = name
+            if mustache:
+                # file.mustache
+                # mustache files are ignored
+                return 
+            else:
+                # file
+                # files with no extension should be treated normally
+                file = name
         
-        # no template or content
-        if template == None:
+        # no yaml or content
+        if yaml == None:
             shutil.copyfile(input_dir + os.path.sep + file, output_dir + os.path.sep + file)
             return    
         
-        # template but no content
+        # yaml but no content
         if content == None:
-            print(template)
+            print(yaml)
             return
         
-        # template with content
+        # yaml with content
         print(content)
 
 def _build_directory(input_dir, output_dir):
