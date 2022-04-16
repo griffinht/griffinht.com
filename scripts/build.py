@@ -139,6 +139,9 @@ def watch(input, output):
             sys.stdout.flush()
 
             async for event in inotify:
+                build_directory(input, output)
+                continue
+                # this doesn't really work below so just rebuild the whole thing on changes
 
                 _file = str(event.name)
                 file = strip_extension(_file)
