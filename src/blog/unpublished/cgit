@@ -1,0 +1,77 @@
+cgit
+
+```
+FROM nginx
+RUN apt-get update && apt-get install -y git fcgiwrap cgit python3-pygments python3-markdown
+
+COPY fcgi.sh /docker-entrypoint.d/fcgi.sh
+COPY nginx/ /etc/nginx/
+COPY cgitrc /etc/cgitrc
+COPY cgit.png /usr/share/cgit/cgit.png
+```
+
+https://wiki.alpinelinux.org/wiki/Cgit
+
+# debian setup 
+`apt-get update && apt-get install -y git fcgiwrap cgit python3-pygments python3-markdown`
+
+# fcgi.sh
+```
+spawn-fcgi -M 666 -s /var/run/fcgiwrap.socket /usr/bin/fcgiwrap
+```
+
+# nginx.conf
+```
+debian
+events {}
+http {
+    server {
+        listen 80 default_server;
+        server_name _;
+        include mime.types;
+
+        root /usr/share/cgit;
+        try_files $uri @cgit;
+
+        location ~ /.+/(info/refs|git-upload-pack) {
+            include fastcgi_params;
+            fastcgi_pass unix:/var/run/fcgiwrap.socket;
+            fastcgi_param SCRIPT_FILENAME /usr/lib/git-core/git-http-backend;
+
+            fastcgi_param PATH_INFO $uri;
+            fastcgi_param GIT_HTTP_EXPORT_ALL "";
+            fastcgi_param GIT_PROJECT_ROOT /git;
+        }
+
+        location @cgit {
+            include fastcgi_params;
+            fastcgi_pass unix:/var/run/fcgiwrap.socket;
+            fastcgi_param SCRIPT_FILENAME /usr/lib/cgit/cgit.cgi;
+            
+            fastcgi_param PATH_INFO $uri;
+            fastcgi_param QUERY_STRING $args;
+        }
+    }
+}
+```
+
+# git.conf
+```
+include fastcgi_params;
+fastcgi_pass unix:/var/run/fcgiwrap.socket;
+fastcgi_param SCRIPT_FILENAME /usr/lib/git-core/git-http-backend;
+
+# necessary because of git_read and git_write in nginx.conf
+fastcgi_param PATH_INFO $1;
+fastcgi_param GIT_HTTP_EXPORT_ALL "";
+fastcgi_param GIT_PROJECT_ROOT /git;
+```
+
+
+
+git is not required, cgit doesnt need it
+
+# RUN apk add python3-pygments python3-markdown
+#RUN apt-get update && apt-get install -y git fcgiwrap cgit python3-pygments python3-markdown
+
+http://blog.zot24.com/tips-tricks-with-alpine-docker/

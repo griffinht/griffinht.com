@@ -1,0 +1,9 @@
+when swapping a docker container from debian to alpine, i got `spawn-fcgi: child exited with: 2` while trying to spawn-fcgi
+
+this is because the Alpine `fcgiwrap` package puts the binary in `/usr/bin/fcgiwrap`
+
+
+https://unix.stackexchange.com/questions/635674/problem-with-default-fcgiwrap-socket-access-rights-and-nginx-alpine-linux
+
+https://stackoverflow.com/questions/16306210/spawn-fcgi-child-exited-with-13 
+
