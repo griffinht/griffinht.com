@@ -3,5 +3,6 @@ services:
         build:
             dockerfile: dev.Dockerfile
         volumes:
+            - ./scripts:/app/scripts
             - ./src:/app/src
             - ./build:/app/build

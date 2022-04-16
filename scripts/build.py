@@ -28,15 +28,7 @@ def build_template(input, file, template, content, output):
       print(e)
       return
 
-def build_file(link, input_path, output_path):
-  if link:
-    try:
-      os.readlink(output_path)
-    except FileNotFoundError:
-      os.symlink(os.getcwd() + os.path.sep + input_path, output_path)
-    except Exception as e:
-      raise e
-  else:
+def build_file(input_path, output_path):
     try:
       shutil.copyfile(input_path, output_path)
     except FileNotFoundError as e:
@@ -48,9 +40,10 @@ def build_file(link, input_path, output_path):
 def build_directory(output):
   os.makedirs(output, exist_ok=True)
 
-def build(link, input, file, output, files=None):
+def build(input, file, output, files=None):
   if os.path.isdir(input + os.path.sep + file):
-    build_directory(output + os.path.sep + file)
+    os.makedirs(output + os.path.sep + file)
+    print(input + os.path.sep + file)
   else:
     _file = None
     template = None
@@ -73,21 +66,21 @@ def build(link, input, file, output, files=None):
         _file = f
         break
     if _file == None:
-      build_file(link, input + os.path.sep + file, output + os.path.sep + file)
+      build_file(input + os.path.sep + file, output + os.path.sep + file)
     else:
-      build_template(link, input + os.path.sep + file, output + os.path.sep + file, output)
+      build_template(input + os.path.sep + file, output + os.path.sep + file, output)
 
-def build_directory(link, input, output):
+def build_directory(input, output):
   input_length = len(input)
   for path, directories, files in os.walk(input):
     _output = output + path[input_length:]
 
     for directory in directories:
-      build(link, path, directory, _output)
+      build(path, directory, _output)
     for file in files:
-      build(link, path, file, _output, files=files)
+      build(path, file, _output, files=files)
 
-def watch(link, input, output):
+def watch(input, output):
   print("import asyncinotify")
   asyncinotify = importlib.import_module("asyncinotify")
   asyncio = importlib.import_module("asyncio")
@@ -110,10 +103,10 @@ def watch(link, input, output):
 
         if (event.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
           print("CLOSE_WRITE")
-          build(link, _input, file, _output)
+          build(_input, file, _output)
         elif (event.mask & asyncinotify.Mask.CREATE) > 0:
           print("CREATE")
-          build(link, _input, file, _output)
+          build(_input, file, _output)
         elif (event.mask & asyncinotify.Mask.DELETE) > 0:
           print("DELETE")
           try:
@@ -126,7 +119,7 @@ def watch(link, input, output):
             continue
         elif (event.mask & asyncinotify.Mask.MODIFY) > 0:
           print("MODIFY")
-          build(link, _input, file, _output)
+          build(_input, file, _output)
         elif (event.mask & asyncinotify.Mask.MOVED_FROM) > 0:
           print("MOVED_FROM")
           try:
@@ -139,7 +132,7 @@ def watch(link, input, output):
             continue
         elif (event.mask & asyncinotify.Mask.MOVED_TO) > 0:
           print("MOVED_TO")
-          build(link, _input, file, _output)
+          build(_input, file, _output)
         sys.stdout.flush()
 
   loop = asyncio.new_event_loop()
@@ -157,13 +150,11 @@ def main():
   parser.add_argument("-v", "--version", action="version", version=NAME + " v" + VERSION + " by " + AUTHOR)
   parser.add_argument("-o", "--output", default=DEFAULT_OUTPUT)
   parser.add_argument("-w", "--watch", default=False, action='store_true')
-  parser.add_argument("-l", "--link", default=False, action='store_true')#todo description
   parser.add_argument("REMAINDER", nargs=argparse.REMAINDER)
   parsed = parser.parse_args(sys.argv[1:])
 
   output = parsed.output
   isWatch = parsed.watch
-  link = parsed.link
   length = len(parsed.REMAINDER)
   if length == 0:
     input = DEFAULT_INPUT
@@ -174,10 +165,10 @@ def main():
 
   if isWatch:
     print("watching " + os.getcwd() + os.path.sep + input)
-    watch(link, input, output)
+    watch(input, output)
   else:
     print("building " + os.getcwd() + os.path.sep + input)
-    build_directory(link, input, output)
+    build_directory(input, output)
 
 if __name__ == '__main__':
     main()
