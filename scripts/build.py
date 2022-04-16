@@ -29,88 +29,86 @@ def strip_extension(file):
     
 
 def build(input_dir, name, output_dir, files=None):
-    if os.path.isdir(input_dir + os.path.sep + name):
-        os.makedirs(output_dir + os.path.sep + name, exist_ok=True)
-    else:
-        # can be cached by previous function caller
-        if files == None:
-            files = os.listdir(input_dir)
+    # can be cached by previous function caller
+    if files == None:
+        files = os.listdir(input_dir)
 
-        file = None
-        template_file = None
-        content_file = None
-        mustache_file = False
-        
-        for f in files:
-            if not f.startswith(name):
-                continue
+    file = None
+    template_file = None
+    content_file = None
+    mustache_file = False
+    
+    for f in files:
+        if not f.startswith(name):
+            continue
 
-            extension = f.split(".")[-1]
-            if extension == "yml" or extension == "yaml":
-                template_file = f
-            elif extension == "md":
-                content_file = f
-            elif extension == "mustache":
-                mustache_file = True
-            elif file == None:
-                file = f
+        extension = f.split(".")[-1]
+        if extension == "yml" or extension == "yaml":
+            template_file = f
+        elif extension == "md":
+            content_file = f
+        elif extension == "mustache":
+            mustache_file = True
+        elif file == None:
+            file = f
 
-        # file either has no extension or is a mustache file
-        # file or file.mustache
-        if file == None:
-            if mustache_file:
-                # file.mustache
-                # mustache files are ignored
-                print(input_dir + os.path.sep + name + ".mustache (ignored)")
-                return
-            else:
-                # file
-                # files with no extension should be treated normally
-                file = name
-        
-        # no yaml or content
-        if template_file == None:
-            #print(input_dir + os.path.sep + file + " (file)")
-            shutil.copyfile(input_dir + os.path.sep + file, output_dir + os.path.sep + file)
+    # file either has no extension or is a mustache file
+    # file or file.mustache
+    if file == None:
+        if mustache_file:
+            # file.mustache
+            # mustache files are ignored
+            print(input_dir + os.path.sep + name + ".mustache (ignored)")
             return
-
-        # yaml but no content
-        if content_file == None:
-            print(input_dir + os.path.sep + file + " (template)")
-            with open(input_dir + os.path.sep + template_file, "r") as template_stream:
-                try:
-                    template = yaml.safe_load(template_stream)
-                except Exception as e:
-                    print(e)
-                    return
-                with open(input_dir + os.path.sep + file, "r") as input_stream:
-                        with open(output_dir + os.path.sep + file, "w") as output_stream:
-                            output_stream.write(chevron.render(input_stream, template, partials_path=input_dir))
         else:
-            # yaml with content
-            print(input_dir + ": " + file + " (template + content)")
-            with open(input_dir + os.path.sep + template_file, "r") as template_stream:
-                try:
-                    template = yaml.safe_load(template_stream)
-                except Exception as e:
-                    print(e)
-                    return
+            # file
+            # files with no extension should be treated normally
+            file = name
+    
+    # no yaml or content
+    if template_file == None:
+        #print(input_dir + os.path.sep + file + " (file)")
+        shutil.copyfile(input_dir + os.path.sep + file, output_dir + os.path.sep + file)
+        return
 
-                with open(input_dir + os.path.sep + content_file, "r") as content_stream:
-                    content = content_stream.read()
-                template["content"] = markdown.markdown(content, extensions=['extra'])
+    # yaml but no content
+    if content_file == None:
+        print(input_dir + os.path.sep + file + " (template)")
+        with open(input_dir + os.path.sep + template_file, "r") as template_stream:
+            try:
+                template = yaml.safe_load(template_stream)
+            except Exception as e:
+                print(e)
+                return
+            with open(input_dir + os.path.sep + file, "r") as input_stream:
+                    with open(output_dir + os.path.sep + file, "w") as output_stream:
+                        output_stream.write(chevron.render(input_stream, template, partials_path=input_dir))
+    else:
+        # yaml with content
+        print(input_dir + ": " + file + " (template + content)")
+        with open(input_dir + os.path.sep + template_file, "r") as template_stream:
+            try:
+                template = yaml.safe_load(template_stream)
+            except Exception as e:
+                print(e)
+                return
 
-                with open(input_dir + os.path.sep + file, "r") as input_stream:
-                        with open(output_dir + os.path.sep + file, "w") as output_stream:
-                            output_stream.write(chevron.render(input_stream, template, partials_path=input_dir))
+            with open(input_dir + os.path.sep + content_file, "r") as content_stream:
+                content = content_stream.read()
+            template["content"] = markdown.markdown(content, extensions=['extra'])
 
-def _build_directory(input_dir, output_dir):
+            with open(input_dir + os.path.sep + file, "r") as input_stream:
+                    with open(output_dir + os.path.sep + file, "w") as output_stream:
+                        output_stream.write(chevron.render(input_stream, template, partials_path=input_dir))
+
+def build_directory(input_dir, output_dir):
     input_dir_length = len(input_dir)
     for input_path, directories, files in os.walk(input_dir):
         output_path = output_dir + input_path[input_dir_length:]
 
         for directory in directories:
-            build(input_path, directory, output_path)
+            os.makedirs(output_path + os.path.sep + directory, exist_ok=True)
+#            build(input_path, directory, output_path)
         
         files_set = set()
 
@@ -208,7 +206,7 @@ def main():
         watch(input, output)
     else:
         print("building " + os.getcwd() + os.path.sep + input)
-        _build_directory(input, output)
+        build_directory(input, output)
 
 if __name__ == '__main__':
     main()
