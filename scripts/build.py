@@ -60,9 +60,9 @@ def build(input_dir, name, output_dir, files=None):
             files = os.listdir(input_dir)
 
         file = None
-        yaml = None
-        content = None
-        mustache = False
+        template_file = None
+        content_file = None
+        mustache_file = False
         
         for f in files:
             if not f.startswith(name):
@@ -70,38 +70,48 @@ def build(input_dir, name, output_dir, files=None):
 
             extension = f.split(".")[-1]
             if extension == "yml" or extension == "yaml":
-                yaml = f
+                template_file = f
             elif extension == "md":
-                content = f
+                content_file = f
             elif extension == "mustache":
-                mustache = True
+                mustache_file = True
             elif file == None:
                 file = f
 
         # file either has no extension or is a mustache file
         # file or file.mustache
         if file == None:
-            if mustache:
+            if mustache_file:
                 # file.mustache
                 # mustache files are ignored
-                return 
+                print(input_dir + os.path.sep + name + ".mustache (ignored)")
+                return
             else:
                 # file
                 # files with no extension should be treated normally
                 file = name
         
         # no yaml or content
-        if yaml == None:
+        if template_file == None:
+            #print(input_dir + os.path.sep + file + " (file)")
             shutil.copyfile(input_dir + os.path.sep + file, output_dir + os.path.sep + file)
-            return    
-        
-        # yaml but no content
-        if content == None:
-            print(yaml)
             return
-        
-        # yaml with content
-        print(content)
+
+        # yaml but no content
+        if content_file == None:
+            print(input_dir + os.path.sep + file + " (template)")
+            with open(input_dir + os.path.sep + template_file, "r") as template_stream:
+                try:
+                    template = yaml.safe_load(template_stream)
+                except Exception as e:
+                    print(e)
+                    return
+                with open(input_dir + os.path.sep + file, "r") as input_stream:
+                        with open(output_dir + os.path.sep + file, "w") as output_stream:
+                            output_stream.write(chevron.render(input_stream, template, partials_path=input_dir))
+        else:
+            # yaml with content
+            print(input_dir + ": " + file + " (template + content)")
 
 def _build_directory(input_dir, output_dir):
     input_dir_length = len(input_dir)
