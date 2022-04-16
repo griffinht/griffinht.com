@@ -145,7 +145,7 @@ def watch(input, output):
 
                 _input = str(event.path)[:-len(_file) - 1]
                 output_dir = output + _input[len(input):]
-                print(event.mask, _input, str(event.name) + "->" + file, output_dir, end=" ")
+                print(_input + "/" + _file + " (" + str(event.mask) + ")")
 
                 sys.stdout.flush()
                 if (event.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
