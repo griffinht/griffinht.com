@@ -16,7 +16,7 @@ AUTHOR="griffinht"
 DEFAULT_INPUT=""
 DEFAULT_OUTPUT=""
 
-def build_template(input_dir, file, template, content, output_dir):
+def build_template(input_dir, file, output_dir):
     print(input_dir, file, template, output_dir)
     with open(input_dir + os.path.sep + template, "r") as template_stream:
         try:
@@ -45,31 +45,29 @@ def build(input_dir, file, output_dir, files=None):
         build_directory(output_dir + os.path.sep + file)
         print(input_dir + os.path.sep + file)
     else:
-        _file = None
-        template = None
-        content = None
+        # can be cached by previous function caller
+        if files == None:
+            files = os.listdir(input_dir)
 
-    # can be cached by previous function caller
-    if files == None:
-        files = os.listdir(input_dir)
+        for f in files:
+            f_split = f.split(".")
+            #print(f)
+            #print(f_split[0:len(f_split) - 1])
+            #if f_split[0] != file:
+            #    continue
 
-    for f in files:
-        f_split = f.split(".")
-        if f_split[0] != file:
-            continue
+            #if f_split[-1] == "yml":
+            #    template = f
+            #elif f_split[-1] == "md":
+            #    content = f
+            #elif not f_split[-1] == "mustache":
+            #    _file = f
+            #    break
 
-        if f_split[-1] == "yml":
-            template = f
-        elif f_split[-1] == "md":
-            content = f
-        elif not f_split[-1] == "mustache":
-            _file = f
-            break
-
-    if _file == None:
-        build_file(input_dir + os.path.sep + file, output_dir + os.path.sep + file)
-    else:
-        build_template(input_dir + os.path.sep + file, output_dir + os.path.sep + file, output_dir)
+            #if _file == None:
+            #    build_file(input_dir + os.path.sep + file, output_dir + os.path.sep + file)
+            #else:
+            #    build_template(input_dir + os.path.sep + file, output_dir + os.path.sep + file, output_dir)
 
 def _build_directory(input_dir, output_dir):
     input_dir_length = len(input_dir)
@@ -78,7 +76,21 @@ def _build_directory(input_dir, output_dir):
 
         for directory in directories:
             build(input_path, directory, output_path)
+        
+        files_set = set()
         for file in files:
+            index = file.rfind(".")
+            _file = None
+            if (index == -1):
+                # file -> file
+                _file = file
+            else:
+                # file.extension -> file
+                # file.file.extension -> file.file
+                _file = file[0:index]
+            files_set.add(_file)
+        print(files, "\n", list(dict.fromkeys(files_set)))
+        for file in files_set:
             build(input_path, file, output_path, files=files)
 
 def watch(input, output):
