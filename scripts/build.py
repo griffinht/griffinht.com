@@ -9,36 +9,13 @@ import shutil
 import chevron
 import yaml
 import time
+import markdown
 
 NAME="build"
 VERSION="0.0.1"
 AUTHOR="griffinht"
 DEFAULT_INPUT=""
 DEFAULT_OUTPUT=""
-
-def build_template(input_dir, file, output_dir):
-    print(input_dir, file, template, output_dir)
-    with open(input_dir + os.path.sep + template, "r") as template_stream:
-        try:
-            template_yaml = yaml.safe_load(template_stream)
-            with open(input_dir + os.path.sep + file, "r") as input_stream:
-                with open(output_dir + os.path.sep + file, "w") as output_stream:
-                    output_stream.write(chevron.render(input_stream, template_yaml, partials_path=input_dir))
-        except Exception as e:
-            print(e)
-            return
-
-def build_file(input_path, output_path):
-    try:
-        shutil.copyfile(input_path, output_path)
-    except FileNotFoundError as e:
-        print(e)
-        return
-    except Exception as e:
-        raise e
-
-def build_directory(output_path):
-    os.makedirs(output_path, exist_ok=True)
 
 def strip_extension(file):
     index = file.rfind(".")
@@ -53,7 +30,7 @@ def strip_extension(file):
 
 def build(input_dir, name, output_dir, files=None):
     if os.path.isdir(input_dir + os.path.sep + name):
-        build_directory(output_dir + os.path.sep + name)
+        os.makedirs(output_dir + os.path.sep + name, exist_ok=True)
     else:
         # can be cached by previous function caller
         if files == None:
@@ -112,6 +89,20 @@ def build(input_dir, name, output_dir, files=None):
         else:
             # yaml with content
             print(input_dir + ": " + file + " (template + content)")
+            with open(input_dir + os.path.sep + template_file, "r") as template_stream:
+                try:
+                    template = yaml.safe_load(template_stream)
+                except Exception as e:
+                    print(e)
+                    return
+
+                with open(input_dir + os.path.sep + content_file, "r") as content_stream:
+                    content = content_stream.read()
+                print(markdown.markdown(content))
+
+                with open(input_dir + os.path.sep + file, "r") as input_stream:
+                        with open(output_dir + os.path.sep + file, "w") as output_stream:
+                            output_stream.write(chevron.render(input_stream, template, partials_path=input_dir))
 
 def _build_directory(input_dir, output_dir):
     input_dir_length = len(input_dir)
