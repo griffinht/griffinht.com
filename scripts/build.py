@@ -16,14 +16,14 @@ AUTHOR="griffinht"
 DEFAULT_INPUT=""
 DEFAULT_OUTPUT=""
 
-def build_template(input, file, template, content, output):
-  print(input, file, template, output)
-  with open(input + os.path.sep + template, "r") as template_stream:
+def build_template(input_dir, file, template, content, output_dir):
+  print(input_dir, file, template, output_dir)
+  with open(input_dir + os.path.sep + template, "r") as template_stream:
     try:
       template_yaml = yaml.safe_load(template_stream)
-      with open(input + os.path.sep + file, "r") as input_stream:
-        with open(output + os.path.sep + file, "w") as output_stream:
-          output_stream.write(chevron.render(input_stream, template_yaml, partials_path=input))
+      with open(input_dir + os.path.sep + file, "r") as input_stream:
+        with open(output_dir + os.path.sep + file, "w") as output_stream:
+          output_stream.write(chevron.render(input_stream, template_yaml, partials_path=input_dir))
     except Exception as e:
       print(e)
       return
@@ -37,13 +37,13 @@ def build_file(input_path, output_path):
     except Exception as e:
       raise e
 
-def build_directory(output):
-  os.makedirs(output, exist_ok=True)
+def build_directory(output_path):
+  os.makedirs(output_path, exist_ok=True)
 
-def build(input, file, output, files=None):
-  if os.path.isdir(input + os.path.sep + file):
-    os.makedirs(output + os.path.sep + file)
-    print(input + os.path.sep + file)
+def build(input_dir, file, output_dir, files=None):
+  if os.path.isdir(input_dir + os.path.sep + file):
+    build_directory(output_dir + os.path.sep + file)
+    print(input_dir + os.path.sep + file)
   else:
     _file = None
     template = None
@@ -51,7 +51,7 @@ def build(input, file, output, files=None):
    
     # can be cached by previous function caller
     if files == None:
-      files = os.listdir(input)
+      files = os.listdir(input_dir)
     
     for f in files:
       f_split = f.split(".")
@@ -66,19 +66,19 @@ def build(input, file, output, files=None):
         _file = f
         break
     if _file == None:
-      build_file(input + os.path.sep + file, output + os.path.sep + file)
+      build_file(input_dir + os.path.sep + file, output_dir + os.path.sep + file)
     else:
-      build_template(input + os.path.sep + file, output + os.path.sep + file, output)
+      build_template(input_dir + os.path.sep + file, output_dir + os.path.sep + file, output_dir)
 
-def build_directory(input, output):
-  input_length = len(input)
-  for path, directories, files in os.walk(input):
-    _output = output + path[input_length:]
+def _build_directory(input_dir, output_dir):
+  input_dir_length = len(input_dir)
+  for input_path, directories, files in os.walk(input_dir):
+    output_path = output_dir + input_path[input_dir_length:]
 
     for directory in directories:
-      build(path, directory, _output)
+      build(input_path, directory, output_path)
     for file in files:
-      build(path, file, _output, files=files)
+      build(input_path, file, output_path, files=files)
 
 def watch(input, output):
   print("import asyncinotify")
@@ -97,20 +97,20 @@ def watch(input, output):
       async for event in inotify:
         file = str(event.name)
         _input = str(event.path)[:-len(file) - 1]
-        _output = output + _input[len(input):]
-        print(event.mask, _input, file, _output, end=" ")
+        output_dir = output + _input[len(input):]
+        print(event.mask, _input, file, output_dir, end=" ")
         sys.stdout.flush()
 
         if (event.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
           print("CLOSE_WRITE")
-          build(_input, file, _output)
+          build(_input, file, output_dir)
         elif (event.mask & asyncinotify.Mask.CREATE) > 0:
           print("CREATE")
-          build(_input, file, _output)
+          build(_input, file, output_dir)
         elif (event.mask & asyncinotify.Mask.DELETE) > 0:
           print("DELETE")
           try:
-            os.remove(_output + os.path.sep + file)
+            os.remove(output_dir + os.path.sep + file)
           except FileNotFoundError as e:
             print(e)
             continue
@@ -119,11 +119,11 @@ def watch(input, output):
             continue
         elif (event.mask & asyncinotify.Mask.MODIFY) > 0:
           print("MODIFY")
-          build(_input, file, _output)
+          build(_input, file, output_dir)
         elif (event.mask & asyncinotify.Mask.MOVED_FROM) > 0:
           print("MOVED_FROM")
           try:
-            os.remove(_output + os.path.sep + file)
+            os.remove(output_dir + os.path.sep + file)
           except FileNotFoundError as e:
             print(e)
             continue
@@ -132,7 +132,7 @@ def watch(input, output):
             continue
         elif (event.mask & asyncinotify.Mask.MOVED_TO) > 0:
           print("MOVED_TO")
-          build(_input, file, _output)
+          build(_input, file, output_dir)
         sys.stdout.flush()
 
   loop = asyncio.new_event_loop()
@@ -168,7 +168,7 @@ def main():
     watch(input, output)
   else:
     print("building " + os.getcwd() + os.path.sep + input)
-    build_directory(input, output)
+    _build_directory(input, output)
 
 if __name__ == '__main__':
     main()
