@@ -51,34 +51,46 @@ def strip_extension(file):
         return file[0:index]
     
 
-def build(input_dir, file, output_dir, files=None):
-    if os.path.isdir(input_dir + os.path.sep + file):
-        build_directory(output_dir + os.path.sep + file)
-        print(input_dir + os.path.sep + file)
+def build(input_dir, name, output_dir, files=None):
+    if os.path.isdir(input_dir + os.path.sep + name):
+        build_directory(output_dir + os.path.sep + name)
     else:
         # can be cached by previous function caller
         if files == None:
             files = os.listdir(input_dir)
 
+        file = None
+        template = None
+        content = None
+        
         for f in files:
+            if not f.startswith(name):
+                continue
+
+            extension = f.split(".")[-1]
+            if extension == "yml":
+                template = f
+            elif extension == "md":
+                content = f
+            elif file == None:
+                file = f
+
+        # file does not have an extension
+        if file == None:
+            file = name
+        
+        # no template or content
+        if template == None:
             shutil.copyfile(input_dir + os.path.sep + file, output_dir + os.path.sep + file)
-            #print(f)
-            #print(f_split[0:len(f_split) - 1])
-            #if f_split[0] != file:
-            #    continue
-
-            #if f_split[-1] == "yml":
-            #    template = f
-            #elif f_split[-1] == "md":
-            #    content = f
-            #elif not f_split[-1] == "mustache":
-            #    _file = f
-            #    break
-
-            #if _file == None:
-            #    build_file(input_dir + os.path.sep + file, output_dir + os.path.sep + file)
-            #else:
-            #    build_template(input_dir + os.path.sep + file, output_dir + os.path.sep + file, output_dir)
+            return    
+        
+        # template but no content
+        if content == None:
+            print(template)
+            return
+        
+        # template with content
+        print(content)
 
 def _build_directory(input_dir, output_dir):
     input_dir_length = len(input_dir)
