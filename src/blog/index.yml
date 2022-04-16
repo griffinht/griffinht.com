@@ -1,7 +1,6 @@
 title: blog
 root: ../
-footer:
-  source: blog/
+source: blog/
 articles:
   - title: Last.FM scrobbling with ncspot and rescrobbled
     href: lastfm-scrobbling-with-ncspot-and-rescrobbled/index.html

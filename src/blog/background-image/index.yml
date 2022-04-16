@@ -1,5 +1,4 @@
 title: What is this background image?
 root: ../../
-footer:
-    source: blog/background-image/
+source: blog/background-image/index.md
 datetime: 2022-02-27
