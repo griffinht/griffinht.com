@@ -98,7 +98,7 @@ def build(input_dir, name, output_dir, files=None):
 
                 with open(input_dir + os.path.sep + content_file, "r") as content_stream:
                     content = content_stream.read()
-                template["content"] = markdown.markdown(content)
+                template["content"] = markdown.markdown(content, extensions=['extra'])
 
                 with open(input_dir + os.path.sep + file, "r") as input_stream:
                         with open(output_dir + os.path.sep + file, "w") as output_stream:
