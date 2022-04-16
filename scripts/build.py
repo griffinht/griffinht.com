@@ -31,7 +31,11 @@ def strip_extension(file):
 def build(input_dir, name, output_dir, files=None):
     # can be cached by previous function caller
     if files == None:
-        files = os.listdir(input_dir)
+        try:
+            files = os.listdir(input_dir)
+        except Exception as e:
+            print(e)
+            return
 
     file = None
     template_file = None
@@ -39,7 +43,7 @@ def build(input_dir, name, output_dir, files=None):
     mustache_file = False
     
     for f in files:
-        if not f.startswith(name):
+        if strip_extension(f) != name:
             continue
 
         extension = f.split(".")[-1]
@@ -135,20 +139,20 @@ def watch(input, output):
             sys.stdout.flush()
 
             async for event in inotify:
-                file = str(event.name)
-                _input = str(event.path)[:-len(file) - 1]
-                output_dir = output + _input[len(input):]
-                print(event.mask, _input, file, output_dir, end=" ")
-                sys.stdout.flush()
 
+                _file = str(event.name)
+                file = strip_extension(_file)
+
+                _input = str(event.path)[:-len(_file) - 1]
+                output_dir = output + _input[len(input):]
+                print(event.mask, _input, str(event.name) + "->" + file, output_dir, end=" ")
+
+                sys.stdout.flush()
                 if (event.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
-                    print("CLOSE_WRITE")
                     build(_input, file, output_dir)
                 elif (event.mask & asyncinotify.Mask.CREATE) > 0:
-                    print("CREATE")
                     build(_input, file, output_dir)
                 elif (event.mask & asyncinotify.Mask.DELETE) > 0:
-                    print("DELETE")
                     try:
                         os.remove(output_dir + os.path.sep + file)
                     except FileNotFoundError as e:
@@ -158,10 +162,8 @@ def watch(input, output):
                         print(e)
                         continue
                 elif (event.mask & asyncinotify.Mask.MODIFY) > 0:
-                    print("MODIFY")
                     build(_input, file, output_dir)
                 elif (event.mask & asyncinotify.Mask.MOVED_FROM) > 0:
-                    print("MOVED_FROM")
                     try:
                         os.remove(output_dir + os.path.sep + file)
                     except FileNotFoundError as e:
@@ -171,7 +173,6 @@ def watch(input, output):
                         print(e)
                         continue
                 elif (event.mask & asyncinotify.Mask.MOVED_TO) > 0:
-                    print("MOVED_TO")
                     build(_input, file, output_dir)
                     sys.stdout.flush()
 
