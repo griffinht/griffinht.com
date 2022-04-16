@@ -123,15 +123,16 @@ def watch(input, output):
     asyncinotify = importlib.import_module("asyncinotify")
     asyncio = importlib.import_module("asyncio")
     async def _loop():
-        print("adding recursive watches...")
+        print("adding watches recursively...")
         with asyncinotify.Inotify() as inotify:
             mask = asyncinotify.Mask.CLOSE_WRITE | asyncinotify.Mask.CREATE | asyncinotify.Mask.DELETE | asyncinotify.Mask.MODIFY | asyncinotify.Mask.MOVE
             inotify.add_watch(input, mask)
             for path, directories, files in os.walk(input):
                 for directory in directories:
                     inotify.add_watch(path + os.path.sep + directory, mask)
-                    print("watches added")
-                    sys.stdout.flush()
+                print("watches added")
+                sys.stdout.flush()
+
                 async for event in inotify:
                     file = str(event.name)
                     _input = str(event.path)[:-len(file) - 1]
