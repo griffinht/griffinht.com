@@ -131,49 +131,49 @@ def watch(input, output):
             for path, directories, files in os.walk(input):
                 for directory in directories:
                     inotify.add_watch(path + os.path.sep + directory, mask)
-                print("watches added")
+            print("watches added")
+            sys.stdout.flush()
+
+            async for event in inotify:
+                file = str(event.name)
+                _input = str(event.path)[:-len(file) - 1]
+                output_dir = output + _input[len(input):]
+                print(event.mask, _input, file, output_dir, end=" ")
                 sys.stdout.flush()
 
-                async for event in inotify:
-                    file = str(event.name)
-                    _input = str(event.path)[:-len(file) - 1]
-                    output_dir = output + _input[len(input):]
-                    print(event.mask, _input, file, output_dir, end=" ")
+                if (event.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
+                    print("CLOSE_WRITE")
+                    build(_input, file, output_dir)
+                elif (event.mask & asyncinotify.Mask.CREATE) > 0:
+                    print("CREATE")
+                    build(_input, file, output_dir)
+                elif (event.mask & asyncinotify.Mask.DELETE) > 0:
+                    print("DELETE")
+                    try:
+                        os.remove(output_dir + os.path.sep + file)
+                    except FileNotFoundError as e:
+                        print(e)
+                        continue
+                    except IsADirectoryError as e:
+                        print(e)
+                        continue
+                elif (event.mask & asyncinotify.Mask.MODIFY) > 0:
+                    print("MODIFY")
+                    build(_input, file, output_dir)
+                elif (event.mask & asyncinotify.Mask.MOVED_FROM) > 0:
+                    print("MOVED_FROM")
+                    try:
+                        os.remove(output_dir + os.path.sep + file)
+                    except FileNotFoundError as e:
+                        print(e)
+                        continue
+                    except IsADirectoryError as e:
+                        print(e)
+                        continue
+                elif (event.mask & asyncinotify.Mask.MOVED_TO) > 0:
+                    print("MOVED_TO")
+                    build(_input, file, output_dir)
                     sys.stdout.flush()
-
-                    if (event.mask & asyncinotify.Mask.CLOSE_WRITE) > 0:
-                        print("CLOSE_WRITE")
-                        build(_input, file, output_dir)
-                    elif (event.mask & asyncinotify.Mask.CREATE) > 0:
-                        print("CREATE")
-                        build(_input, file, output_dir)
-                    elif (event.mask & asyncinotify.Mask.DELETE) > 0:
-                        print("DELETE")
-                        try:
-                            os.remove(output_dir + os.path.sep + file)
-                        except FileNotFoundError as e:
-                            print(e)
-                            continue
-                        except IsADirectoryError as e:
-                            print(e)
-                            continue
-                    elif (event.mask & asyncinotify.Mask.MODIFY) > 0:
-                        print("MODIFY")
-                        build(_input, file, output_dir)
-                    elif (event.mask & asyncinotify.Mask.MOVED_FROM) > 0:
-                        print("MOVED_FROM")
-                        try:
-                            os.remove(output_dir + os.path.sep + file)
-                        except FileNotFoundError as e:
-                            print(e)
-                            continue
-                        except IsADirectoryError as e:
-                            print(e)
-                            continue
-                    elif (event.mask & asyncinotify.Mask.MOVED_TO) > 0:
-                        print("MOVED_TO")
-                        build(_input, file, output_dir)
-                        sys.stdout.flush()
 
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
