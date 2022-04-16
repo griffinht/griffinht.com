@@ -127,6 +127,7 @@ def watch(input, output):
         with asyncinotify.Inotify() as inotify:
             mask = asyncinotify.Mask.CLOSE_WRITE | asyncinotify.Mask.CREATE | asyncinotify.Mask.DELETE | asyncinotify.Mask.MODIFY | asyncinotify.Mask.MOVE
             inotify.add_watch(input, mask)
+            # what is this loop here for???
             for path, directories, files in os.walk(input):
                 for directory in directories:
                     inotify.add_watch(path + os.path.sep + directory, mask)
