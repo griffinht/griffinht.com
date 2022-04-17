@@ -2,6 +2,7 @@
 <head>
     {{> ../head}}
     <style>
+/*
 article {
     width: 100%;
     max-width: 60em;
@@ -39,43 +40,42 @@ article > section > section > div > div > * {
 article > section > section > div > div:hover {
     color: black;
 }
+*/
     </style>
 </head>
 <body>
     {{> ../header}}
     {{> ../nav}}
-    <article>
-        <header>
-            <h1>projects</h1>
-        </header>
-        {{#projects}}
-        <section>
-            <h2 id="{{year}}" class="fragment">{{year}}<a class="fragmentAnchor" href="#{{year}}">#</a></h2>
+    <div class="spacer">
+        <article>
             {{#projects}}
             <section>
-                <h3 id="{{name}}" class="fragment">
-                    {{#href}}<a href="{{.}}">{{/href}}{{name}}{{#href}}</a>{{/href}}
-                    <a class="fragmentAnchor" href="#{{name}}">#</a>
-                </h3>
-                <div>
-                {{#tags}}
-                    <div>{{.}}</div>
-                {{/tags}}
-                </div>
-                {{{raw}}}
-                {{#description}}
-                <p>{{.}}</p>
-                {{/description}}
-                <p>
-                {{#links}}
-                    <a href="{{href}}">{{text}}</a>
-                {{/links}}
-                </p>
+                <h2 id="{{year}}" class="fragment">{{year}}<a class="fragmentAnchor" href="#{{year}}">#</a></h2>
+                {{#projects}}
+                <section>
+                    <h3 id="{{name}}" class="fragment">
+                        {{#href}}<a href="{{.}}">{{/href}}{{name}}{{#href}}</a>{{/href}}
+                        <a class="fragmentAnchor" href="#{{name}}">#</a>
+                    </h3>
+                    <div>
+                    {{#tags}}
+                        <div>{{.}}</div>
+                    {{/tags}}
+                    </div>
+                    {{{raw}}}
+                    {{#description}}
+                    <p>{{.}}</p>
+                    {{/description}}
+                    <p>
+                    {{#links}}
+                        <a href="{{href}}">{{text}}</a>
+                    {{/links}}
+                    </p>
+                </section>
+                {{/projects}}
             </section>
             {{/projects}}
-        </section>
-        {{/projects}}
-    </article>
-    {{> ../footer}}
+        </article>
+    </div class="spacer">
 </body>
 </html>
