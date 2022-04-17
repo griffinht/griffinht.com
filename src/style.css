@@ -1,13 +1,19 @@
 :root {
+    --accent-background: black;
     --accent-lowlight: hsl(300, 100%, 25%);
     --accent: hsl(300, 100%, 50%);
     --accent-highlight: hsl(300, 100%, 75%);
-    
+    --accent-foreground: white;
+        
+    --neutral-background: white;
+    --neutral-foreground: black;
+
     --primary-background: white;
     --primary-foreground: black;
 }
 body {
-    background-color: var(--primary-background);
+    background-color: var(--neutral-background);
+    background-attachment: fixed;
     margin: 0;
     height: 100vh;
     background-image: url("background.png");
@@ -30,6 +36,7 @@ code {
 pre {
     padding: 1em;
     background: #eee;
+    border-left: 3px solid var(--accent)
 }
 
 pre > code {
@@ -38,7 +45,7 @@ pre > code {
 
 h1 > a:link, h2 > a:link, h3 > a:link, h4 > a:link, h5 > a:link, h6 > a:link,
 h1 > a:visited, h2 > a:visited, h3 > a:visited, h4 > a:visited, h5 > a:visited, h6 > a:visited {
-    color: var(--primary-foreground);
+    color: var(--neutral-foreground);
     text-decoration: none;
 }
 h1 > a:hover, h2 > a:hover, h3 > a:hover, h4 > a:hover, h5 > a:hover, h6 > a:hover {
@@ -59,12 +66,13 @@ h1 > a:hover, h2 > a:hover, h3 > a:hover, h4 > a:hover, h5 > a:hover, h6 > a:hov
 
 
 header {
-    background-color: var(--accent-lowlight);
+    background-color: var(--accent);
+    color: var(--accent-foreground);
 }
 footer {
     margin-top: auto;
     margin-right: auto;
-    background-color: var(--accent-lowlight);
+    background-color: var(--accent);
 }
 nav {
     background-color: rgba(255, 255, 255, 0.9);
