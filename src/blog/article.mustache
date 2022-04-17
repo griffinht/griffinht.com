@@ -2,11 +2,23 @@
 <head>
     {{> ../../head}}
     <style>
+body {
+    display: grid;
+    justify-content: center;
+}
 article {
     background-color: var(--neutral-background);
-    padding: 1em;
-    margin: 1em auto;
     max-width: 60em;
+    padding: 2em;
+    margin: 2em;
+}
+
+/*todo is this ugly*/
+@media (max-width: 40em) {
+    article {
+        padding: 0.5em;
+        margin: 0.5em;
+    }
 }
 
 img {
