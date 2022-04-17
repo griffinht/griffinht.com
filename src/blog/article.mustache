@@ -2,19 +2,23 @@
 <head>
     {{> ../../head}}
     <style>
+body {
+    padding: 2em;
+}
 article {
     background-color: var(--neutral-background);
     max-width: 60em;
     padding: 2em;
-    margin: 2em;
-    align-self: center
+    margin: auto;
+    align-self: center;
 }
 
-/*todo is this ugly*/
 @media (max-width: 40em) {
+    body {
+        padding: 0.5em;
+    }
     article {
         padding: 0.5em;
-        margin: 0.5em;
     }
 }
 
