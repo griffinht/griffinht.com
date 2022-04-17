@@ -79,11 +79,7 @@ def build(input_dir, name, output_dir, files=None):
     if content_file == None:
         print(input_dir + os.path.sep + file + " (template)")
         with open(input_dir + os.path.sep + template_file, "r") as template_stream:
-            try:
-                template = yaml.safe_load(template_stream)
-            except Exception as e:
-                print(e)
-                return
+            template = yaml.safe_load(template_stream)
             with open(input_dir + os.path.sep + file, "r") as input_stream:
                     with open(output_dir + os.path.sep + file, "w") as output_stream:
                         output_stream.write(chevron.render(input_stream, template, partials_path=input_dir))
@@ -91,11 +87,7 @@ def build(input_dir, name, output_dir, files=None):
         # yaml with content
         print(input_dir + ": " + file + " (template + content)")
         with open(input_dir + os.path.sep + template_file, "r") as template_stream:
-            try:
-                template = yaml.safe_load(template_stream)
-            except Exception as e:
-                print(e)
-                return
+            template = yaml.safe_load(template_stream)
 
             with open(input_dir + os.path.sep + content_file, "r") as content_stream:
                 content = content_stream.read()
@@ -120,7 +112,10 @@ def build_directory(input_dir, output_dir):
             files_set.add(strip_extension(file))
 
         for file in files_set:
-            build(input_path, file, output_path, files=files)
+            try:
+                build(input_path, file, output_path, files=files)
+            except Exception as e:
+                print(e)
 
 def watch(input, output):
     print("import asyncinotify")
@@ -139,7 +134,10 @@ def watch(input, output):
             sys.stdout.flush()
 
             async for event in inotify:
-                build_directory(input, output)
+                try:
+                    build_directory(input, output)
+                except Exception as e:
+                    print(e)
                 continue
                 # this doesn't really work below so just rebuild the whole thing on changes
 
