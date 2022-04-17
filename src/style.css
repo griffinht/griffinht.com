@@ -1,31 +1,50 @@
 :root {
-    --background: #ffe6ff;
-    --header: #ffb3ff;
-    --highlight: #f0f;
+    --accent-lowlight: hsl(300, 100%, 25%);
+    --accent: hsl(300, 100%, 50%);
+    --accent-highlight: hsl(300, 100%, 75%);
+    
+    --primary-background: white;
+    --primary-foreground: black;
 }
 body {
-    background-color: var(--background);
+    background-color: var(--primary-background);
     margin: 0;
     height: 100vh;
     background-image: url("background.png");
     display: flex;
     flex-direction: column;
 }
-h1 > a, h2 > a, h3 > a, h4 > a, h5 > a, h6 > a {
-    color: black;
+
+a:link {
+    color: var(--accent)
+}
+a:visited {
+    color: var(--accent-lowlight)
+}
+
+code {
+    padding: 0.25em;
+    background: #eee;
+}
+
+pre {
+    padding: 1em;
+    background: #eee;
+}
+
+pre > code {
+    padding: unset;
+}
+
+h1 > a:link, h2 > a:link, h3 > a:link, h4 > a:link, h5 > a:link, h6 > a:link,
+h1 > a:visited, h2 > a:visited, h3 > a:visited, h4 > a:visited, h5 > a:visited, h6 > a:visited {
+    color: var(--primary-foreground);
     text-decoration: none;
 }
 h1 > a:hover, h2 > a:hover, h3 > a:hover, h4 > a:hover, h5 > a:hover, h6 > a:hover {
     text-decoration: underline;
 }
-header {
-    background-color: var(--header);
-}
-footer {
-    margin-top: auto;
-    margin-right: auto;
-    background-color: var(--header);
-}
+
 
 .fragment > .fragmentAnchor {
     color: initial;
@@ -34,4 +53,22 @@ footer {
 }
 .fragment:hover > .fragmentAnchor {
     visibility: visible;
+}
+
+
+
+
+header {
+    background-color: var(--accent-lowlight);
+}
+footer {
+    margin-top: auto;
+    margin-right: auto;
+    background-color: var(--accent-lowlight);
+}
+nav {
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: space-evenly;
+    padding: 1em;
 }
