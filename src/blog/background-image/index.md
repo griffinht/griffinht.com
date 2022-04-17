@@ -1,6 +1,6 @@
-This background image is the result of some visual artififacts I encountered while playing [BeamNG.Drive](https://www.beamng.com/).
+This background image is the result of some visual artifacts I encountered while playing [BeamNG.Drive](https://www.beamng.com/).
 
-<img src="modernart.png">
+<img src="modernart.webp">
 
 Something broke, but I was still able to take a screenshot of it. 
 
