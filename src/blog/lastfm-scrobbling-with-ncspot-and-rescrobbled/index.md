@@ -52,7 +52,7 @@ After this, consider creating a `systemd` unit file  so rescrobbled can run as a
 ```
 [Unit]
 Description=An MPRIS scrobbler
-Documentation=https://github.com/InputUsername/rescrobbled asdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+Documentation=https://github.com/InputUsername/rescrobbled
 Wants=network-online.target
 After=network-online.target
 
