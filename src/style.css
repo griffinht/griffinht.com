@@ -43,9 +43,6 @@ pre {
     border-left: 3px solid var(--accent);
     overflow-x: auto;  
 }
-/*
-pre:hover, pre:focus { width: min-content; }
-*/
 
 pre > code {
     padding: unset;
