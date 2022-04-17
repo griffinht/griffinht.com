@@ -12,11 +12,17 @@
     --primary-foreground: black;
 }
 body {
+    margin: 0;
+    
+    display: flex;
+    flex-direction: column;
+
     background-color: var(--neutral-background);
     background-attachment: fixed;
-    margin: 0;
-    height: 100vh;
     background-image: url("background.png");
+}
+body > * {
+    min-width: 0;
 }
 
 a:link {
