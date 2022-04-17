@@ -84,3 +84,31 @@ nav {
     justify-content: space-evenly;
     padding: 1em;
 }
+
+
+
+article {
+    background-color: var(--neutral-background);
+    max-width: 60em;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2em;
+}
+.spacer {
+    padding-left: 2em;
+    padding-right: 2em;
+}
+/* collapse on smaller devices */
+@media (max-width: 45em) {
+    .spacer {
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
+    article {
+        padding: 0.5em;
+    }
+}
+
+img {
+    width: 100%;
+}
