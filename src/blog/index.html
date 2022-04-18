@@ -2,7 +2,7 @@
 <head>
     {{> ../head}}
     <style>
-article > section > section {
+article > section {
     border-left: 2px solid var(--primary);
     padding-left: 1em;
 }
@@ -14,13 +14,11 @@ article > section > section {
     </header>
     <article>
         {{#articles}}
+        <h1>{{year}}</h1>
         <section>
-            <h1>{{year}}</h1>
-            <section>
-            {{#articles}}
-                <h1><a href="{{href}}">{{title}}</a></h1>
-            {{/articles}}
-            </section>
+        {{#articles}}
+            <h1><a href="{{href}}">{{title}}</a></h1>
+        {{/articles}}
         </section>
         {{/articles}}
     </article>
