@@ -2,50 +2,25 @@
 <head>
     {{> ../head}}
     <style>
-/*
-article {
-    width: 100%;
-    max-width: 60em;
-    background-color: var(--background);
-    margin: 0 auto;
+article > section > section {
+    border-left: 2px solid var(--primary);
+    padding-left: 1em;
 }
-article > section {
-    padding: 1em;
-}
-article > section {
-    padding: 1em;
-}
-article > section:hover {
-    background-color: var(--header);
-}
-article > section > section:hover {
-    background-color: var(--background);
-}
-article > section > section > div {
+.tags {
     display: flex;
-    gap: 1em;
+    gap: 0.5em;
 }
-article > section > section > div > div {
-    background-color: var(--highlight);
-    color: white;
-    border-radius: 0.5em;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.tags > .tag {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
     padding: 0.5em;
 }
-article > section > section > div > div > * {
-    max-height: 3em;
-}
-article > section > section > div > div:hover {
-    color: black;
-}
-*/
     </style>
 </head>
 <body>
     {{> ../header}}
     {{> ../nav}}
+    {{{content}}}
     <div class="spacer">
         <article>
             {{#projects}}
@@ -57,10 +32,8 @@ article > section > section > div > div:hover {
                         {{#href}}<a href="{{.}}">{{/href}}{{name}}{{#href}}</a>{{/href}}
                         <a class="fragmentAnchor" href="#{{name}}">#</a>
                     </h3>
-                    <div>
-                    {{#tags}}
-                        <div>{{.}}</div>
-                    {{/tags}}
+                    <div class="tags">
+                        {{#tags}}<div class="tag">{{.}}</div>{{/tags}}
                     </div>
                     {{{raw}}}
                     {{#description}}

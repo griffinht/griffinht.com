@@ -1,7 +1,5 @@
 title: projects
 root: ../
-footer:
-  source: projects/index.html
 projects:
   - year: 2022
     projects:
@@ -13,7 +11,7 @@ projects:
           - docker
         description: EdNotes is a project
         links:
-          - href: https://github.com/griffinht/ednotes
+          - href: https://griffinht.com/git/ednotes.git
         text: source
       - name: speedtest
         tags:
@@ -23,7 +21,7 @@ projects:
           - docker
         description: Experimential HTTP speedtest server
         links:
-          - href: https://github.com/griffinht/ednotes
+          - href: https://griffinht.com/git/speedtest.git
             text: source
   - year: 2021
     projects:
@@ -33,7 +31,7 @@ projects:
           - docker
         description: Simple task scheduler/repeater
         links:
-          - href: https://github.com/griffinht/dockron
+          - href: https://griffinht.com/git/dockron.git
             text: source
       - name: ip-server
         tags:
@@ -43,7 +41,7 @@ projects:
           - docker
         raw: "<p>Simple server that returns client ip address</p><code>docker run --rm stzups/ip-server -c griffinht.com:38234</code>"
         links:
-          - href: https://github.com/griffinht/ip-server
+          - href: https://griffinht.com/git/ip-server.git
             text: source
           - href: http://griffinht.com:38234
             text: demo
