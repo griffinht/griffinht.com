@@ -1,6 +1,12 @@
 <html>
 <head>
     {{> ../head}}
+    <style>
+article > section > section {
+    border-left: 2px solid var(--primary);
+    padding-left: 1em;
+}
+    </style>
 </head>
 <body>
     <header>
@@ -9,7 +15,12 @@
     <article>
         {{#articles}}
         <section>
-            <h1><a href="{{href}}">{{title}}</a></h1>
+            <h1>{{year}}</h1>
+            <section>
+            {{#articles}}
+                <h1><a href="{{href}}">{{title}}</a></h1>
+            {{/articles}}
+            </section>
         </section>
         {{/articles}}
     </article>

@@ -2,7 +2,9 @@ title: blog
 root: ../
 source: blog/
 articles:
-  - title: Last.FM scrobbling with ncspot and rescrobbled
-    href: lastfm-scrobbling-with-ncspot-and-rescrobbled/index.html
-  - title: What is this background image?
-    href: background-image/index.html
+  - year: 2022
+    articles:
+      - title: Last.FM scrobbling with ncspot and rescrobbled
+        href: lastfm-scrobbling-with-ncspot-and-rescrobbled/index.html
+      - title: What is this background image?
+        href: background-image/index.html
