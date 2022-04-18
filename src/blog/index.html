@@ -6,14 +6,12 @@
     <header>
         <h1><a href="{{root}}index.html">griffinht.com</a> > blog</h1>
     </header>
-    {{#articles}}
-    <a href="{{href}}">
+    <article>
+        {{#articles}}
         <section>
-            <header>
-                <h1>{{title}}</h1>
-            </header>
+            <h1><a href="{{href}}">{{title}}</a></h1>
         </section>
-    </a>
-    {{/articles}}
+        {{/articles}}
+    </article>
 </body>
 </html>

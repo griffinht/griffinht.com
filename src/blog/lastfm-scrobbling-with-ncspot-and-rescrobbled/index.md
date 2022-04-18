@@ -2,7 +2,7 @@
 
 This can be used with Spotify's official client or something like [ncspot](https://github.com/hrkfdn/ncspot).
 
-## [ncspot](https://github.com/hrkfdn/ncspot)
+## ncspot
 
 `ncspot` ([source](https://github.com/hrkfdn/ncspot)) is a lightweight [ncurses](https://invisible-island.net/ncurses/) Spotify terminal client written in Rust using `librespot`. It is less intuitive than Spotify's native electron app but consumes much less memory.
 
@@ -19,7 +19,7 @@ volnorm = true
 ```
 The rest of the configuration is documented at [hrkfdn/ncspot#configuration](https://github.com/hrkfdn/ncspot#configuration).
 
-## [rescrobbled](https://github.com/InputUsername/rescrobbled)
+## rescrobbled
 
 The [rescrobbled binaries](https://github.com/InputUsername/rescrobbled/releases) on GitHub were compiled with a version of `glib` that my Debian system did not have, so I had to compile from source.
 Compiling is straightforward if `cargo` ([docs](https://doc.rust-lang.org/cargo/)) is installed.
