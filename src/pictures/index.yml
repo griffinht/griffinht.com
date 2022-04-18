@@ -3,7 +3,9 @@ root: ../
 footer:
   source: pictures/index.html
 pictures:
-  - title: cookiejar
-    thumbnail: 0.jpg
-  - title: scotchtape
-    thumbnail: 0.jpg
+  - year: 2022
+    pictures:
+      - title: cookiejar
+        thumbnail: 0.jpg
+      - title: scotchtape
+        thumbnail: 0.jpg

@@ -6,14 +6,19 @@
     <header>
         <h1><a href="{{root}}index.html">griffinht.com</a> > pictures</h1>
     </header>
+    <article>
     {{#pictures}}
-        <article>
+        <h1>{{year}}<h1>
+        {{#pictures}}
+        <section>
             <a href="{{title}}.html">
                 <h1>{{title}}</h1>
                 <img src="{{title}}/{{thumbnail}}">
             </a>
-        </article>
+        </section>
+        {{/pictures}}
     {{/pictures}}
+    </article>
     {{> ../footer}}
 </body>
 </html>
