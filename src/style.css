@@ -37,7 +37,7 @@ code {
 pre {
     padding: 1em;
     background: #eee;
-    border-left: 2px solid var(--accent);
+    border-left: 2px solid var(--primary);
     overflow-x: auto;
 }
 
