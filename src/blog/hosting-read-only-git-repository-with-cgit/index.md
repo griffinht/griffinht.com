@@ -1,13 +1,16 @@
-cgit ([source](https://git.zx2c4.com/cgit/)) is a web interface for Git written in C using the [CGI](https://en.wikipedia.org/wiki/Common_Gateway_Interface) written in C. cgit is seems to be the least complicated way to host Git repositories over the web. It fulfills the philosophy that software should do one thing and do it well. [Other web interfaces](https://git.wiki.kernel.org/index.php/Interfaces,_frontends,_and_tools#Web_Interfaces) are either unmaintained or more complex than cgit (see [GitLab](https://about.gitlab.com/) or [Gitea](https://gitea.com/)). 
+cgit ([source](https://git.zx2c4.com/cgit/)) is a web interface ([CGI](https://en.wikipedia.org/wiki/Common_Gateway_Interface)) for [Git](https://git-scm.com/) written in C. cgit is seems to be the least complicated way to host Git repositories over the web. It is an example of software that does one thing and does it well. [Other web interfaces](https://git.wiki.kernel.org/index.php/Interfaces,_frontends,_and_tools#Web_Interfaces) are either unmaintained or more complex than cgit (see [GitLab](https://about.gitlab.com/) or [Gitea](https://gitea.com/)). 
 
-cgit does not attempt to implement user identies, pull requests, issue trackers, or continous integration. As a result, it is has a small footprint and is relatively easy to deploy.
+cgit does not attempt to implement user identies, pull requests, issue trackers, or continuous integration. As a result, it is has a small footprint and is relatively easy to deploy.
 
-#### Dockerfile
+#### Deployment
 
-Because cgit is a , it needs to have an HTTP server which supports CGI scripts. [nginx](https://nginx.org/en/) is an HTTP server and reverse proxy which can use FastCGI todo to server CGI scripts.
+cgit can be deployed by creating a [Docker](https://docs.docker.com/get-started/overview/) image.
 
-This `Dockerfile` uses [Alpine Linux](https://www.alpinelinux.org/) as a base image.
+cgit requires an HTTP server which supports CGI scripts. [nginx](https://nginx.org/en/) is an HTTP server and reverse proxy which supports [FastCGI](https://en.wikipedia.org/wiki/FastCGI) via the [nginx FastCGI module](https://nginx.org/en/docs/http/ngx_http_fastcgi_module.html).
 
+[Alpine Linux](https://www.alpinelinux.org/) is used as a base image because it is lightweight.
+
+`Dockerfile`
 ```
 FROM nginx:alpine
 
@@ -20,6 +23,111 @@ COPY cgitrc /etc/cgitrc
 COPY cgit/ /usr/share/webapps/cgit/
 ```
 
+The [official nginx image](https://hub.docker.com/_/nginx/) will run any scripts in the `/docker-entrypoint.d/` directory. This is where the script to create the `FastCGI` socket can be placed. `spawn-fcgi` ([source](https://redmine.lighttpd.net/projects/spawn-fcgi)) ([manpage](https://linux.die.net/man/1/spawn-fcgi)) is used in the example below.
+
+`/docker-entrypoint.d/fcgi.sh`
+```
+#!/bin/sh
+spawn-fcgi -M 666 -s /var/run/fcgiwrap.socket /usr/bin/fcgiwrap
+```
+This script will create a [Unix socket](https://en.wikipedia.org/wiki/Unix_domain_socket) at `/var/run/fcgiwrap.socket` to communicate with the `fcgiwrap` program installed at `/usr/bin/fcgiwrap` using [chmod permissions](https://linux.die.net/man/1/chmod) `666`.
+
+`nginx` can be configured to use this socket as follows
+
+`/etc/nginx/nginx.conf`
+```
+# https://wiki.archlinux.org/title/Cgit
+# https://gist.github.com/kawaki-san/3ac6cc084cd6ea12605b8e64b558cc24
+# https://git-scm.com/docs/git-http-backend
+# push is done via direct fs access
+events {}
+http {
+    server {
+        listen 80 default_server;
+        server_name _;
+        include mime.types;
+
+        # directory with cgit assets such as cgit.png or cgit.css
+        root /usr/share/webapps/cgit;
+        try_files $uri @cgit;
+
+        location @cgit {
+            include fastcgi_params;
+            # Unix socket which was spawned with spawn-fcgi
+            fastcgi_pass unix:/var/run/fcgiwrap.socket;
+            # cgit.cgi is installed by the Alpine package
+            fastcgi_param SCRIPT_FILENAME /usr/share/webapps/cgit/cgit.cgi;
+            
+            # https://example.com/$uri?$args
+            fastcgi_param PATH_INFO $uri;
+            fastcgi_param QUERY_STRING $args;
+        }
+    }
+}
+```
+
+`cgit` can be configured with a single configuration file.
+
+`/etc/cgitrc` ([docs](https://git.zx2c4.com/cgit/tree/cgitrc.5.txt))
+```
+# optional, provides formatting for source code
+# requires python3-pygments
+source-filter=/usr/lib/cgit/filters/syntax-highlighting.py
+# optional, provides formatting for the about page
+# requires python-markdown
+about-filter=/usr/lib/cgit/filters/about-formatting.sh
+# note that if the python dependencies for the above scripts are not installed, then the about page and source code will render blank
+
+# what file to look for to serve the readme, which is placed in the about page for each repository
+readme=:README.md
+readme=:readme.md
+readme=:README.html
+readme=:readme.html
+readme=:README.htm
+readme=:readme.htm
+readme=:README.txt
+readme=:readme.txt
+readme=:README
+readme=:readme
+
+# setting a blank value will hide the cgit version at the bottom of the page
+footer=
+# link for clicking on the logo
+logo-link=https://example.com
+root-title=My awesome cgit instance!
+root-desc=This is my awesome cgit instance, which contains all my Git repositories
+# used as the about page for the entire instance, viewed by clicking about in the top left corner
+# /usr/share/webapps/cgit/README.md
+root-readme=README.md
+
+# /usr/share/webapps/cgit/
+# needs to be prefixed with the virtual-root, see below
+css=/git/cgit.css
+logo=/git/cgit.png
+
+# where cgit expects HTTP requests to come from
+# https://example.com/git/
+virtual-root=/git/
+
+# where cgit will look for Git repositories in the filesystem
+# make sure this is last
+# https://lists.zx2c4.com/pipermail/cgit/2017-February/003466.html
+scan-path=/git/
+```
+
+
+#### Create new repository
+`git init --bare $NAME`
+
+It is important to create a bare git repository, or else it may not be possible to `git push`.
+[Read more on Stack Overflow](https://stackoverflow.com/questions/5540883/whats-the-practical-difference-between-a-bare-and-non-bare-repository)
+
+#### Import existing repositories from GitHub
+To import existing repositories [Github](https://github.com/), use this shell command. It requires `curl jq git`. Replace `$USER` with your GitHub user.
+
+
+`curl https://api.github.com/users/"$USER"/repos | jq -r '.[].html_url' | while read -r url; do git clone --bare "$url"; done`
+
 #### Read More
 [https://wiki.archlinux.org/title/cgit](https://wiki.archlinux.org/title/cgit)
 
@@ -29,18 +137,3 @@ COPY cgit/ /usr/share/webapps/cgit/
 [Texas Instruments](https://git.ti.com/cgit)
 [GNU Savannah](https://git.savannah.gnu.org/cgit/)
 
-
-
-
-
-read only access via my website and `git clone`
-read+write via private file server
-
-clone all of your github directories to working directory
-
-replace $USER with your github user
-requires `curl jq git`
-`curl https://api.github.com/users/"$USER"/repos | jq -r '.[].html_url' | while read -r url; do git clone --bare "$url"; done`
-
-create new repository
-`git init --bare $NAME`
