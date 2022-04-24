@@ -72,10 +72,7 @@ def build(input_dir, name, output_dir, files=None):
     # no yaml or content
     if template_file == None:
         #print(input_dir + os.path.sep + file + " (file)")
-        try:
-            shutil.copyfile(input_dir + os.path.sep + file, output_dir + os.path.sep + file)
-        except FileNotFoundError as e:
-            print(e)
+        shutil.copyfile(input_dir + os.path.sep + file, output_dir + os.path.sep + file)
         return
 
     # yaml but no content
@@ -118,7 +115,10 @@ def build_directory(input_dir, output_dir):
             files_set.add(strip_extension(file))
 
         for file in files_set:
-            build(input_path, file, output_path, files=files)
+            try:
+                build(input_path, file, output_path, files=files)
+            except FileNotFoundException as e:
+                print(e)
 
 def watch(input, output):
     print("import asyncinotify")
