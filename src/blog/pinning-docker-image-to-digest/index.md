@@ -19,10 +19,14 @@ The digest looks something like `sha256:61face6bf030edce7ef6d7dd66fe452298d6f5f7
 
 #### Architecture
 
-Note that the digest is architecture specific and using the wrong architecture may cause an error message
+The digest is architecture specific and using the wrong architecture may cause an error message.
 
 ```
 standard_init_linux.go:228: exec user process caused: exec format error
 ```
 
 Use the `OS/ARCH` dropdown to pull the correct architecture. This is likely `linux/amd64`.
+
+#### Read more
+
+[Digests in Docker](https://www.mikenewswanger.com/posts/2020/docker-image-digests/)
