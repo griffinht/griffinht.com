@@ -72,7 +72,10 @@ def build(input_dir, name, output_dir, files=None):
     # no yaml or content
     if template_file == None:
         #print(input_dir + os.path.sep + file + " (file)")
-        shutil.copyfile(input_dir + os.path.sep + file, output_dir + os.path.sep + file)
+        try:
+            shutil.copyfile(input_dir + os.path.sep + file, output_dir + os.path.sep + file)
+        except FileNotFoundError as e:
+            print(e)
         return
 
     # yaml but no content
