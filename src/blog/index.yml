@@ -6,6 +6,8 @@ articles:
     articles:
       - title: Hosting a read-only Git repository with cgit
         href: hosting-read-only-git-repository-with-cgit/index.html
+      - title: Pinning a Docker Image to a digest
+        href: pinning-docker-image-to-digest/index.html
       - title: Last.FM scrobbling with ncspot and rescrobbled
         href: lastfm-scrobbling-with-ncspot-and-rescrobbled/index.html
       - title: What is this background image?
