@@ -88,6 +88,9 @@ def build(input_dir, name, output_dir, files=None):
         print(input_dir + ": " + file + " (template + content)")
         with open(input_dir + os.path.sep + template_file, "r") as template_stream:
             template = yaml.safe_load(template_stream)
+            # empty .yml is valid to trigger template processing
+            if template is None:
+                template = {}
 
             with open(input_dir + os.path.sep + content_file, "r") as content_stream:
                 content = content_stream.read()
@@ -112,10 +115,7 @@ def build_directory(input_dir, output_dir):
             files_set.add(strip_extension(file))
 
         for file in files_set:
-            try:
-                build(input_path, file, output_path, files=files)
-            except Exception as e:
-                print(e)
+            build(input_path, file, output_path, files=files)
 
 def watch(input, output):
     print("import asyncinotify")
@@ -134,10 +134,7 @@ def watch(input, output):
             sys.stdout.flush()
 
             async for event in inotify:
-                try:
-                    build_directory(input, output)
-                except Exception as e:
-                    print(e)
+                build_directory(input, output)
                 continue
                 # this doesn't really work below so just rebuild the whole thing on changes
 
