@@ -3,7 +3,7 @@
 ### websites
 [griffinht.com](https://griffinht.com)
 
-[griffin.ht](https://griffin.ht) (cool domain I grabbed, currently redirects here)
+[griffin.ht](https://griffin.ht) (cool domain, serves as a landing page for this website)
 
 ### external platforms
 [github](https://github.com/griffinht)
