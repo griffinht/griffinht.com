@@ -1,12 +1,10 @@
-FROM python:alpine as build
+FROM griffinht/inline-website as build
 
 WORKDIR /usr/src
 
-COPY scripts/install.sh scripts/install.sh
-RUN ./scripts/install.sh
+COPY src src
 
-COPY . .
-RUN ./scripts/build.py --output build src
+RUN inline-website.py --output build src
 
 FROM scratch
 

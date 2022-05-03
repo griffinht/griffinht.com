@@ -1,8 +1,7 @@
 services:
-    mustache:
-        build:
-            dockerfile: dev.Dockerfile
+    build:
+        image: griffinht/inline-website
         volumes:
-            - ./scripts:/app/scripts
-            - ./src:/app/src
-            - ./build:/app/build
+            - ./src:/src
+            - ./build:/build
+        command: --watch --output build src
