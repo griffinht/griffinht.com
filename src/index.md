@@ -1,5 +1,3 @@
-## welcome to my website
 [about](about.html)
-[bio](bio.html)
 [contact](contact.html)
-
+[resume](resume/index.html)
