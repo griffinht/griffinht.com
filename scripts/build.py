@@ -117,7 +117,7 @@ def build_directory(input_dir, output_dir):
         for file in files_set:
             try:
                 build(input_path, file, output_path, files=files)
-            except FileNotFoundException as e:
+            except Exception as e:
                 print(e)
 
 def watch(input, output):
