@@ -1,9 +1,9 @@
 # About me
 
 ### websites
-[griffinht.com](http://griffinht.com)
+[griffinht.com](https://griffinht.com)
 
-[griffin.ht](https://griffinht.com) (cool domain I grabbed, currently redirects here)
+[griffin.ht](https://griffin.ht) (cool domain I grabbed, currently redirects here)
 
 ### external platforms
 [github](https://github.com/griffinht)
