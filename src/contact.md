@@ -11,6 +11,7 @@ This is my preferred contact method.
 
 ### external platforms
 [github](https://github.com/griffinht)
+[gitlab](https://gitlab.com/griffinht)
 [reddit](https://reddit.com/u/griffinht)
 [twitter](https://twitter.com/griffin_ht)
 [hacker news](https://news.ycombinator.com/user?id=griffinht)
