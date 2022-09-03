@@ -2,16 +2,17 @@
 <head>
     {{> ../head}}
     <style>
-article > section > section {
+article > section > section, dl {
     border-left: 2px solid var(--primary);
     padding-left: 1em;
 }
-.tags {
+.tags, dl > dd > ol {
     display: flex;
     gap: 0.5em;
     overflow-x: auto;
+    list-style-type: none;
 }
-.tags > .tag {
+.tags > .tag, dl > dd > ol > li {
     background-color: var(--primary);
     color: var(--primary-foreground);
     padding: 0.5em;
@@ -22,7 +23,9 @@ article > section > section {
     <header>
         <h1><a href="{{root}}index.html">griffinht.com</a> > projects</h1>
     </header>
+    <div class="markdown">
     {{{content}}}
+    </div> 
     <div class="spacer">
         <article>
             {{#projects}}

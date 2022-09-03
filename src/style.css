@@ -114,3 +114,20 @@ article {
 img {
     width: 100%;
 }
+
+
+
+
+
+
+
+
+
+
+.markdown {
+    background-color: var(--neutral-background);
+    max-width: 60em;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2em;
+}
