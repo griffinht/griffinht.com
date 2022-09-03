@@ -4,11 +4,9 @@ projects
 2022
 ---------
 
-Scribbleshare
+**Scribbleshare** (12/2020 - 5/2021)
 
-: (12/2020 - 5/2021)
-
-    1. test
+:   1. test
     2. test2
     3. test3
 
@@ -34,3 +32,5 @@ Scribbleshare
 :   4k SLOC **Java WebSocket backend** used to synchronize whiteboard drawing between web clients in real time
 
     * custom binary protocol with hand-written serializers/deserializers
+
+:   [source](https://griffinht.com/git/scribbleshare.git/)
