@@ -4,4 +4,4 @@ default: docker
 clean:
 	rm -r build
 docker:
-	docker build --tag stzups/griffinht.com:latest .
+	docker build --tag griffinht/griffinht.com:latest .
