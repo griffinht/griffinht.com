@@ -6,13 +6,13 @@ article > section > section, dl {
     border-left: 2px solid var(--primary);
     padding-left: 1em;
 }
-.tags, dl > dd > ol {
+dl > dd > ol {
     display: flex;
     gap: 0.5em;
     overflow-x: auto;
     list-style-type: none;
 }
-.tags > .tag, dl > dd > ol > li {
+dl > dd > ol > li {
     background-color: var(--primary);
     color: var(--primary-foreground);
     padding: 0.5em;
@@ -31,37 +31,10 @@ ol {
     <header>
         <h1><a href="{{root}}index.html">griffinht.com</a> > projects</h1>
     </header>
-    <div class="markdown">
-    {{{content}}}
-    </div> 
     <div class="spacer">
-        <article>
-            {{#projects}}
-            <section>
-                <h2 id="{{year}}" class="fragment">{{year}}<a class="fragmentAnchor" href="#{{year}}">#</a></h2>
-                {{#projects}}
-                <section>
-                    <h3 id="{{name}}" class="fragment">
-                        {{#href}}<a href="{{.}}">{{/href}}{{name}}{{#href}}</a>{{/href}}
-                        <a class="fragmentAnchor" href="#{{name}}">#</a>
-                    </h3>
-                    <div class="tags">
-                        {{#tags}}<div class="tag">{{.}}</div>{{/tags}}
-                    </div>
-                    {{{raw}}}
-                    {{#description}}
-                    <p>{{.}}</p>
-                    {{/description}}
-                    <p>
-                    {{#links}}
-                        <a href="{{href}}">{{text}}</a>
-                    {{/links}}
-                    </p>
-                </section>
-                {{/projects}}
-            </section>
-            {{/projects}}
-        </article>
+        <article class="markdown">
+            {{{content}}}
+        </article> 
     </div class="spacer">
 </body>
 </html>
