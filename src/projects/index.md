@@ -4,32 +4,36 @@ projects
 2022
 ---------
 
-**Ednotes**
+**inline-website** (2/2022 - 5/2022)
+
+:   1. python
+    2. mustache
+
+:   static website generator python script with no special directory structure (all files are inline)
+
+:   supports mustache templates, markdown, yml
+
+:   [source](https://griffinht.com/git/inline-website.git/) [example (this page)](https://griffinht.com/git/griffinht.com.git/tree/src/projects)
+
+>
+
+**Ednotes** (1/2022 - 4/2022)
 
 :   1. html
     2. css
     3. typescript
     4. docker
 
-:   ednotes is a project
+:   timestamp base interactive video note taking app
 
-:   [source](https://griffinht.com/git/ednotes.git/)
+:   lightweight static frontend with no dependencies
+
+:   [source](https://griffinht.com/git/ednotes.git/) todo demo
 
 2021
 ----------
 
-**dockron**
-
-:   1. rust
-    2. docker
-
-:   simple task scheduler/repeater
-
-:   [source](https://griffinht.com/git/dockron.git/)
-
->
-
-**ip-server** (9/2020 - 10/2020)
+**ip-server** (11/2021 - 12/2021)
 
 :   1. rust
     2. networking
@@ -43,6 +47,17 @@ projects
 :   [source](https://griffinht.com/git/ip-server.git/)
 
 :   [demo](http://griffinht.com:38234)
+
+>
+
+**dockron** (9/2021 - 11/2021)
+
+:   1. rust
+    2. docker
+
+:   simple process scheduler/repeater, like cron but easy to use in Docker containers
+
+:   [source](https://griffinht.com/git/dockron.git/)
 
 >
 
@@ -80,6 +95,18 @@ projects
         * hot.griffinht.com: my personal collection of several internal web interfaces for personal use secured by Authelia
 
             * Services: monitoring dashboards (Grafana), metasearch engine (SearXNG), RSS feed reader (Miniflux), speedtest (LibreSpeed), photo viewer (PhotoPrism), household ERP (Grocy), as well as various alternative frontends for popular services (LibReddit, Invidious, Nitter, Rimgo, Quetre, and Scribe)
+
+>
+
+**home-fastled-controller** (2/2020 - 3/2020)
+
+:   1. arduino
+    2. c
+    3. fastled
+    4. ws281018b
+    5. soldering
+
+:   programmed an arduino using the FastLED library to control several custom soldered strips of individually addressable RGB led strips with various patterns.
 
 >
 
@@ -122,9 +149,13 @@ projects
 
 >
 
-**home-fastled-controller** (2/2020 - 3/2020)
 
-:   programmed an arduino using the FastLED library to control several custom soldered strips of individually addressable RGB led strips with various patterns.
+2020
+-----------
+
+**Debian (Linux)**
+
+:   installed Debian on computer, used daily ever since then
 
 >
 
@@ -139,15 +170,7 @@ projects
 
 >
 
-**Tanks** (3/2020 - 8/2020)
-
-:   Java server with fully custom HTTP/1.1 and WebSocket server implementations using blocking Java sockets with no external dependencies
-
-:   2D real time multiplayer browser game where each client controls a tank which they may shoot and destroy other tanks
-
->
-
-**truck cake thrower game**
+**truck cake thrower game** (5/2020 - 6/2020)
 
 :   1. html
     2. css
@@ -158,8 +181,7 @@ projects
 >
 
 
-
-**SpaceGame**
+**SpaceGame** (5/2020 - 7/2020)
 
 :   1. c++
     2. direct3d
@@ -169,18 +191,33 @@ projects
 
 >
 
-**Tanks**
+**Tanks** (3/2020 - 8/2020)
 
 :   1. java
+    2. blocking sockets
     2. http
     3. websockets
     4. javascript
 
-:   kljsdfg
+:   Java server with fully custom HTTP/1.1 and WebSocket server implementations using blocking Java sockets with no external dependencies
 
->
+:   2D real time multiplayer browser game where each client controls a tank which they may shoot and destroy other tanks
 
-**Minecraft Generator**
+2019
+-----------
+
+**BeaconProtect** (9/2019 - 2/2020)
+
+:   1. java
+    2. maven
+    3. git
+
+:   minecraft bukkit plugin, my first big java project
+
+2017
+-------------------
+
+**Minecraft Generator** (5/2017)
 
 :   1. javascript
 
@@ -193,3 +230,44 @@ projects
 **fakevirus**
 
 **the random game**
+
+2014
+--------------
+
+**CodeAcademy**
+
+:   1. javascript
+    2. html
+    3. css
+
+:   self taught javascript through free online course
+
+2013
+----------
+
+**System Administrator**
+
+:   1. dynamic ip
+
+:   managed several instance of Minecraft servers for use by my friends and I
+
+:   responsible for loading maps, keeping software running and up to date
+
+**Windows 7**
+
+:   minecraft
+
+2011
+--------------
+
+**Windows Vista**
+
+:   web games (monkeyquest)
+
+2009
+-----------------
+
+
+**Windows XP**
+
+:   experience with ms word, cd-rom games
