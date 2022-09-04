@@ -16,4 +16,4 @@ This is my preferred contact method.
 [twitter](https://twitter.com/griffin_ht)
 [hacker news](https://news.ycombinator.com/user?id=griffinht)
 [stack exchange](https://stackexchange.com/users/16572500/griffinht)
-[linkedin](www.linkedin.com/in/griffinht)
+[linkedin](https://www.linkedin.com/in/griffinht)
