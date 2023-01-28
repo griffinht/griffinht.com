@@ -1,3 +1,7 @@
+---
+title: contact
+---
+
 ### email
 
 This is my preferred contact method.
