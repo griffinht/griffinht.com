@@ -10,7 +10,7 @@
 
 :   supports mustache templates, markdown, yml
 
-:   [source](https://griffinht.com/git/inline-website.git/) [example (this page)](https://griffinht.com/git/griffinht.com.git/tree/src/projects)
+:   [source](https://griffinht.com/git/inline-website/) [example (this page)](https://griffinht.com/git/griffinht.com.git/tree/src/projects)
 
 >
 
@@ -42,8 +42,6 @@
 :   simple server that returns client ip addresss `docker run --rm stzups/ip-server -c griffinht.com:38234`
 
 :   [source](https://griffinht.com/git/ip-server.git/)
-
-:   [demo](http://griffinht.com:38234)
 
 >
 
@@ -218,7 +216,7 @@
 
 :   1. javascript
 
-:   Originally hosted on https://lemonpickles.net/generator, then https://stzups.net/generator
+:   Originally hosted on lemonpickles.net/generator, then stzups.net/generator
 
 :   [reddit](https://www.reddit.com/r/Minecraft/comments/6bznqx/remember_111_chat_limit_is_op_i_made_a_copypaste/) [forum](https://hypixel.net/threads/forge-1-8-9-256chat-mod-v1-1b-now-actually-starts-up-edition.1959635/#post-14848866)
 

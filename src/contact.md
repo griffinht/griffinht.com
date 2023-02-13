@@ -13,7 +13,7 @@ This is my preferred contact method.
 ## other platforms
 
 ### websites
-[griffin.ht](https://griffin.ht) (cool domain I grabbed, currently used as a landing page of some sort)
+I used to have the griffin.ht (Haiti TLD) domain. I let it expire and it is no longer mine.
 
 ### external platforms
 [github](https://github.com/griffinht)

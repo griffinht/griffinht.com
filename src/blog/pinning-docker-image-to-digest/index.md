@@ -3,7 +3,7 @@ file_content: {{> ../article}}
 file_extension: .html
 title: Pinning a Docker Image to a digest
 root: ../../
-source: blog/pinning-docker-image-to-digests/index.md
+source: blog/pinning-docker-image-to-digest/index.md
 datetime: 2022-04-24
 ---
 
