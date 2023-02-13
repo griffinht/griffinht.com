@@ -15,10 +15,11 @@ WORKDIR /build
 COPY --from=build /usr/src/build .
 
 # check offline
-RUN lychee /build --offline 
+RUN lychee /build --no-progress --timeout 5 --exclude projects/html --offline 
 
 # then check online
-RUN lychee /build
+# linkedin excluded because of a very silly 999 status code
+RUN lychee /build --no-progress --timeout 5 --exclude projects/html --exclude https://www.linkedin.com/in/griffinht
 
 FROM scratch
 
