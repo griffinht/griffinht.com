@@ -4,4 +4,4 @@ services:
         volumes:
             - ./src:/src
             - ./build:/build
-        command: --watch --output build src
+        command: --output build src
