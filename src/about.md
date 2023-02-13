@@ -1,3 +1,9 @@
+---
+file_extension: .html
+file_content: '{{> article}}'
+title: about
+---
+
 # About me 
 
 [contact](contact.html)
