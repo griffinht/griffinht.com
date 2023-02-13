@@ -1,3 +1,12 @@
+---
+file_content: {{> ../article}}
+file_extension: .html
+title: Pinning a Docker Image to a digest
+root: ../../
+source: blog/pinning-docker-image-to-digests/index.md
+datetime: 2022-04-24
+---
+
 Docker images can be pinned to a specific digest in the form of a SHA256 hash by specifying it in the image reference ([source](https://docs.docker.com/engine/reference/builder/#syntax)).
 
 #### Image reference syntax

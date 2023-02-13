@@ -1,3 +1,12 @@
+---
+file_extension: .html
+file_content: {{> ../article}}
+title: What is this background image?
+root: ../../
+source: blog/background-image/index.md
+datetime: 2022-02-27
+---
+
 This background image is the result of some visual artifacts I encountered while playing [BeamNG.Drive](https://www.beamng.com/).
 
 <img src="modernart.webp">
