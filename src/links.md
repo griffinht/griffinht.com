@@ -1,3 +1,8 @@
+---
+title: links
+file_extension: .html
+file_content: {{> article}}
+---
 ### websites
 [griffin.ht](https://griffinht.com) (cool domain I grabbed, currently redirects here)
 

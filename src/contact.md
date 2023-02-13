@@ -1,5 +1,7 @@
 ---
 title: contact
+file_extension: .html
+file_content: {{> article}}
 ---
 
 ### email
