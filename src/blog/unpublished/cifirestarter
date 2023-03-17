@@ -1,0 +1,8 @@
+ci is bloated
+
+wanted strong git support
+no wishy washy git clone
+just everything from a hash/git commit then buiild
+
+but ci is not your build/test environment so everything in docker
+remote code execute as a service
