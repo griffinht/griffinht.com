@@ -1,0 +1,6 @@
+so how can we do this manually? without the sway workaround?
+
+we need to use dbus-launch
+https://dbus.freedesktop.org/doc/dbus-launch.1.html
+https://github.com/emersion/xdg-desktop-portal-wlr/wiki
+
