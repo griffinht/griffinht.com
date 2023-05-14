@@ -1,0 +1,14 @@
+packaing with home
+
+~/config/thing
+.file
+
+recursive bit
+programs that want to modify their config
+executable scripts like for sway with recursive
+
+binary installation
+
+binary installation the right way by making your own channel
+referencing that channel with (dirname current-filename)
+guix -L thing
