@@ -1,3 +1,11 @@
+unrelated
+guix blog installing fonts requires guix fonts fontconfig
+
+
+
+
+
+
 packaing with home
 
 ~/config/thing
@@ -12,3 +20,46 @@ binary installation
 binary installation the right way by making your own channel
 referencing that channel with (dirname current-filename)
 guix -L thing
+
+how to understand these awful error messages?
+(list ) vs '()
+example error mesages
+
+
+mention this
+https://libreddit.hot.griffinht.com/r/guile/comments/r1agrf/using_modules_installed_with_guix/
+
+
+
+
+https://invidious.hot.griffinht.com/watch?v=JAt2_7wmjLU
+,apropos (,a)
+,describe (,d)
+
+(use-modules (gnu packages))
+,a packages
+
+set up guix environment
+see all the documentation in the code? wondering why you can't google for anything? its all there!
+also emacs probably exposes this if i had to guess
+
+check this out
+https://gist.github.com/mhitza/a00d7900571e9f13bac2bbf4a203d21b
+
+
+
+
+
+(l)ast
+
+(u)p
+
+(n)ext
+(p)revious
+
+next previous with children
+[]
+
+
+(d)irectory
+(t)op
