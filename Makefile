@@ -5,3 +5,6 @@ clean:
 	rm -r build
 docker:
 	docker build --tag griffinht/griffinht.com:latest .
+
+build:
+	inline-website.py
