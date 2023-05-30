@@ -7,6 +7,8 @@ root: ../../
 datetime: 2022-03-16
 ---
 
+# so jk its actually after u put ur key in u log in then it makes a .config/rescrobbled/session file with a secret thingy then it doesnt ask again
+
 [Rescrobbled](https://github.com/InputUsername/rescrobbled) is a daemon written in Rust which works by using the [MPRIS](https://wiki.archlinux.org/title/MPRIS) D-Bus interface to detect currently playing songs so they can be scrobbled to a [Last.fm](https://www.last.fm/) (or [ListenBrainz](https://listenbrainz.org/)) compatible service.
 
 This can be used with Spotify's official client or something like [ncspot](https://github.com/hrkfdn/ncspot).
