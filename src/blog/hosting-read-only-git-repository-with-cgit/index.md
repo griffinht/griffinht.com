@@ -7,6 +7,9 @@ source: blog/hosting-read-only-git-repository-with-cgit/index.md
 datetime: 2022-04-24
 ---
 
+# todo check this out https://wiki.alpinelinux.org/wiki/Cgit
+# https://git.zx2c4.com/cgit/commit/?h=jd/zx2c4-deployment&id=8ed1bef90f631989c0cadc326a163b874a64e02d
+
 `cgit` ([source](https://git.zx2c4.com/cgit/)) is a web interface ([CGI](https://en.wikipedia.org/wiki/Common_Gateway_Interface)) for [Git](https://git-scm.com/) written in C. `cgit` is seems to be the least complicated way to host Git repositories over the web. It is an example of software that does one thing and does it well. [Other web interfaces](https://git.wiki.kernel.org/index.php/Interfaces,_frontends,_and_tools#Web_Interfaces) are either unmaintained or more complex than `cgit` (see [GitLab](https://about.gitlab.com/) or [Gitea](https://gitea.com/)). 
 
 cgit does not attempt to implement user identies, pull requests, issue trackers, or continuous integration. As a result, it is has a small footprint and is relatively easy to deploy.
