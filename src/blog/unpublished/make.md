@@ -91,3 +91,8 @@ clean:
 ```
 
 How can I learn more about `make`? Using it! I learned a lot from my plain text accounting journey or inline-website? Link blog posts to here
+
+
+
+We want the tested version of helloworld, or helloworld.test even if we aren't running it
+We could also express this as helloworld: helloworld.raw but this makes the build required to use makefile which is unneccessary
