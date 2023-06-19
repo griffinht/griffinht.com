@@ -35,3 +35,24 @@ the app just needs to make sure you are who you say you are
 the app just needs to amek sure you are not posing as someone else
 
 
+
+
+identity reuse?
+app passwords, which section should this be in?
+draw out an example threat vector diagram
+email/carddav/caldav/vpn/sso/legacy non sso example/ssh
+web vs non web
+what kind of secrets, link to secrets and password fatiuge
+
+
+
+
+
+
+zero trust
+    vpn single point of failure,
+    authenticate early authenticat often - or authorize??
+secure by design?
+    threat montioring, endpoint protection, etc.
+    or just using something that can't feasibly be broken in to
+single sign in, single sign out

@@ -123,3 +123,38 @@ secret based identity
                                 argon2id
                                 salt protecting against rainbow table
                         dbouel hashing/triple hashing
+
+entropy and limited attempts
+    ip rate limiting, service wide, identity wide, hybrid
+    why its important with low entropy
+    why its not with high
+    for example phone password
+        how much time to break a 4 digit pin with increasing ms per attemtps vs a n digit password with 1ms between attempts
+        tradeoff between user convenicene and security
+        the most secure is infinite timeout, because then no one could hack anyone because no one could authenticate :genius:
+
+talk abuot password reuse and link to the password doc
+why is it so bad?
+each seri
+
+
+identify brokering
+    social login
+    openid connect
+    saml 2
+    kerberos
+user federatino
+    windwos ad
+    ldap
+    relational db
+
+
+https://en.wikipedia.org/wiki/Federated_identity
+    see links at bottom of page
+identify brokering?
+
+
+
+
+good systems
+    allows for users to be revoked, groups to change, etc, principle of least whatever
