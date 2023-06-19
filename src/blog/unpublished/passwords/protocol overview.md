@@ -22,3 +22,16 @@ authentication
 saml
 oauth
     allow identitiews to act as your identity for certain things
+
+
+
+
+
+
+
+every time you log in to an app, you are providing an identity
+the app just needs to know that you are you, and somebody else is not you
+the app just needs to make sure you are who you say you are
+the app just needs to amek sure you are not posing as someone else
+
+
