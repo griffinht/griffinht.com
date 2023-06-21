@@ -55,4 +55,8 @@ zero trust
 secure by design?
     threat montioring, endpoint protection, etc.
     or just using something that can't feasibly be broken in to
-single sign in, single sign out
+single sign in sso, single sign out
+    allows for easy mfa or security key or whatever you want to identitie provider across your systems
+
+
+TOOD FIND APP PASSWORD

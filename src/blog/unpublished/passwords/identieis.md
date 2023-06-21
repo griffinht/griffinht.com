@@ -158,3 +158,11 @@ identify brokering?
 
 good systems
     allows for users to be revoked, groups to change, etc, principle of least whatever
+totp
+otp
+sms vulnerable
+proprietary google auth
+proprietary twilio authy
+duo propretary
+pshigin - push based vs totp
+anti fishing - confirming with code
