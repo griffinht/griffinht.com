@@ -1,0 +1,121 @@
+# CARRIER LOOKUPS
+https://freecarrierlookup.com/
+
+
+snikket kind of works with sure.im
+macaw.me
+other providers don't work
+
+every single client and server partially work with each other
+every client is buggy
+
+
+the happy path
+jmp chatterbox.town or sure.im
+then you are done
+
+why do certain devices get certain messages but frequently they also dont?
+
+# VOIP NUMBER
+https://freecarrierlookup.com/
+paypal: this is a voip number
+no short codes can be recieved from any service ever
+
+is a workaround to get a real number then port it in????
+maybe! what if we grab a tello number for $5 a month, pop the esim into my iphone, then port it into jmp, then see if i can use it! also try using with services before, then port in, then user after
+
+short codes?
+short codes
+https://www.dslreports.com/forum/r32778015-General-Short-Code-SMS-Options-besides-Anveo?group=General
+
+so google needs to be sent twice but it does work
+(google being sent twice - first time to a shortcode which does not work then a second time to a legacy long code??)
+18339510149
+as documented here :(
+https://news.ycombinator.com/item?id=26894855
+and when it sent i got a snikket notification which i tapped which dismissed the notification and of course snikket did not have the chat message (it was missing)
+
+
+thankfully gajim did
+https://github.com/snikket-im/snikket-ios/issues/194
+
+
+What is Wi-Fi Calling?
+Wi-Fi calling allows you to place calls, recieve calls, send texts, recieve texts (what are calls? what kind of texts? does it depend per carrier?) on a cellular line which supports wifi calling. 0ww(what is a cellular line?). It can be enabled per line on most phones.
+
+TELLo
+https://blog.tello.com/news/wi-fi-calling-is-now-fully-supported-by-tello-mobile/
+https://blog.tello.com/news/wi-fi-calling/
+https://tello.com/help_center/how-can-i-use-wi-fi-calling?_language=en
+ATT
+https://www.att.com/features/wifi-calling/
+https://www.att.com/support/article/wireless/KM1063258/
+
+ncsu portal personal info text email notif setup fascinating!!!
+
+Wi-Fi Calling cannot be turned on and off at will. Instead, you can enable Wi-Fi calling in Settings>Wi-Fi Calling>On. You may need to enter your emergency address. This is the address that will be automatically sent to emergency services like 911 (todo check if other countries)
+Why can't I Wi-Fi call on my computer?
+    what if the computer has a sim??? todo search putting sims/esims in computers
+    If Wi-Fi calling needs a sim (what is a sim? cellular connection?), then why can't we place calls from a regular computer with an Internet connection?
+Why can I Wi-Fi call on my computer?
+RELAY is the right word herd
+https://support.apple.com/en-gb/guide/iphone/iph9c5776d3c/ios
+    Microsoft Windows with the app (todo) and Apple from a macbook can place wifi calls (and regular?) from the computer by connecting to the phone when it is nearby via bluetooth and placingn the call on the phone, from the computer (what?? reword). This only works when the phone is close to the computer. The computer is simply acting as a remote control, and is not actually able to place Wi-Fi calls.
+
+How can I turn on Wi-Fi Calling?
+    Wi-Fi calling should be an option which can be turned on in your phone's cellular settings.
+https://support.apple.com/en-gb/guide/iphone/iph78f4697ca/ios
+    If you have an iPhone, 
+        1. go to Settings> Cellular
+        2. If you have Dual SIM, find the "SIMs" subsection and choose a line. You should choose the line which has the number which you would like to use Wi-Fi calling from.
+How can I use Wi-Fi Calling?
+    todo find android answer
+    You cannot always use Wi-Fi Calling. Your phone will only use Wi-Fi calling when certain conditions are met.
+When does my phone use Wi-Fi Calling?
+    Your phone will use Wi-Fi calling when 
+- Place your phone in airplane mode, then connect your phone to the Internet
+    - How can I connect my phone to the Internet in airplane mode?
+        - Connect to a Wi-Fi network with Internet access, or maybe via ethernet dongle or bluetooth?
+    - Your phone will display AT&T Wifi as the cellular provider
+
+
+| bruh | Primary sim only | iPhone multi sim |
+|----|----|----|
+| Wi-Fi Calling  | x | x |
+| airplane | x | x |
+
+| bruh | iPhone single sim | iPhone multi sim |
+|----|----|----|
+| call  | x | x |
+| airplane | x | x |
+
+
+iphone how to turn off data
+if you have 1 sim (the regular thing most people have0
+data roaming off - your phone (probably) will not use data over your celluar connection
+    note you cannot prevent it from roaming
+airplain mode
+    you will lose your ability to talk, text, data
+    however you can connect to wifi and turn on wifi calling then you can talk, text unlimited no international depends on your carrier
+        remember wifi calling in europe is the same as wifi calling in the us, thus you will not be charged for internatoin
+removing the physical sim
+    you will lose your ability to wifi call
+    maybe a table is helpful
+
+if oyu have 2 sims (or 1 esim???) your phone enters a super secret mode that is extra confusing
+
+
+
+
+
+
+JMP CHAT
+paypal this number is not supported
+paypal does try to send with otp
+
+google works second time because the first time it sends a shortcode!
+ebay never delivered
+amazon never delivered
+
+todo
+walmart sends with shortcodes but idk how to test
