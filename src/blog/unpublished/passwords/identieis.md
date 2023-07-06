@@ -166,3 +166,10 @@ proprietary twilio authy
 duo propretary
 pshigin - push based vs totp
 anti fishing - confirming with code
+
+
+
+email as identity
+sms as identity
+mail as identity - usps informed delivery
+device as identity??
