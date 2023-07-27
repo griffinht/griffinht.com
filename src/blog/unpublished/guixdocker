@@ -1,0 +1,29 @@
+coreos sucks - see how to enable systemd unit on boot
+debian is fine - standard unix experience, conigure with ansible
+
+how can i test coreos? every time i have to deploy to a real system?
+    - i have to test with qemu? so fat!
+    - https://docs.fedoraproject.org/en-US/fedora-coreos/provisioning-qemu/
+
+how can i manage my machine's config? and keep it up to date? guix!
+how do i change a simple config without reprovisioning the entire machine? guix!
+
+https://stumbles.id.au/getting-started-with-guix-deploy.html
+
+https://guix.gnu.org/manual/en/html_node/Invoking-guix-system.html
+we can make a basic guix image by defining a simple operating system then first test this as a lightweight docker container! or qemu or whatver its just a system image
+then we deploy ONCE not everytime we change a config as we would with immutable coreos
+then we use guix deploy to manage the config - no more entire redeploys! we can change everything! 100% rollback!
+
+
+
+testing with docker
+not quite because some weird networking issues todo basically i can't get herd services loopback or networking which ssh-daemon depends on because of a netlink error or something probably becaus of docker networking and thanks to me using podman
+
+rootless fake docker with podman
+    networking fails
+    loopback fails
+hot-desktop real docker
+    networking starts, loopback does't same error
+
+potentially related to ? https://issues.guix.gnu.org/issue/34333
