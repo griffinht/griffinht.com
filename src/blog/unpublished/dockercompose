@@ -9,3 +9,6 @@ It is easy to view a docker volume from your host just docker volume inspect for
 
 .env for secrets, not secrets file (it is not moved wiih docker context)
 use docker context
+
+
+docker compose dev vs prod source ./production.env

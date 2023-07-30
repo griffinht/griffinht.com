@@ -146,3 +146,84 @@ Cannot connect to the Docker daemon at http://docker.example.com. Is the docker 
 
 add your user to docker group
 `(supplementarygroup docker) or whatever it is
+
+
+docker run --rm helloworld
+failed to solve: rpc error: code = Unknown desc = failed to solve with frontend dockerfile.v0: failed to create LLB definition: failed to do request: Head "https://registry-1.docker.io/v2/library/nginx/manifests/alpine": x509: certificate signed by unknown authority
+oh no!
+we need https certificates! try adding nss-certs to your operating system packages
+dont forgot to also restart docker
+```
+herd restart dockerd
+```
+```
+guix deploy deploy.scm -x -- herd restart dockerd
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ALSO
+DEPLOYMENT
+docker compose
+    (semi) declarative
+        semi because docker compose requires me to manually fudge around each service
+        and things like volumes can be a little stateful
+        and a few other tweaks here and there
+    runs on anything
+    local or remote, easy to switch
+    auth via ssh or tls cacert
+    can work with podman or docker engine
+guix os
+    deploy
+        create your own iso
+    redeploy
+        guix deploy
+debian
+    deploy
+        ansible or ssh script/debian preseed
+    redeploy
+        ansible
+    lots of state can get messy!
+coreos
+    deploy
+        create own iso
+    redeploy
+        can't
+
+scared of deploying to the host
+debian - pain - ansible futzing around whatever
+coros - can't - immutable must be a container
+so might as well container all the things!
+    nginx in a container
+    certbot in a container
+    backup service in a container
+
+enter guix
+(service wireguard-service-type
+                      (wireguard-configuration
+                       (addresses (list "10.0.0.1/32"))
+                       (peers
+                        (list
+                         (wireguard-peer
+                          (name "overdrive1")
+                          (public-key "m2qys8ATAKUTT8YNUM3OmnJnw1lYm5GHpUA42/l1Qz8=")
+                          (allowed-ips '("10.0.0.3/32")))
+# thin client backup vs fat client restic
+(service rsync-service-type
+                      (rsync-configuration
+                       (address "10.0.0.1")
+                       (modules %rsync-modules-for-backup)))
+doesn't get easier than this - seriously
