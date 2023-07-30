@@ -136,3 +136,13 @@ it works! guix deploy on bare metal!
 
 guix deploy: sending 15 store items (105 MiB) to '192.168.0.6'...
 guix deploy: successfully deployed envy-laptop
+
+
+
+
+we need other services, documentation is a little sparse and tricky to figure out
+error messages are useless! guix moment
+Cannot connect to the Docker daemon at http://docker.example.com. Is the docker daemon running?
+
+add your user to docker group
+`(supplementarygroup docker) or whatever it is
