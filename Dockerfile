@@ -19,7 +19,8 @@ RUN lychee /build --no-progress --timeout 5 --exclude projects/html --offline
 
 # then check online
 # linkedin excluded because of a very silly 999 status code
-RUN lychee /build --no-progress --timeout 5 --exclude projects/html --exclude https://www.linkedin.com/in/griffinht
+#todo lol when the site is down this breaks with griffinht.com links
+#RUN lychee /build --no-progress --timeout 5 --exclude projects/html --exclude https://www.linkedin.com/in/griffinht
 
 FROM scratch
 
