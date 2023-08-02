@@ -1,0 +1,160 @@
+the easiest wireguard configuration you have ever done
+
+I never realized how easy WireGuard (what is wireguard) could be to configure until I stumbled upon Guix. Guix is a fully declarative operating system.
+
+A system running Guix may define a `(wireguard-service-type)`
+
+https://guix.gnu.org/manual/en/html_node/VPN-Services.html#Wireguard
+
+Let's make a WireGuard server at example.com:51280. WireGuard
+
+Let's start by generating a private key for our client. This private key never needs to leave the client machine.
+
+You will need a few tools which are commonly found in the `wireguard-tools` package of your distribution. (todo link repology??)
+
+```
+$ wg genkey > private
+$ wg pubkey < private
+PLAzAYcMAynLWj4FXDh65JLNnj8epKCfTpVOtDGP0Ag=
+```
+
+The key that was printed is your public key. This will be shared with the server. The private key is save to the file `private`. We will need it for later. Don't share this!
+
+This is all we need in our Guix operating system configuration.
+
+`system.scm`
+```
+(service wireguard-service-type
+         (wireguard-configuration
+          (addresses '("10.0.0.1/32"))
+          (peers
+           (list
+            (wireguard-peer
+             (name "my-peer")
+             ;todo not needed(endpoint "my.wireguard.com:51820")
+             (public-key "PLAzAYcMAynLWj4FXDh65JLNnj8epKCfTpVOtDGP0Ag=")
+             (allowed-ips '("10.0.0.2/32")))))))
+```
+
+Go ahead and apply this configuration to your Guix machine. I use `guix deploy` todo
+```
+$ guix deploy
+deploying...
+```
+
+This will deploy our configuration, which means Guix will run a WireGuard service using the Shepherd init system (todo link), Guix generates the server's private key for us, so we need to find the public key.
+```
+$ ssh root@example.com
+root@guix-server ~# herd status
+Started:
+...
+ + wireguard-wg0
+...
+root@guix-server ~# wg
+interface: wg0
+  public key: fpVS/35NXlVSDi63oDoPCRFXnixUjtT/eKixCAb69Aw=
+  private key: (hidden)
+  listening port: 51820
+
+peer: PLAzAYcMAynLWj4FXDh65JLNnj8epKCfTpVOtDGP0Ag=
+  allowed ips: 10.0.0.2/32
+root@guix-server ~# logout
+Connection to x.x.x.x closed.
+```
+
+We can see the Shepherd service `wireguard-wg0` is running, and checking the `wg` command shows us the server's newly generated public key. Let's configure our client.
+
+todo preshared key???
+`/etc/wireguard/my-conf.conf` (should/must todo owned by root)
+
+```
+[Interface]
+PrivateKey = $(cat private)
+Address = 10.0.0.2
+
+[Peer]
+PublicKey = fpVS/35NXlVSDi63oDoPCRFXnixUjtT/eKixCAb69Aw=
+AllowedIps = 0.0.0.0/8 todo
+Endpoint = example.com:51820
+```
+
+Replace `$(cat private)` with this client's private key we generated earlier.
+
+How can I add a new client?
+```
+(service wireguard-service-type
+         (wireguard-configuration
+          (addresses '("10.0.0.1/32"))
+          (peers
+           (list
+            (wireguard-peer
+             (name "my-peer")
+             ;todo not needed(endpoint "my.wireguard.com:51820")
+             (public-key "PLAzAYcMAynLWj4FXDh65JLNnj8epKCfTpVOtDGP0Ag="))
+            (wireguard-peer
+             (name "my-other-peer")
+             (public-key "YsxEitIw1Rpe+m3ks1YEp9adzhpX4f2VxmoYp0Gudgo=")
+             (allowed-ips '("10.0.0.3/32")))))))
+```
+
+```
+$ guix deploy
+bruh
+```
+
+Done! You can probably guess how to remove a client. (todo grammer)
+
+How can I generate a QR code configuration?
+`my-other-peer.conf`
+```
+[Interface]
+PrivateKey = YsxEitIw1Rpe+m3ks1YEp9adzhpX4f2VxmoYp0Gudgo=")
+Address = 10.0.0.3
+
+[Peer]
+PublicKey = fpVS/35NXlVSDi63oDoPCRFXnixUjtT/eKixCAb69Aw=
+AllowedIPs = 0.0.0.0/0
+Endpoint = example.com:51820
+```
+
+```
+$ guix shell qrencode
+...
+building profile with 1 package...
+$ qrencode -t ansiutf8 < my-other-peer.conf
+█████████████████████████████████████████████████████████████
+█████████████████████████████████████████████████████████████
+████ ▄▄▄▄▄ █  ███  █▀█▄ ▄▄█▀ ▀█ █  ▄▄▀  ▄█ ▄▄  ▀██ ▄▄▄▄▄ ████
+████ █   █ ██▀▄▄ █▄▀▀ █  ▄▄  ▄ █▄▄▄██▄▄▀▄ ███ ▀▄▀█ █   █ ████
+████ █▄▄▄█ █  █  ▄█▄▄▀ ▀▄ ▀▄ ▄▄▄ ▄▄▀▀▀ █ █▄ ██ ███ █▄▄▄█ ████
+████▄▄▄▄▄▄▄█ ▀ █ ▀▄█▄█ ▀▄▀ ▀ █▄█ █▄▀ █ █ ▀▄▀ ▀ ▀▄█▄▄▄▄▄▄▄████
+████▄  ▀▀▄▄▀▄█▄█▄ ▄█▄██  █ ▄▄ ▄   ▄▀▄ █▀▄█▄█ █▄██ ▄▄ █▀▄ ████
+████▀█ ▄█▄▄▀ ▄▀█▄▄▄█▄▀█ ▀█▀ █ ▄▄▄▄ ▄▀▄█▄▄▄█  ▄▀▄▄ ▀▄  ▄█▄████
+████▀██▄ █▄█▄▄▄█▀█ ▄█▄▄ █   ▀▄█▄▄ █▄▄███▄▀▄▄  █▀▄▀██▄ █▀▄████
+████▄ ▀██▄▄ ▄   ▀█▀█  ▄▀▄▀███ ▄█  ▄ ▄▄▀█ █▀ ▄██▄ █ ▀ ▀▄█ ████
+████▀▀ ▀▀▄▄▀▀█▀▄▀██   ▄█▄  ▄▄ █▄▀▀█▀  ▄▀▄▀█▀▄ ▄▄█▀▄█▄▀▀▀▀████
+████▄▄▀▀▀ ▄ █▀▄ ██  ▀▄▀█▄▄▄▄█ ▄▄▄▀█▀▀██▄▀ █▄ ▀▄█ ██▄▄ ▄█ ████
+█████▄█ ▀▄▄ ▄ ▄█▀▀ ▀█▀▄ █▄ ▀▄▀██▄▀▄▄ ▄▄▀▄██▀▄ ▄▀█ ▄▀ █▄██████
+█████▄▄██▄▄▄██ █▄ ▄▀▄█▀▄▄▄▀▄█▀▄ ▄ ██▀██▀ ▀▀  █ █  ▄▀█ █▀▄████
+████▄ ▀  ▄▄▄ ██ ▀ ▄█▄██    █ ▄▄▄ ▀▄▀▄ ▄▄▄█▄  ▀▄▀ ▄▄▄  ██ ████
+████▀▄▀▄ █▄█ ▄▀▄ ▄▄█▄▄▄ ▀█▀▀ █▄█  ▀█▀▀ ▄ ▀▀█▄▀██ █▄█  █▀▄████
+████▀█ ▄  ▄▄▄██ ▄▀▄ █▀ ▀▄      ▄  █▄▄█▄▀ █▄▀ ▄▄█ ▄  ▄▀▄ ▀████
+████ ██ ▀▄▄█▄▀▄█▀█▀█▀ ▄█▀▀▄▄ ▄ ▀█ █▄ ▄▀▀ ▄▄  ▄█  █ ▄▀ █  ████
+████▀██▀█ ▄  ▀▀█ ██   ▄▄▄  ▀██  ▀ ▄█▄▄▄▀▄▀█▀▄▀█     █▄█▄▄████
+████▄ ▄█▀▄▄██▀▀█ █  ▀▀▄▄▀▄▄▄▄▄█▄█ █ ▀██▀ ▄▀▄█▀▀▀ ▀▄██▀█▀ ████
+████▄▀  ▀ ▄▄▄ ▀ ▄▀▄ ▄█ ▀▄▄   █ ▄█ ▄▄ ▄▄▀  ██▄▀█ █ ▄▄▄▄▄ ▀████
+████▀▄ █ ▀▄▀▄▀█▄  ▄███▀▄▀ ▄▄▄▀▄ █▀█▀▀▀███▄ ▄█▄▀▀ ▀ ▀ ▀▄  ████
+█████▀▄ ▄▀▄▄  ▄▄▀ ▄█▄██▄▄   ▄▀ █ ▀██  ▄▀▄▀██▄ ▄▄▄▄ ██ █▀█████
+████▄ ▀▄▄▄▄▀█ ▀ ▄▄▄█▄▄ ▄▄█▀ █ ▄▄█▄██ ▄█▄▀██▀  ▄█ █▄ █ ▄█▄████
+███████▄██▄█▀▄█▄▀▄█ ██ ▄▄    ▄▄▄  ▄▄▄▄▄█▄▀▄▀▄▀▄  ▄▄▄ ▄█▄ ████
+████ ▄▄▄▄▄ █▀ █ ▀ ▀█  ▄▄▀▄█▀ █▄█  ▀ ▄ █▀█▄█ ▀ ▄  █▄█ ▀█  ████
+████ █   █ ██ █▀  █   ▄██   ▄ ▄ ▄███ ▄█▀▄██▀▄▀▄ ▄ ▄ ▄▄▀ ▄████
+████ █▄▄▄█ █  ▄ █▄█ ▀██▄█  ▀▀▄██▀▀▀  ▀▀▄ ▀▀▄▀▄▀█  ▄▀▄█▄██████
+████▄▄▄▄▄▄▄█▄▄██▄▄▄▄██▄▄▄▄▄█▄███▄██▄▄▄██▄▄▄█▄███▄▄██▄███▄████
+█████████████████████████████████████████████████████████████
+█████████████████████████████████████████████████████████████
+```
+
+Point a mobile device at your terminal and voila!
+
+If you would instead perfer PNG image, try `qrencode -o qrcode.png < my-other-peer.conf`.
