@@ -98,8 +98,10 @@ How can I add a new client?
 ```
 
 ```
-$ guix deploy
+$ guix deploy deploy.scm
 bruh
+$ guix deploy deploy.scm -x -- herd restart wireguard-wg0
+$ guix deploy deploy.scm -x -- wg show wg0
 ```
 
 Done! You can probably guess how to remove a client. (todo grammer)

@@ -1,0 +1,71 @@
+Let's say we wanted to create a Docker image of iperf3, a piece of software used for measuring network bandwidth.
+
+```
+$ guix pack -f docker iperf
+/gnu/store/i52pwyicnlwqla79ddsdrq18imb5lfwl-iperf-docker-pack.tar
+$ docker load < /gnu/store/i52pwyicnlwqla79ddsdrq18imb5lfwl-iperf-docker-pack.tar
+Loaded image: localhost/iperf:latest
+$ docker run --rm -it localhost/iperf:latest
+docker: Error response from daemon: container create: no command or entrypoint provided, and no CMD or ENTRYPOINT from image.
+See 'docker run --help'.
+```
+
+However, by default `guix pack` will attempt to compress the resulting docker tarball using `gzip`, which I have found can be very slow! For development purposes, consider adding the `--compression=none` option to drastically speed up the build time.
+
+docker load < 'pack'
+Error response from daemon: failed to load image: payload does not match any of the supported image formats:
+ * oci: initializing source oci:/var/tmp/api_load.tar2152152783:: open /var/tmp/api_load.tar2152152783/index.json: not a directory
+ * oci-archive: creating temp directory: untarring file "/var/tmp/oci2574865020": unexpected EOF
+ * docker-archive: loading tar component manifest.json: unexpected EOF
+ * dir: open /var/tmp/api_load.tar2152152783/manifest.json: not a directory
+
+
+
+
+Docker and podman issue lol
+unable to upgrade to tcp, received 409
+
+
+
+```
+$ docker load < "$(guix pack -f docker --entry-point=iperf3)"
+Loaded image: localhost/iperf:latest
+$ docker run --rm -it localhost/iperf:latest
+Error: crun: executable file `/gnu/store/jsb93bl1x6xr6n1by7gs69ja0yi307h0-profile/iperf3` not found in $PATH: No such file or directory: OCI runtime attempted to invoke a command that was not found
+```
+
+```
+$ guix shell iperf -- which iperf3
+/gnu/store/jsb93bl1x6xr6n1by7gs69ja0yi307h0-profile/bin/iperf3
+```
+
+
+
+--entry-point=/bin/iperf3
+
+
+How can I use the other Dockerfile directives? (`CMD`, `EXPOSE`, `VOLUME`, ...) idk lol
+How can I `ADD` or `COPY`?? good question todo
+- make a guix package
+
+```
+FROM alpine
+
+RUN apk add --no-cache iperf
+
+ENTRYPOINT ["iperf3"]
+```
+
+```
+FROM debian:bullseye-slim as build
+
+RUN apt-get update && apt-get install -y iperf3 && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+ENTRYPOINT ["iperf3"]
+```
+
+debian                           bullseye-slim     803d805eb2ce   6 days ago      84MB
+alpine                           latest            c1aabb73d233   7 weeks ago     7.63MB
+localhost/iperf                  latest            00b09fa62bbb   53 years ago    81.2MB
+
+Note the creation date of `localhost/iperf`, the image from `guix pack`. It's 53 years old! Those familiar with reproducible builds will understand - the bit for bit something something todo
