@@ -1,0 +1,30 @@
+todo reduce collect join chain
+    what databases are optimized for these?
+    https://news.ycombinator.com/item?id=38610892
+
+
+simd
+    https://www.rustsim.org/blog/2020/03/23/simd-aosoa-in-nalgebra/
+
+
+
+
+
+the solution is hashmap
+sql is slow use it as little and infrequently as possible
+    what if i cached my data
+    dont engineer your own datbase
+
+
+
+the cogs in my programmer brain began to turn as i envisioned the pipeline i would create
+
+i could create m threads and allocate n/m indices for each thread to compute and the results could be returned as a vector then i would combine each vector in to one big final result vector after waiting for each to join or maybe i could assign work as needed with producers and consumer sas i had done in my operating systems course with various ipc mechanisms and posix apis for pthreads.
+
+
+
+here is some code i have written throughout the past few years
+this is a map reduce
+this is a map collect
+
+these techinqures arent just for programs on your machine - they also work in distributed systems and databases!!!
