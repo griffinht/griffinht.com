@@ -113,6 +113,7 @@ https://rendaw.gitlab.io/blog/3c38052a1eb3.html#a-brief-guix-review
 I plan on deploying this VM to a `VM server in my home lab` (link to setting up guix home lab vm host) which uses `libvirtd` to allow me to deploy my VMs to my home lab. You may consider `deploying a vm image to the cloud` (link to deploying images to cloud via guix deploy? or just general).
 
 The old fashioned method would be starting with a pre-built image of Debian or Ubuntu, then SSHing in. From there, I would add my SSH key, disable SSH password login, update the system, install Docker, 
+vagrantfile? terraform?
 
 Nowadays there are shiny new tools like `cloud-init` to automate this drudgery. Infrastructure as code tools like Ansible, ..., exist to automate this drudgery. I've also briefly tried Fedora's CoreOS - an immutable distribution of Fedora which acts as a Docker container host, with automatic updates and more uhhh. CoreOs is distributed as an image, and can even be customized with Butane, a domain specific language (DSL). Unfortunately and I remember becoming frustrated when I attempted to configure a static IP address. It involved several lines of akward and brittle YAML to configured the underlying systemd networking stack - a rather leaky abstraction. I was also frustrated at how long it took to build and test my changes.
 
@@ -125,59 +126,140 @@ https://earlruby.org/2023/02/quickly-create-guest-vms-using-virsh-cloud-image-fi
 
 `cloud-init` appears to be an antiquated hack for when creating a custom image is too difficult. 
 
+As of [this patch](https://issues.guix.gnu.org/65842), the default image type appears to be `--image-type=mbr-hybrid-raw`, which uses the `mbr-hybrid-disk-image` defined in the `(gnu system image)` module [source](todo). I believe that means the following two code segments are basically the same.
+
+Using [`guix system image`](https://guix.gnu.org/manual/en/html_node/Invoking-guix-system.html#index-image_002c-creating-disk-images):
+
 ```shell
-guix system image --image-type=efi-raw my-os.scm
+$ guix system image --image-type=mbr-hybrid-raw my-os.scm
 ```
 
-```scheme
-(add-to-load-path (string-append (dirname (current-filename)) "/"))
+Internally, this is line 229 of image.scm todo link
+Could this be documented better?
+Reading the source code shows how qcow2 is merely an `mbr-hybrid-disk-image` but using the `compressed-qcow2` format instead of `disk-image`, the default for `mbr-hybrid-disk-image`.
 
-(use-modules (my-bruh)
-             (gnu)
+Or with an [image declaration](https://guix.gnu.org/manual/en/html_node/image-Reference.html):
+
+`my-image.scm`
+
+```scheme
+(use-modules (gnu)
              (gnu image)
              (gnu system image))
 (image
   (format 'disk-image)
   (operating-system %my-system)
-  (partitions (image-partitions efi-disk-image)))
+  (partitions (image-partitions mbr-hybrid-disk-image)))
+```
+
+Build the image like this:
+
+```bash
+$ guix system image my-image.scm
+```
+
+The image can also be inspected like this:
+
+```bash
+$ fdisk -l "$(guix system image my-image.scm)"
+Disk /gnu/store/5vxmd3xqj3gzwzgwdzgia1jlpdw6211y-disk-image: 4 GiB, 4292415488 bytes, 8383624 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x00000000
+
+Device                                                  Boot Start     End Sectors Size Id Type
+/gnu/store/5vxmd3xqj3gzwzgwdzgia1jlpdw6211y-disk-image1       2048   83967   81920  40M ef EFI (FAT-12/16/32)
+/gnu/store/5vxmd3xqj3gzwzgwdzgia1jlpdw6211y-disk-image2 *    83968 8383623 8299656   4G 83 Linux
 ```
 
 # Customizing the image
-I'd like to add a swap partition to my VM
+How can the image be customized? Let's add a swap partition.
+
+I'd like to add a swap partition to my VM. While I don't think this can be accomplished via [`guix system image`](guix system image doc), it can 
 I think this is mostly the same as this:
 
-```shell
-guix system image my-image.scm
-```
-
 ```scheme
-(add-to-load-path (string-append (dirname (current-filename)) "/"))
-
-(use-modules (system)
-             (gnu)
+(use-modules (gnu)
              (gnu image)
              (gnu system image))
 (image
   (format 'disk-image)
   (operating-system %my-system)
-  (partitions (image-partitions efi-disk-image)))
+  (partitions (image-partitions mbr-hybrid-disk-image)))
 ```
 
-I have no idea what `image-partitions` is. It is only referenced in the [Instantiante an image](https://guix.gnu.org/manual/en/html_node/Instantiate-an-Image.html) documentation, but the only definition I could find were two lines in the source code. It is notably absent from the [Image reference](https://guix.gnu.org/manual/en/html_node/image-Reference.html) documentation, which only mentions.
+```bash
+$ guix system image my-image.scm
+```
+
+An aside:
+blockquite?
+Can I make a `qcow2` image? Is it better than this?
+[this](https://serverfault.com/questions/677639/which-is-better-image-format-raw-or-qcow2-to-use-as-a-baseimage-for-other-vms)
+
+
+
+
+
+
+Here is the definition of the `mbr-hybrid-disk-image`. I'd like to add a swap partition to that `partitions` list we see defined here.
+
+[`gnu/system/image.scm`](todo link)
+```scheme
+(define mbr-hybrid-disk-image
+  (image-without-os
+   (format 'disk-image)
+   (partition-table-type 'mbr)
+   (partitions
+    (list esp-partition root-partition))))
+```
+
+I have very limited knowledge of Scheme and Guile, so I think my first approach is to simply copy this declaration, then add the swap partition to the `partitions` list. This shouldn't be too difficult, especially since `esp-partition` and `root-partition` are both defined (and exported) in `(gnu system image)`. That means I should be able to copy this declaration to `my-image.scm` without any trouble.
+
+`my-image.scm`
+```scheme
+(image
+  (format 'disk-image)
+  (operating-system %system)
+  (partitions (image-partitions 
+                (image-without-os
+                 (format 'disk-image)
+                 (partition-table-type 'mbr)
+                 (partitions
+                  (list esp-partition root-partition))))))
+```
+
+This works. It was at this time that I realized that there is no way to currently define a swap partition with the Guix image API - per the [`partition` reference](https://guix.gnu.org/manual/en/html_node/partition-Reference.html) the only supported file systems are "vfat", "fat16", "fat32" and "ext4". This means I will have to create my swap partition with
+
+
+how to add a swap partition - guix currently doesn't support
+can do with regular fdisk/parted/mount/mkswap
+partition initializer -> maybe with initialize-root-partition????? gnu/build/image.scm <- cool!
+
+
+
+
+
+
+
+
+Wow we did it!:
+
+todo
+```bash
+$ fdisk -l "$(guix system image my-image.scm)"
+todo
+```
+
 
 todo link to the blog of the person who implemented this
 https://guix.gnu.org/cookbook/en/guix-cookbook.html
+https://guix.gnu.org/cookbook/en/html_node/Guix-System-Image-API.html
 
-The 
 
-##### bad
 
-```(scheme)
-(partitions (list efi-disk-image))
-```
-
-##### good
-
-```(scheme)
-(partitions (image-partitions efi-disk-image))
-```
+todo guix system image has no docs on --image-type
+https://issues.guix.gnu.org/65842
+https://othacehe.org/
