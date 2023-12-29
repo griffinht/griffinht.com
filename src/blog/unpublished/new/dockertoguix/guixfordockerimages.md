@@ -387,12 +387,16 @@ blah blah blah quit yappin
 ```bash
 todo pick a specific commit so the reader can follow along?
 $ git clone todo.griffinht.com/todo
-$ tree
 $ python3 src/inline-website.py
+Traceback (most recent call last):
+  File "/home/griffin/git/inline-website/src/inline-website.py", line 11, in <module>
+    import chevron
+ModuleNotFoundError: No module named 'chevron'
 ```
 
 That's because `inline-website.py` tried to `import chevron`, which is a Python module I don't have installed.
 
+`src/inline-website.py`
 ```python
 #!/usr/bin/env python3
 
@@ -508,13 +512,15 @@ Let's start from the beginning and see how this entire process looks with Guix.
 
 todo compare blogs which go through the above process?
 
+Enough of Dockerize - let's Guixify all the things!
+
 # Guix time
 
 ## Introduction to Guix as a package manager
 
 Rewinding to our original problem, we want a way to install the Python modules `chevron`, `markdown`, and `yaml`, but we don't want to use `pip`.
 
-Starting with `chevron`, I wonder who packages this already? [Repology](https://repology.org/project/python:chevron/versions) shows there are a variety of non PyPI repositories with the Python module `chevron`. Guix is on that list! We also could have queried Guix's official library of packages directly with `guix search`.
+Starting with `chevron`, I wonder who packages this already? [Repology](https://repology.org/project/python:chevron/versions) shows there are a variety of non PyPI repositories with the Python module `chevron`. Guix is on that list! We also could have queried Guix's official library of packages (channel todo) directly with `guix search`.
 
 ```bash
 $ guix search python markdown
@@ -536,13 +542,71 @@ relevance: 35
 
 > there is also a web search at https://packages.guix.gnu.org/
 
+## Building packages
+
+Guix can build `python-chevron` for us. `guix build` will build a package and output the location of the resulting files.
+
+```bash
+$ tree -L 5 -I 'chevron-*' $(guix build python-chevron)
+/gnu/store/fgl39clk8v1h142vxkwiwkhqjp1svg3f-python-chevron-0.14.0
+├── bin
+│   └── chevron
+└── lib
+    └── python3.10
+        └── site-packages
+            └── chevron
+                ├── __init__.py
+                ├── main.py
+                ├── metadata.py
+                ├── __pycache__
+                ├── renderer.py
+                └── tokenizer.py
+
+7 directories, 6 files
+```
+
+There are the Python files we need for `import chevron` to work. But how do we tell Python where to look? Let's see how `pip` does it:
+
+```bash
+$ pip install chevron
+$ tree -L 1 ~/.local/share/pip/chevron
+/home/griffin/.local/share/pip/chevron
+├── __init__.py
+├── main.py
+├── metadata.py
+├── __pycache__
+├── renderer.py
+└── tokenizer.py
+
+2 directories, 5 files
+$ env | grep PYTHON
+PYTHONPATH=:/home/griffin/.local/share/pip:/home/griffin/.local/share/pip:/home/griffin/.local/share/pip:/home/griffin/.local/share/pip
+$ pip uninstall chevron
+```
+
+Looks like `pip` has set our `PYTHONPATH` environment variable to the place where `pip` installs Python modules.
+
+Let's add the path from `guix build python-chevron` to `PYTHONPATH`:
+
+```bash
+$ PYTHONPATH="$(guix build python-chevron)/lib/python3.10/site-packages:$PYTHONPATH" ./src/inline-website.py
+Traceback (most recent call last):
+  File "/home/griffin/git/inline-website/./src/inline-website.py", line 12, in <module>
+    import yaml
+ModuleNotFoundError: No module named 'yaml'
+```
+
+It worked! Python was able to find and `import chevron` and import the `chevron` from the output of `guix build python-chevron`.  Now we need to install the other two modules, `yaml` and `mustache`. However, this manual `guix build` approach is rather awkward.
+
+What if there was a way to build and install several packages to a certain place? This would kind of be how `pip` installs everything to `~/.local/share/pip`.
+
 ## Installing packages to a profile
     `guix package`
 
-Let's install these packages to our *user* profile. Compare this to package managers like Debian's `apt` or Arch's `pacman` - they install packages systemwide todo reference, thus requiring root privelieges (`sudo`) todo ehhh?. Guix can also install system wide packages, but here we want to install as us, the user confuding todo!
+Let's try installing these packages to our *user* profile. Compare this to package managers like Debian's `apt` or Arch's `pacman` - they install packages systemwide todo reference, thus requiring root privelieges (`sudo`) todo ehhh?. Many language specific package managers like `pip` or `npm` often instead install packages to the user, or even in the project directory (like `node_modules` from `npm`). Guix can install packages to anywhere - the system, the user, idksystem wide packages and user packages, but here we want to install as us, the user confuding todo! This is like how `pip` would install packages to a user specific `site-packages`, without requiring root. todo guix differs in the store!
 
 ```bash
-$ guix install python-chevron python-pyyaml python-markdown
+$ guix package --install python-chevron python-pyyaml python-markdown
 The following packages will be installed:
 ...
 hint: Consider setting the necessary environment variables by running:
@@ -551,14 +615,48 @@ hint: Consider setting the necessary environment variables by running:
      . "$GUIX_PROFILE/etc/profile"
 
 Alternately, see `guix package --search-paths -p "/home/griffin/.guix-profile"'.
+$ ./src/inline-website.py
+Traceback (most recent call last):
+  File "/home/griffin/git/inline-website/./src/inline-website.py", line 11, in <module>
+    import chevron
+ModuleNotFoundError: No module named 'chevron'
 ```
 
-We can even describe this profile with 
+> pro tip: try `guix install`, `guix remove`, and more shorthands idk todo
 
-There are some really cool concepts that I skimmed over here in the background todo. The [manual](https://guix.gnu.org/manual/en/html_node/Invoking-guix-package.html) is a great reference if you'd like to learn more about upgrades, rollbacks, reproducibility, and more.
+It didn't work. After all, why would it? In order for `python` to import an external module, it needs to be available in the `PYTHONPATH` environment variable. Where should we point our `PYTHONPATH` to find the Python modules we just installed with Guix? You can probably guess the answer based on the hint that `guix package` gave us, but we will get there.
 
+First of all, where does `guix package` install packages?
+
+
+
+
+
+We have actually been relying on the system installed version of `python3` - in my case, the Debian todo link to deb repo?
+
+
+
+
+Where did we just install these packages to?
+If this were Debian
+`/usr/bin`
+`/etc/bin`
+whatever
+
+We can even describe this profile with . This would kind of be like `pip list` or `apt list --installed`. Guix also provides many other goodies, like `guix gc --refe` or `guix graph` to generate a graph. Let's check it out!
+
+todo insert guix graph here
+
+There are some really cool concepts that I didn't cover here. The [manual](https://guix.gnu.org/manual/en/html_node/Invoking-guix-package.html) is a great reference if you'd like to learn more about upgrades, rollbacks, transactions, generations, reproducibility, uhhh and more.
+
+One of the killer features of Guix is `guix shell`. Let's go back to the original scenario: we just `git clone`'d a repository and want to install some Python modules so we can do some developing. I don't actually want to gunk up my system or user profile with these project specific dependencies. What if there was a way to create an ephemeral developer environment with exactly what I needed for `inline-website`? `apt` installs everything systemwide, `pip` installs everything to my user profile, `npm` installs everything to the `node_modules` in the project workspace, and Docker just puts everything in a magical container. Guix has `guix shell`.
+
+> yes, `pip --target` can install to the current directory and `npm --global` installs to the user profile (or systemwide??), and `apt` might be able to install to the user profile without root access using [some trickery](https://askubuntu.com/questions/339/how-can-i-install-a-package-without-root-access) (and Docker can use all of these tools :))
+
+## Installing packages in an ephemeral environment
 ## Installing packages in a one-off environment
     `guix shell`
+
 
 ```bash
 $ guix shell --manifest=manifest.scm -- ./src/inline-website.py --help
@@ -603,6 +701,8 @@ guix shell: error: env: command not found
 Woops. Looks like our `guix shell` was a little *too* pure - we lost the `env` command!
 
 
+Remeber when I said how Docker has containers but we have `guix shell`? `guix shell` is great, but it is not a container. And contaniers are great - (see why containers are great). Oftentimes I want to develop in a container - but how can I do that with Guix? Good thing there is `guix shell --container`.
+
 ### Creating a container
 ### Installing packages in a container
     `guix shell --container`
@@ -646,6 +746,16 @@ $ guix pack --format=tarball --manifest=manifest.scm
 
 https://news.ycombinator.com/item?id=38793206
 package vendoring has been heralded as
+
+who else supports vendoring?
+    cargo
+        https://news.ycombinator.com/item?id=26724833
+    npm
+    go
+    not debian!
+        https://news.ycombinator.com/item?id=38160382
+        link that guix hpc ludovid article?
+
 guix makes this trivial, if desired
 Let's dockerize this!
 
@@ -663,6 +773,14 @@ Just kidding, this approach is silly when `guix pack` can make a Docker image fo
 #### as an RPM
 #### more
 ### todo channels?
+
+### Packaging
+
+Guix empowers us to create our own packages. Kind of like how `npm` and `pip` allow us to package JavaScript and Python applications, and Docker has 
+
+> Where is the user package repository for Guix? It doesn't really exist (yet!?) - see the nix equivalent or guix channels. Right now, Guix is to Arch and Debian as <doesn't exist> is to docker hub/aur/not debian lol 
+
+Going back to the original scenario, I am looking to package `inline-website` then use it in my `griffinht.com` project so I can generate my static site! Then I want to use `griffinht.com` in my home lab so I can deploy with nginx!
 
 Let's try bundling up all the dependencies in to a tarball
 
@@ -1020,3 +1138,39 @@ What systems?
 Debian, Ubuntu, Arch, - everything!
 
 How? find differences?
+
+# On cheating when packaging
+
+Docker is always cheating
+    nooo you can't just ship the whole machine
+    `FROM debian` docker go brrr
+    noo you can't just switch to a different distro when the one you were using doesn't have the package you need
+    `FROM arch` go brrr
+
+Debian makes it hard to cheat - how can I even define my own package? Often this results in akwardly building from source when I want my software to just work
+I think this is why many people dislike Debian - they have their favorite software that can't be packaged on Debian and they read https://news.ycombinator.com/item?id=38160382 and it just seems silly, so they
+Compare this to Arch where vendoring is allowed - is it??? todo
+
+Guix allows us to cheat however much we want - you won't find much cheating in the official guix channel (link) but here is an example of doing it yourself
+Guix empowers everyone to become a full fledged hacker of their environment - try that in debian (lol) or swap gcc to clang or build from source (aur) or add a dep or change a build flag (gentoo)
+But parentehsees are indeed scary - and as (link cool blog post guix for non guix) puts it, guix often throws no bones in helping you. Error messages are completely opaque or hidden. If you can find the backtrace, you probably have no idea what wrong type to apply means - you just wanted to make a little software package!
+
+# If Guix is so great why aren't we using it?
+
+Use nix if you want transactional functional magic but way more people and packages
+    nix cheats more - vendoring dependencies
+    non free software
+
+Guix is a gnu project
+    see non guix
+
+https://www.youtube.com/watch?v=LnU8SYakZQQ
+
+# Guixify my software
+# Guixify my $HOME
+# Guixify my neovim
+# Guixify my home lab
+    # Guixify my docker
+    # Guixify my vm
+    # Guixify my vps
+    # Guixify my desktop
