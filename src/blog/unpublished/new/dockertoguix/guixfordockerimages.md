@@ -382,6 +382,10 @@ The manual states `guix shell` will create an "*augmented* environment, where th
 
 # THIS IS THE REAL START
 
+Guix is hard and scary. I wanted use it to install my packages, manage my system, manage my other systems, and package my software, to but the [scary parentheses](link to guile) and other Guixyness kept getting in the way. This is my attempt at learning the foundations of Guix, step by step from package manager to the future of software development.
+
+Our story begins with `inline-website`, a tiny and semi broken Python script I wrote to create this website, mostly because I didn't want to learn how to use one of the many existing static site generators. Unfortunately, `inline-website` has *dependencies*. Thanks to the advent of package managers, blah blah bnlah quit yappin
+
 blah blah blah quit yappin
 
 ```bash
@@ -543,6 +547,7 @@ relevance: 35
 > there is also a web search at https://packages.guix.gnu.org/
 
 ## Building packages
+    `guix build` ([manual](https://guix.gnu.org/manual/en/html_node/Invoking-guix-build.html))
 
 Guix can build `python-chevron` for us. `guix build` will build a package and output the location of the resulting files.
 
@@ -565,7 +570,9 @@ $ tree -L 5 -I 'chevron-*' $(guix build python-chevron)
 7 directories, 6 files
 ```
 
-There are the Python files we need for `import chevron` to work. But how do we tell Python where to look? Let's see how `pip` does it:
+> `guix build` is a very powerful tool - let's check out `tar -xf $(guix build python-chevron --source) && tree -L bruh todo`
+
+The `guix build` output contains the Python files we need for `import chevron` to work. But how do we tell Python where to find them? Let's see how `pip` does it:
 
 ```bash
 $ pip install chevron
@@ -584,9 +591,9 @@ PYTHONPATH=:/home/griffin/.local/share/pip:/home/griffin/.local/share/pip:/home/
 $ pip uninstall chevron
 ```
 
-Looks like `pip` has set our `PYTHONPATH` environment variable to the place where `pip` installs Python modules.
+Looks like `pip` sets the `PYTHONPATH` environment variable to the place where `pip` installs Python modules.
 
-Let's add the path from `guix build python-chevron` to `PYTHONPATH`:
+Let's append the path from `guix build python-chevron` to `PYTHONPATH`:
 
 ```bash
 $ PYTHONPATH="$(guix build python-chevron)/lib/python3.10/site-packages:$PYTHONPATH" ./src/inline-website.py
@@ -596,14 +603,14 @@ Traceback (most recent call last):
 ModuleNotFoundError: No module named 'yaml'
 ```
 
-It worked! Python was able to find and `import chevron` and import the `chevron` from the output of `guix build python-chevron`.  Now we need to install the other two modules, `yaml` and `mustache`. However, this manual `guix build` approach is rather awkward.
+It worked! Python was able to find import the `chevron` module from the output of `guix build python-chevron`. Now Python is complaining about missing the other two modules we need, `yaml` and `mustache`. However, this manual `guix build` approach is rather awkward.
 
-What if there was a way to build and install several packages to a certain place? This would kind of be how `pip` installs everything to `~/.local/share/pip`.
+What if there was a way to build and install several packages to a certain place? This kind of be similar to how `pip` installs everything to `~/.local/share/pip`.
 
 ## Installing packages to a profile
-    `guix package`
+    `guix package` ([manual](https://guix.gnu.org/manual/en/html_node/Invoking-guix-package.html))
 
-Let's try installing these packages to our *user* profile. Compare this to package managers like Debian's `apt` or Arch's `pacman` - they install packages systemwide todo reference, thus requiring root privelieges (`sudo`) todo ehhh?. Many language specific package managers like `pip` or `npm` often instead install packages to the user, or even in the project directory (like `node_modules` from `npm`). Guix can install packages to anywhere - the system, the user, idksystem wide packages and user packages, but here we want to install as us, the user confuding todo! This is like how `pip` would install packages to a user specific `site-packages`, without requiring root. todo guix differs in the store!
+Let's try installing these packages to our *user* profile. Compare this to package managers like Debian's `apt` or Arch's `pacman` - they install packages to the system profile, available to any user tod oreference,. This is why they require root privileges (`sudo`) todo ehhh?. Many language specific package managers like `pip` or `npm` often instead install packages to places like the user profile (`~/.local/share/pip` from `pip`) or the project directory (`node_modules` from `npm`). Guix can install packages to anywhere - the system, the user, or the project directory (todo link to guix pack? uhhh idk) idksystem wide packages and user packages, but here we want to install as us, the user confuding todo! todo remove This is like how `pip` would install packages to a user specific `site-packages`, without requiring root. todo guix differs in the store!
 
 ```bash
 $ guix package --install python-chevron python-pyyaml python-markdown
@@ -622,11 +629,18 @@ Traceback (most recent call last):
 ModuleNotFoundError: No module named 'chevron'
 ```
 
-> pro tip: try `guix install`, `guix remove`, and more shorthands idk todo
+> pro tip: try some aliases instead, like `guix install` or `guix remove` todo link
 
-It didn't work. After all, why would it? In order for `python` to import an external module, it needs to be available in the `PYTHONPATH` environment variable. Where should we point our `PYTHONPATH` to find the Python modules we just installed with Guix? You can probably guess the answer based on the hint that `guix package` gave us, but we will get there.
+It didn't work. After all, why would it? In order for `python` to import an external module, it needs to be available in the `PYTHONPATH` environment variable. Where should we point our `PYTHONPATH` to find the Python modules Guix just installed for us? You can probably guess the answer based on the hint that `guix package` gave us, but we will get there.
 
-First of all, where does `guix package` install packages?
+It works, but where does `guix package` install packages?
+
+`~/.guix-profile`? Kind of! todo Learn more about [the Store](https://guix.gnu.org/manual/en/html_node/The-Store.html)
+
+
+
+Debian users may be familiar with this problem - removing a package will not remove its dependencies until `sudo apt autoremove` is ran. This can be helpful with brittle system which may have incidentally been relying on idk todo. This can be annoying when todo debian find which packages have been installed by the user. This mixes declarative and imperative i think
+I'm not sure if `pip` handles this at all - we `pip uninstall chevron` but all the other things are still there?
 
 
 
@@ -647,7 +661,7 @@ We can even describe this profile with . This would kind of be like `pip list` o
 
 todo insert guix graph here
 
-There are some really cool concepts that I didn't cover here. The [manual](https://guix.gnu.org/manual/en/html_node/Invoking-guix-package.html) is a great reference if you'd like to learn more about upgrades, rollbacks, transactions, generations, reproducibility, uhhh and more.
+There are some really cool concepts that I didn't cover here. The [manual](https://guix.gnu.org/manual/en/html_node/Invoking-guix-package.html) is a great reference if you'd like to learn more about upgrades, rollbacks, transactions, generations, reproducibility, uhhh and more. https://guix.gnu.org/manual/en/html_node/Features.html
 
 One of the killer features of Guix is `guix shell`. Let's go back to the original scenario: we just `git clone`'d a repository and want to install some Python modules so we can do some developing. I don't actually want to gunk up my system or user profile with these project specific dependencies. What if there was a way to create an ephemeral developer environment with exactly what I needed for `inline-website`? `apt` installs everything systemwide, `pip` installs everything to my user profile, `npm` installs everything to the `node_modules` in the project workspace, and Docker just puts everything in a magical container. Guix has `guix shell`.
 
@@ -1152,7 +1166,7 @@ I think this is why many people dislike Debian - they have their favorite softwa
 Compare this to Arch where vendoring is allowed - is it??? todo
 
 Guix allows us to cheat however much we want - you won't find much cheating in the official guix channel (link) but here is an example of doing it yourself
-Guix empowers everyone to become a full fledged hacker of their environment - try that in debian (lol) or swap gcc to clang or build from source (aur) or add a dep or change a build flag (gentoo)
+Guix empowers everyone to become a full fledged hacker of their environment - try that in debian (lol) or swap gcc to clang or build from source (aur) or add a dep or change a build flag (gentoo) https://guix.gnu.org/en/blog/2023/parameterized-packages-for-gnu-guix/ https://blog.lispy.tech/
 But parentehsees are indeed scary - and as (link cool blog post guix for non guix) puts it, guix often throws no bones in helping you. Error messages are completely opaque or hidden. If you can find the backtrace, you probably have no idea what wrong type to apply means - you just wanted to make a little software package!
 
 # If Guix is so great why aren't we using it?
@@ -1174,3 +1188,9 @@ https://www.youtube.com/watch?v=LnU8SYakZQQ
     # Guixify my vm
     # Guixify my vps
     # Guixify my desktop
+show how guix runs circles around other package managers
+continously give other package manager examples
+    then should how guix does it better
+    guix graph
+    guix build --source
+    guix gc
