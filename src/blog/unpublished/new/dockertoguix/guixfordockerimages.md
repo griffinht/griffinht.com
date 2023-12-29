@@ -3,6 +3,7 @@ https://www.futurile.net/
     the goat!
 https://pages.stat.wisc.edu/~yandell/R_for_data_sciences/connect/docker.html
 https://issues.guix.gnu.org/55680
+https://guix.gnu.org/blog/2019/gnu-guix-1.0.0-released/
 
 # From Debian to Docker to Guix
 # From Docker to Guix
@@ -278,7 +279,7 @@ https://www.futurile.net/2022/12/12/guix-managing-apps-with-manifests/
 [`guix shell` documentation](https://guix.gnu.org/manual/en/html_node/Invoking-guix-shell.html#Invoking-guix-shell)
 Thankfully, GNU Guix
 ```bash
-$ guix shell python python-chevron python-markdown
+$ guix shell python python-chevron python-pyyaml python-markdown
 ...
 $ src/inline-website.py --help
 usage: inline-website.py [-h] [-v] [-o OUTPUT] [-w] ...
@@ -296,7 +297,7 @@ options:
 However, this approach is kind of unwieldy. I could place the `guix shell ...` command in a one line shell script for easy reference, but Guix has a better idea. I'm going to instead put these packages in a *manifest*. The ([manual](https://guix.gnu.org/en/manual/devel/en/html_node/Writing-Manifests.html)) describes manifests as *a “bill of materials” that defines a package set*.
 
 ```bash
-$ guix shell python python-chevron python-markdown --export-manifest > manifest.scm
+$ guix shell python python-chevron python-pyyaml python-markdown --export-manifest > manifest.scm
 ```
 
 `manifest.scm`
@@ -308,6 +309,7 @@ $ guix shell python python-chevron python-markdown --export-manifest > manifest.
 (specifications->manifest
   (list "python"
         "python-chevron"
+        "python-pyyaml"
         "python-markdown"))
 ```
 
@@ -338,21 +340,324 @@ Now that we have this fancy manifest, what can we do?
 [The cookbook](https://guix.gnu.org/cookbook/en/html_node/The-benefits-of-manifests.html) has more information on the benefits of manifests - todo
 
 Actually, what can't we do?
+todo pyyaml
 
+todo do this anywhere?
+https://zero-to-nix.com/start/init-flake
+
+### Creating a one-off developer environment
+    I want to develop my `inline-website` project without installing all the dependencies to the rest of my system
+
+### Creating a one-off software environment
 ### Installing packages in a one-off environment
     `guix shell`
 
+The manual states `guix shell` will create an "*augmented* environment, where the new packages are added to search path environment variables such as `PATH`"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# THIS IS THE REAL START
+
+blah blah blah quit yappin
+
+```bash
+todo pick a specific commit so the reader can follow along?
+$ git clone todo.griffinht.com/todo
+$ tree
+$ python3 src/inline-website.py
+```
+
+That's because `inline-website.py` tried to `import chevron`, which is a Python module I don't have installed.
+
+```python
+#!/usr/bin/env python3
+
+import chevron
+import pyyaml
+import markdddadf
+
+...
+```
+
+> the `#!/shebang` [Wikipedia](https://en.wikipedia.org/wiki/Shebang_%28Unix%29) allows me to make my python script executable - instead of `python src/inline-website.py` I may simply `chmod +x src/inline-website.py && ./src/inline-website.py`
+
+Let's fix this:
+
+```bash
+$ pip install chevron pyyaml markdown
+```
+
+But you are a seasoned software developer. You are sick of all these random language specific package managers. What you need is the one true package manager. Docker to the rescue!
+todo read a blog post about why docker is so great
+
+`pip` `npm` `cargo` `whatever go uses`
+Let's not even get started with Java's package managers.
+
+watch the sarcasm
+There is only one small issue with this genius plan. Docker is not a package manager. see why todo
+
+`Dockerfile`
+```Dockerfile
+
+COPY src .
+
+RUN pip install chevron pyyaml markdown
+
+
+ENTRYPOINT "inline-website.py"
+```
+
+Docker is the last package manager you will ever need! Just `git clone && docker build . --tag inline-website && docker run --rm up`?
+This isn't the most ergonomic approach, but you know what comes next.
+
+`docker-compose.yml`
+```yaml
+inline-website:
+    image:
+        build: .
+    volumes: src./sadf
+```
+
+`git clone && docker compose up`. Done.
+
+Problem solved! kKind of. This is akward and many things don't work - how can you
+Check out all these workarounds 
+java maven
+sockets?
+host communication?
+gui applications?
+
+But it is nice to run untrusted code in a compact little contained container.
+
+
+Sure it tends to be more of a pain to instal but it can be installed eveywher link to install
+Sure it requires root but actually it doesn't require root but it kind of does
+But podman doesnn't so that's cool but podman has its own issues
+And why am I worrying about volumes and networking and user land proxies and namespaces oh my! I just wanted `import chevron`
+
+Anyways, let's ignore this for now. Docker also allows us to use our software elsewhere. I'm going to work on this website, `griffinht.com`, which is generated from `inline-website`.
+
+```bash
+$ git clone asdftodo
+$ docker run --rm --volume ./src:asd inline-website
+```
+
+We already know the first issue - ergonomics
+
+`docker-compose.yml`
+```yaml
+build:
+    image: inline-website
+```
+
+```bash
+$ docker compose run build
+```
+
+I can also build and package ("Dockerize") as a Docker image:
+
+`Dockerfile`
+```Dockerfile
+FROM inline-website as build
+
+COPY src .
+
+RUN inline-website bruh bruh todo
+```
+
+Now from my 
+`Dockerfile`
+```Dockerfile
+FROM nginx
+
+COPY --from=inline-website /buildtodo .
+```
+
+
+why?
+Docker is not a package manager. It may look and feel like a package manager at times, but Docker is not a package manager.
+
+
+Let's start from the beginning and see how this entire process looks with Guix.
+
+
+
+todo compare blogs which go through the above process?
+
+# Guix time
+
+## Introduction to Guix as a package manager
+
+Rewinding to our original problem, we want a way to install the Python modules `chevron`, `markdown`, and `yaml`, but we don't want to use `pip`.
+
+Starting with `chevron`, I wonder who packages this already? [Repology](https://repology.org/project/python:chevron/versions) shows there are a variety of non PyPI repositories with the Python module `chevron`. Guix is on that list! We also could have queried Guix's official library of packages directly with `guix search`.
+
+```bash
+$ guix search python markdown
+name: python-markdown
+version: 3.3.4
+outputs:
++ out: everything
+systems: x86_64-linux i686-linux
+dependencies: python-nose@1.3.7 python-pyyaml@6.0
+location: gnu/packages/python-xyz.scm:13176:2
+homepage: https://python-markdown.github.io/
+license: Modified BSD
+synopsis: Python implementation of Markdown  
+description: This package provides a Python implementation of John Gruber's Markdown.  The library features international input, various Markdown extensions, and several HTML output formats.  A command line wrapper markdown_py is also provided to convert Markdown files to HTML.
+relevance: 35
+
+...
+```
+
+> there is also a web search at https://packages.guix.gnu.org/
+
+## Installing packages to a profile
+    `guix package`
+
+Let's install these packages to our *user* profile. Compare this to package managers like Debian's `apt` or Arch's `pacman` - they install packages systemwide todo reference, thus requiring root privelieges (`sudo`) todo ehhh?. Guix can also install system wide packages, but here we want to install as us, the user confuding todo!
+
+```bash
+$ guix install python-chevron python-pyyaml python-markdown
+The following packages will be installed:
+...
+hint: Consider setting the necessary environment variables by running:
+
+     GUIX_PROFILE="/home/griffin/.guix-profile"
+     . "$GUIX_PROFILE/etc/profile"
+
+Alternately, see `guix package --search-paths -p "/home/griffin/.guix-profile"'.
+```
+
+We can even describe this profile with 
+
+There are some really cool concepts that I skimmed over here in the background todo. The [manual](https://guix.gnu.org/manual/en/html_node/Invoking-guix-package.html) is a great reference if you'd like to learn more about upgrades, rollbacks, reproducibility, and more.
+
+## Installing packages in a one-off environment
+    `guix shell`
+
+```bash
+$ guix shell --manifest=manifest.scm -- ./src/inline-website.py --help
+usage: inline-website.py [-h] [-v] [-o OUTPUT] [-w] ...
+
+positional arguments:
+  REMAINDER
+
+options:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  -o OUTPUT, --output OUTPUT
+  -w, --watch
+```
+
+It worked! But how did it work? How was my Python script able to `import chevron`?
+
+```bash
+$ guix shell python python-chevron python-pyyaml python-markdown --pure --search-paths
+export PATH="/gnu/store/vcsr8llvqi5rnxyb2vwclrnijzy7l7im-profile/bin"
+export GUIX_PYTHONPATH="/gnu/store/vcsr8llvqi5rnxyb2vwclrnijzy7l7im-profile/lib/python3.10/site-packages"
+$ GUIX_PYTHONPATH="/gnu/store/vcsr8llvqi5rnxyb2vwclrnijzy7l7im-profile/lib/python3.10/site-packages" ./src/inline-website --help
+usage: inline-website.py [-h] [-v] [-o OUTPUT] [-w] ...
+
+positional arguments:
+  REMAINDER
+
+options:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  -o OUTPUT, --output OUTPUT
+  -w, --watch
+```
+
+```bash
+$ guix shell python python-chevron python-pyyaml python-markdown --pure -- env
+guix shell: error: env: command not found
+$ guix shell python python-chevron python-pyyaml python-markdown --pure -- env
+guix shell: error: env: command not found
+```
+
+Woops. Looks like our `guix shell` was a little *too* pure - we lost the `env` command!
+
+
+### Creating a container
 ### Installing packages in a container
     `guix shell --container`
+    `guix container`
 nsenter?
+https://guix.gnu.org/manual/en/html_node/Invoking-guix-container.html
+
+Let's take `guix shell` one step further by creating an *isolated* environment containing nothing but the packages we asked for. 
+
+```bash
+$ guix shell --container --manifest=manifest.scm -- ./src/inline-website.py --help
+guix shell: error: ./src/inline-website.py: command not found
+```
+
+This is a real container and it really does contain nothing but the packages we asked for (and the files from the current working directory).
+
+If you thought `guix shell --pure` was bleak, prepare yourself for the barren world of `guix shell --container`
+
+```bash
+$ which env
+/usr/bin/env
+$ guix shell --pure -- $(which env)
+$ guix shell --container -- $(which env)
+
 ### Packaging packages
     `guix pack`
 
-The [manual](https://guix.gnu.org/manual/en/html_node/Invoking-guix-pack.html) says how `guix pack` allows us to "pass software to people who are not (yet!) lucky enough to be using Guix".
+The [manual](https://guix.gnu.org/manual/en/html_node/Invoking-guix-pack.html) says how `guix pack` allows us to "pass software to people who are not (yet!) lucky enough to be using Guix". "creates a shrink-wrapped *pack* or *software bundle* ... containing the binaries of the software you're intereste in, and all its dependnecies"
+
+> The guix pack command creates a shrink-wrapped pack or software bundle: it creates a tarball or some other archive containing the binaries of the software you’re interested in, and all its dependencies. The resulting archive can be used on any machine that does not have Guix, and people can run the exact same binaries as those you have with Guix. 
 
 > note that `guix pack` also supports taking a list of packages via the command line - `guix pack python python-chevron python-markdown` would produce the same result as `guix pack --manifest=manifest.scm`
 
 #### as a tarball
+
+```
+$ guix pack --format=tarball --manifest=manifest.scm
+```
+
+### Vendoring packages
+
+https://news.ycombinator.com/item?id=38793206
+package vendoring has been heralded as
+guix makes this trivial, if desired
+Let's dockerize this!
+
+```Dockerfile
+FROM scratch
+
+COPY pack .
+```
+
+Just kidding, this approach is silly when `guix pack` can make a Docker image for us - see the next section!
+
+### Packaging/shrink wrapping software environments/manifests
 #### as a docker image
 #### as a DEB
 #### as an RPM
@@ -598,6 +903,8 @@ What is all this stuff? Why do we even need half of it?
 
 Let's see why sqlite is in here:
 
+link to Decoding guix packages
+
 
 Now why don't you try running it on your (linux) machine!
 
@@ -690,3 +997,26 @@ run just one guix service with a lightweight init???
     boom?
     
 
+But I don't want all this blot!
+
+What bloat?
+
+glibc!
+
+We need glibc
+
+I have glibc!
+
+What glibc?
+
+ldd glibc
+
+Where did you get this?
+
+It's on every system!
+
+What systems?
+
+Debian, Ubuntu, Arch, - everything!
+
+How? find differences?
