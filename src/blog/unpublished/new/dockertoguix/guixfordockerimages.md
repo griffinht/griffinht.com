@@ -382,7 +382,13 @@ The manual states `guix shell` will create an "*augmented* environment, where th
 
 # THIS IS THE REAL START
 
+# Foreward uhhhhh
 Guix is hard and scary. I wanted use it to install my packages, manage my system, manage my other systems, and package my software, to but the [scary parentheses](link to guile) and other Guixyness kept getting in the way. This is my attempt at learning the foundations of Guix, step by step from package manager to the future of software development.
+
+I had been using Guix for about a year until I wrote this series. I started by installing `guix` to my existing Debian ([binary installation](https://guix.gnu.org/manual/en/html_node/Binary-Installation.html)) system because I wanted to manage my dotfiles and switch from the Gnome desktop environment to the Sway window manager. I had seen snippets of what Guix and Nix can do from occasional postings on Hacker News. I wanted to 
+
+Now a year later I still find myself barely able to write a package myself and barely able to uhhh. I knew I could Guixify my home lab, which comprised of. I was kind of sick of Docker at this point, after having configured `nginx` and, then attempting to switch to Podman, then still wanting to use Docker Compose, but kubernetes idk
+I was using Docker like it was a package manager, and Docker is not a package manager todo see thing.
 
 Our story begins with `inline-website`, a tiny and semi broken Python script I wrote to create this website, mostly because I didn't want to learn how to use one of the many existing static site generators. Unfortunately, `inline-website` has *dependencies*. Thanks to the advent of package managers, blah blah bnlah quit yappin
 
@@ -398,7 +404,7 @@ Traceback (most recent call last):
 ModuleNotFoundError: No module named 'chevron'
 ```
 
-That's because `inline-website.py` tried to `import chevron`, which is a Python module I don't have installed.
+Looks like we are missing some dependencies.
 
 `src/inline-website.py`
 ```python
@@ -411,13 +417,17 @@ import markdddadf
 ...
 ```
 
-> the `#!/shebang` [Wikipedia](https://en.wikipedia.org/wiki/Shebang_%28Unix%29) allows me to make my python script executable - instead of `python src/inline-website.py` I may simply `chmod +x src/inline-website.py && ./src/inline-website.py`
+`inline-website.py` tried to `import chevron`, which is a Python module I don't have installed.
+
+> the `#!/shebang` [Wikipedia](https://en.wikipedia.org/wiki/Shebang_%28Unix%29) allows me to make my python script executable - instead of `python3 src/inline-website.py` I may simply `chmod +x src/inline-website.py && ./src/inline-website.py`
 
 Let's fix this:
 
 ```bash
 $ pip install chevron pyyaml markdown
 ```
+
+you me us we who?
 
 But you are a seasoned software developer. You are sick of all these random language specific package managers. What you need is the one true package manager. Docker to the rescue!
 todo read a blog post about why docker is so great
@@ -524,6 +534,7 @@ Enough of Dockerize - let's Guixify all the things!
 
 Rewinding to our original problem, we want a way to install the Python modules `chevron`, `markdown`, and `yaml`, but we don't want to use `pip`.
 
+cnfusing language kind of
 Starting with `chevron`, I wonder who packages this already? [Repology](https://repology.org/project/python:chevron/versions) shows there are a variety of non PyPI repositories with the Python module `chevron`. Guix is on that list! We also could have queried Guix's official library of packages (channel todo) directly with `guix search`.
 
 ```bash
@@ -548,6 +559,9 @@ relevance: 35
 
 ## Building packages
     `guix build` ([manual](https://guix.gnu.org/manual/en/html_node/Invoking-guix-build.html))
+
+aside: guix build in deptch with source and grafts? what is that
+and changing compile flags and clang-toolchain and stuff
 
 Guix can build `python-chevron` for us. `guix build` will build a package and output the location of the resulting files.
 
@@ -605,16 +619,17 @@ ModuleNotFoundError: No module named 'yaml'
 
 It worked! Python was able to find import the `chevron` module from the output of `guix build python-chevron`. Now Python is complaining about missing the other two modules we need, `yaml` and `mustache`. However, this manual `guix build` approach is rather awkward.
 
-What if there was a way to build and install several packages to a certain place? This kind of be similar to how `pip` installs everything to `~/.local/share/pip`.
+What if there was a way to build and install several packages to a certain place? Kind of like how ... todo This would be kind of similar to how `pip` installs everything to `~/.local/share/pip`.
 
 ## Installing packages to a profile
     `guix package` ([manual](https://guix.gnu.org/manual/en/html_node/Invoking-guix-package.html))
 
-Let's try installing these packages to our *user* profile. Compare this to package managers like Debian's `apt` or Arch's `pacman` - they install packages to the system profile, available to any user tod oreference,. This is why they require root privileges (`sudo`) todo ehhh?. Many language specific package managers like `pip` or `npm` often instead install packages to places like the user profile (`~/.local/share/pip` from `pip`) or the project directory (`node_modules` from `npm`). Guix can install packages to anywhere - the system, the user, or the project directory (todo link to guix pack? uhhh idk) idksystem wide packages and user packages, but here we want to install as us, the user confuding todo! todo remove This is like how `pip` would install packages to a user specific `site-packages`, without requiring root. todo guix differs in the store!
+todo Let's try installing these packages with `guix package`. todo move the rest down Let's try installing these packages to our *user* profile. Compare this to package managers like Debian's `apt` or Arch's `pacman` - they install packages to the system profile, available to any user tod oreference,. This is why they require root privileges (`sudo`) todo ehhh?. Many language specific package managers like `pip` or `npm` often instead install packages to places like the user profile (`~/.local/share/pip` from `pip`) or the project directory (`node_modules` from `npm`). Guix can install packages to anywhere - the system, the user, or the project directory (todo link to guix pack? uhhh idk) idksystem wide packages and user packages, but here we want to install as us, the user confuding todo! todo remove This is like how `pip` would install packages to a user specific `site-packages`, without requiring root. todo guix differs in the store!
 
 ```bash
 $ guix package --install python-chevron python-pyyaml python-markdown
 The following packages will be installed:
+todo fill this in
 ...
 hint: Consider setting the necessary environment variables by running:
 
@@ -629,19 +644,276 @@ Traceback (most recent call last):
 ModuleNotFoundError: No module named 'chevron'
 ```
 
-> pro tip: try some aliases instead, like `guix install` or `guix remove` todo link
+> pro tip: try some aliases instead, like `guix install <packages>` or `guix remove <packages>` todo link
 
-It didn't work. After all, why would it? In order for `python` to import an external module, it needs to be available in the `PYTHONPATH` environment variable. Where should we point our `PYTHONPATH` to find the Python modules Guix just installed for us? You can probably guess the answer based on the hint that `guix package` gave us, but we will get there.
+It didn't work. After all, why would it? As we saw above, todo In order for `python` to import an external module, it needs to be available in the `PYTHONPATH` environment variable. Where should we point our `PYTHONPATH` to find the Python modules Guix just installed for us? Guix provides a hint for us in the output of `guix package`.
+
+todo?
 
 It works, but where does `guix package` install packages?
 
 `~/.guix-profile`? Kind of! todo Learn more about [the Store](https://guix.gnu.org/manual/en/html_node/The-Store.html)
 
+Instead of installing to the entire user profile, I only really want to install to this project.
+
+todo rewrite
+Every `guix package` operation is a transaction, allowing us to switch to previous generations with ease. Let's roll back to the previous generation (where nothing was installed) and then install everything to a special new *profile* `inline-website`. Remeber, a profile is merely a directory of installed packages. Remember our `guix build python-chevron` example from before? That was a single package. `guix package` allows us to install multiple packages to a directory, which is called a *profile*. If you wanted to compare Guix profiles to `pip`, then `pip`'s default profile (or directory of installed python modules) would be `~/.local/share/pip`. Debian's `apt` default "profile" (or directory of installed packages) would technically located at the system root `/`, which is where we find `/bin`, `/etc/`, `/lib`, and more.
+
+```bash
+$ guix package --roll-back
+$ guix package --list-installed # will output nothing because nothing is installed
+$ pwd
+/home/griffin/git/inline-website
+$ guix package --profile=my-profile --install python-chevron python-pyyaml python-markdown
+The following packages will be installed:
+   python-chevron  0.14.0
+   python-markdown 3.3.4
+   python-pyyaml   6.0
+
+hint: Consider setting the necessary environment variables by running:
+
+     GUIX_PROFILE="/home/griffin/git/inline-website/my-profile"
+     . "$GUIX_PROFILE/etc/profile"
+
+Alternately, see `guix package --search-paths -p "/home/griffin/git/inline-website/my-profile"'.
+```
+
+Let's explore what a Guix profile looks like:
+Let's see how Guix represents these mysterious profiles:
+
+```bash
+$ ls -lh
+total 20K
+-rw-r--r-- 1 griffin griffin  121 Dec 29 08:09 Dockerfile
+-rw-r--r-- 1 griffin griffin  366 Sep 19 21:33 Makefile
+lrwxrwxrwx 1 griffin griffin   17 Dec 29 13:12 my-profile -> my-profile-1-link
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 13:12 my-profile-1-link -> /gnu/store/8l01qmyd7f8ac4nanbn8sqj7jrkq0hpn-profile
+-rw-r--r-- 1 griffin griffin 1.2K Sep 19 21:33 README
+drwxr-xr-x 2 griffin griffin 4.0K Dec 29 08:20 src
+drwxr-xr-x 3 griffin griffin 4.0K Sep 19 21:33 test
+```
+
+We can see there are two new interesting symlinks. It also appears none of the actual contents of the packages have been installed in the directory. Instead, it looks like they might be at `/gnu/store/8l01qmyd7f8ac4nanbn8sqj7jrkq0hpn-profile`.
+
+What if I removed a package?
+
+```bash
+$ guix package --profile=my-profile --remove python-chevron
+The following package will be removed:
+   python-chevron 0.14.0
+
+The following derivation will be built:
+  /gnu/store/kq6ffx5lfp3g2xqkivk3a6zp40ldqw9g-profile.drv
+
+building CA certificate bundle...
+listing Emacs sub-directories...
+building fonts directory...
+building directory of Info manuals...
+building profile with 2 packages...
+hint: Consider setting the necessary environment variables by running:
+
+     GUIX_PROFILE="/home/griffin/git/inline-website/my-profile"
+     . "$GUIX_PROFILE/etc/profile"
+
+Alternately, see `guix package --search-paths -p "/home/griffin/git/inline-website/my-profile"'.
+```
+
+todo what is a derivation - `guix` has never seen a profile where `python-chevron` and `python-` - think of all the mixed libraryes whatever
+if we do this again we can see no new derivatino is built - guix knows what happens when `python-chevron` and `python` are combined, and caches it for us - not actually tho idk
+man idk maybe remove this blurb
+
+```bash
+$ ls -lh
+total 20K
+-rw-r--r-- 1 griffin griffin  121 Dec 29 08:09 Dockerfile
+-rw-r--r-- 1 griffin griffin  366 Sep 19 21:33 Makefile
+lrwxrwxrwx 1 griffin griffin   17 Dec 29 13:55 my-profile -> my-profile-2-link
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 13:12 my-profile-1-link -> /gnu/store/8l01qmyd7f8ac4nanbn8sqj7jrkq0hpn-profile
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 13:55 my-profile-2-link -> /gnu/store/8pj526phyk0kw5yi8kizlp5nlkw1q8wz-profile
+-rw-r--r-- 1 griffin griffin 1.2K Sep 19 21:33 README
+drwxr-xr-x 2 griffin griffin 4.0K Dec 29 08:20 src
+drwxr-xr-x 3 griffin griffin 4.0K Sep 19 21:33 test
+```
+
+Let's re-install `python-chevron`:
+
+```bash
+$ guix package --profile=my-profile --install python-chevron
+The following package will be installed:
+   python-chevron 0.14.0
+
+The following derivation will be built:
+  /gnu/store/dmmqwf8wbmzh9prdnkvb3b4c30mg6adv-profile.drv
+
+building CA certificate bundle...
+listing Emacs sub-directories...
+building fonts directory...
+building directory of Info manuals...
+building profile with 3 packages...
+hint: Consider setting the necessary environment variables by running:
+
+     GUIX_PROFILE="/home/griffin/git/inline-website/my-profile"
+     . "$GUIX_PROFILE/etc/profile"
+
+Alternately, see `guix package --search-paths -p "/home/griffin/git/inline-website/my-profile"'.
+$ ls -lh
+total 20K
+-rw-r--r-- 1 griffin griffin  121 Dec 29 08:09 Dockerfile
+-rw-r--r-- 1 griffin griffin  366 Sep 19 21:33 Makefile
+lrwxrwxrwx 1 griffin griffin   17 Dec 29 14:01 my-profile -> my-profile-3-link
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 13:12 my-profile-1-link -> /gnu/store/8l01qmyd7f8ac4nanbn8sqj7jrkq0hpn-profile
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 13:55 my-profile-2-link -> /gnu/store/8pj526phyk0kw5yi8kizlp5nlkw1q8wz-profile
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 14:01 my-profile-3-link -> /gnu/store/viznir6599bmw7zz8b1966gf71v2ymsn-profile
+-rw-r--r-- 1 griffin griffin 1.2K Sep 19 21:33 README
+drwxr-xr-x 2 griffin griffin 4.0K Dec 29 08:20 src
+drwxr-xr-x 3 griffin griffin 4.0K Sep 19 21:33 test
+```
+
+Inspecting the results, we see `my-profile` now points to `my-profile-3-link`. Each of these three links are a *generation*. A profile is actually just a generation point in time and space uhhhhhhhh
+
+```bash
+$ guix package --profile=my-profile --list-generations
+Generation 1	Dec 29 2023 13:11:02
+  python-markdown	3.3.4 	out	/gnu/store/4jp981ms6nwyv844r4xf1blfyakz96x8-python-markdown-3.3.4
+  python-pyyaml  	6.0   	out	/gnu/store/007vydgsvjpz061fxgs01nj1n65dxf6i-python-pyyaml-6.0
+  python-chevron 	0.14.0	out	/gnu/store/fgl39clk8v1h142vxkwiwkhqjp1svg3f-python-chevron-0.14.0
+
+Generation 2	Dec 29 2023 13:55:15
+ - python-chevron	0.14.0	out	/gnu/store/fgl39clk8v1h142vxkwiwkhqjp1svg3f-python-chevron-0.14.0
+
+Generation 3	Dec 29 2023 14:01:40	(current)
+ + python-chevron	0.14.0	out	/gnu/store/fgl39clk8v1h142vxkwiwkhqjp1svg3f-python-chevron-0.14.0
+```
+
+We are free to switch between generations with ease using `--switch-generation` ([manual](https://guix.gnu.org/manual/en/html_node/Invoking-guix-package.html#index-generations).
+
+Let's switch to the second generation of our profile, when we removed `python-chevron`, leaving us with `python-pyyaml` and `python-markdown`:
+
+```bash
+$  guix package --profile=my-profile --switch-generation=2
+switched from generation 3 to 2
+ ls -lh
+total 20K
+-rw-r--r-- 1 griffin griffin  121 Dec 29 08:09 Dockerfile
+-rw-r--r-- 1 griffin griffin  366 Sep 19 21:33 Makefile
+lrwxrwxrwx 1 griffin griffin   17 Dec 29 14:19 my-profile -> my-profile-2-link
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 13:12 my-profile-1-link -> /gnu/store/8l01qmyd7f8ac4nanbn8sqj7jrkq0hpn-profile
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 13:55 my-profile-2-link -> /gnu/store/8pj526phyk0kw5yi8kizlp5nlkw1q8wz-profile
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 14:01 my-profile-3-link -> /gnu/store/viznir6599bmw7zz8b1966gf71v2ymsn-profile
+-rw-r--r-- 1 griffin griffin 1.2K Sep 19 21:33 README
+drwxr-xr-x 2 griffin griffin 4.0K Dec 29 08:20 src
+drwxr-xr-x 3 griffin griffin 4.0K Sep 19 21:33 test
+$ guix package --profile=my-profile --list-installed
+python-markdown	3.3.4	out	/gnu/store/4jp981ms6nwyv844r4xf1blfyakz96x8-python-markdown-3.3.4
+python-pyyaml  	6.0  	out	/gnu/store/007vydgsvjpz061fxgs01nj1n65dxf6i-python-pyyaml-6.0
+```
+
+No files have been moved or copies or deleted - the only thing that changed was the `my-profile` symlink now points to `my-profile-2-link`
+
+We can also roll back https://guix.gnu.org/manual/en/html_node/Invoking-guix-package.html#index-rolling-back
+
+```
+$ guix package --profile=my-profile --roll-back
+switched from generation 2 to 1
+$ guix package --profile=my-profile --roll-back
+The following derivation will be built:
+  /gnu/store/s418j4p738i062m49nl0jafl1j52k2g4-profile.drv
+
+building profile with 0 packages...
+switched from generation 1 to 0
+$ guix package --profile=my-profile --roll-back
+switched from generation 0 to 0
+```
+
+Rolling back from generation 1 to generation 0 actually created a special new generation: the 0th generation. The manual states how this generation "contains no files apart from its own metadata".
+
+As shown again, rolling back from generation 0 effectively does nothing, as we are already at the 0th generation.
+
+Let's inspect what the zeroth generation looks like
+
+```bash
+$ ls -lh
+total 20K
+-rw-r--r-- 1 griffin griffin  121 Dec 29 08:09 Dockerfile
+-rw-r--r-- 1 griffin griffin  366 Sep 19 21:33 Makefile
+lrwxrwxrwx 1 griffin griffin   17 Dec 29 14:21 my-profile -> my-profile-0-link
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 14:21 my-profile-0-link -> /gnu/store/yx25cxlsy5klj05fazxy18jjh2z5qi2f-profile
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 13:12 my-profile-1-link -> /gnu/store/8l01qmyd7f8ac4nanbn8sqj7jrkq0hpn-profile
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 13:55 my-profile-2-link -> /gnu/store/8pj526phyk0kw5yi8kizlp5nlkw1q8wz-profile
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 14:01 my-profile-3-link -> /gnu/store/viznir6599bmw7zz8b1966gf71v2ymsn-profile
+-rw-r--r-- 1 griffin griffin 1.2K Sep 19 21:33 README
+drwxr-xr-x 2 griffin griffin 4.0K Dec 29 08:20 src
+drwxr-xr-x 3 griffin griffin 4.0K Sep 19 21:33 test
+```
+
+What if we delete a generation?
+
+```bash
+$ guix package --profile=my-profile --delete-generations=1
+deleting my-profile-1-link
+$ ls -lh
+total 20K
+-rw-r--r-- 1 griffin griffin  121 Dec 29 08:09 Dockerfile
+-rw-r--r-- 1 griffin griffin  366 Sep 19 21:33 Makefile
+lrwxrwxrwx 1 griffin griffin   17 Dec 29 14:24 my-profile -> my-profile-2-link
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 14:21 my-profile-0-link -> /gnu/store/yx25cxlsy5klj05fazxy18jjh2z5qi2f-profile
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 13:55 my-profile-2-link -> /gnu/store/8pj526phyk0kw5yi8kizlp5nlkw1q8wz-profile
+lrwxrwxrwx 1 griffin griffin   51 Dec 29 14:01 my-profile-3-link -> /gnu/store/viznir6599bmw7zz8b1966gf71v2ymsn-profile
+-rw-r--r-- 1 griffin griffin 1.2K Sep 19 21:33 README
+drwxr-xr-x 2 griffin griffin 4.0K Dec 29 08:20 src
+drwxr-xr-x 3 griffin griffin 4.0K Sep 19 21:33 test
+```
+
+> note: profiles are *just files*. `guix package --profile=my-profile` is the same as `guix package --profile=my-profile-2-link`. If we wanted to see what packages were installed in the third generation, then just `guix package --profile=my-profile-3-link --list-installed`.
+
+What if we navigated to the `/gnu/store/8l01qmyd7f8ac4nanbn8sqj7jrkq0hpn-profile`
+It's still there! How can we get rid of it? meet `guix gc`
+
+It's gone!
+
+
+
+# TODO todo
+`guix gc`
+this is def a separate article!
+https://dthompson.us/posts/guix-for-development.html
+https://news.ycombinator.com/item?id=34490376
+https://en.wikipedia.org/wiki/GNU_Guix
+
+
+
+
+We know how to install and remove packages from profiles, and how to switch between profiles. This still begs the question: What is a profile?
+
+should this be introduced earlier??
+
+Remember, a Guix profile is a directory of packages. What dose this look like?
+
+Whenever we make a new profile with `guix package --install`, we see this:
+
+```
+The following derivation will be built:
+  /gnu/store/dmmqwf8wbmzh9prdnkvb3b4c30mg6adv-profile.drv
+
+building CA certificate bundle...
+listing Emacs sub-directories...
+building fonts directory...
+building directory of Info manuals...
+building profile with 3 packages...
+```
+
+What is Guix doing?
+
+### Inspecting profile contents
+
+
+
+
+In fact, remember when we `guix build chevron`? The `chevron` here is the same `chevron` from there! Let's see what `guix gc` has to say about this
 
 
 Debian users may be familiar with this problem - removing a package will not remove its dependencies until `sudo apt autoremove` is ran. This can be helpful with brittle system which may have incidentally been relying on idk todo. This can be annoying when todo debian find which packages have been installed by the user. This mixes declarative and imperative i think
 I'm not sure if `pip` handles this at all - we `pip uninstall chevron` but all the other things are still there?
-
 
 
 
@@ -666,6 +938,9 @@ There are some really cool concepts that I didn't cover here. The [manual](https
 One of the killer features of Guix is `guix shell`. Let's go back to the original scenario: we just `git clone`'d a repository and want to install some Python modules so we can do some developing. I don't actually want to gunk up my system or user profile with these project specific dependencies. What if there was a way to create an ephemeral developer environment with exactly what I needed for `inline-website`? `apt` installs everything systemwide, `pip` installs everything to my user profile, `npm` installs everything to the `node_modules` in the project workspace, and Docker just puts everything in a magical container. Guix has `guix shell`.
 
 > yes, `pip --target` can install to the current directory and `npm --global` installs to the user profile (or systemwide??), and `apt` might be able to install to the user profile without root access using [some trickery](https://askubuntu.com/questions/339/how-can-i-install-a-package-without-root-access) (and Docker can use all of these tools :))
+
+# TODO
+how to make the shebang work - see chevron bin/guix-bash magic
 
 ## Installing packages in an ephemeral environment
 ## Installing packages in a one-off environment
@@ -740,6 +1015,7 @@ $ which env
 /usr/bin/env
 $ guix shell --pure -- $(which env)
 $ guix shell --container -- $(which env)
+```
 
 ### Packaging packages
     `guix pack`
@@ -755,6 +1031,9 @@ The [manual](https://guix.gnu.org/manual/en/html_node/Invoking-guix-pack.html) s
 ```
 $ guix pack --format=tarball --manifest=manifest.scm
 ```
+
+### todo talk about networking
+docker is great because with `docker compose up -d` you can have all the databases and other services your app needs instantly. but what if you wanted to communicate from the host to docker? or docker to the host?
 
 ### Vendoring packages
 
@@ -1181,6 +1460,7 @@ Guix is a gnu project
 https://www.youtube.com/watch?v=LnU8SYakZQQ
 
 # Guixify my software
+    # Guixify ncspot
 # Guixify my $HOME
 # Guixify my neovim
 # Guixify my home lab
@@ -1194,3 +1474,7 @@ continously give other package manager examples
     guix graph
     guix build --source
     guix gc
+    wow these tools are really cool what if we could use them with other package managers?????? unguix them per say
+
+# derivations what thel hell is this
+https://guix.gnu.org/en/blog/2023/dissecting-guix-part-1-derivations/
