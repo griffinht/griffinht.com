@@ -192,3 +192,233 @@ $ ssh mysystem
 $ guix update???
 $ herd restart??
 ```
+
+
+
+
+# libvirt
+
+Now that everything is set up let's try to spin up a VM.
+
+```
+Unable to complete install: 'Failed to connect socket to '/var/run/libvirt/virtlogd-sock': No such file or directory'
+
+Traceback (most recent call last):
+  File "/gnu/store/gjfwa4iyfczbv9znbnrip0d72mcdrg1i-virt-manager-4.1.0/share/virt-manager/virtManager/asyncjob.py", line 72, in cb_wrapper
+    callback(asyncjob, *args, **kwargs)
+  File "/gnu/store/gjfwa4iyfczbv9znbnrip0d72mcdrg1i-virt-manager-4.1.0/share/virt-manager/virtManager/createvm.py", line 2008, in _do_async_install
+    installer.start_install(guest, meter=meter)
+  File "/gnu/store/gjfwa4iyfczbv9znbnrip0d72mcdrg1i-virt-manager-4.1.0/share/virt-manager/virtinst/install/installer.py", line 695, in start_install
+    domain = self._create_guest(
+  File "/gnu/store/gjfwa4iyfczbv9znbnrip0d72mcdrg1i-virt-manager-4.1.0/share/virt-manager/virtinst/install/installer.py", line 637, in _create_guest
+    domain = self.conn.createXML(initial_xml or final_xml, 0)
+  File "/gnu/store/lpg9wdyr6b3v8x2yy79jiadv3mqb5ll8-python-libvirt-8.6.0/lib/python3.10/site-packages/libvirt.py", line 4442, in createXML
+    raise libvirtError('virDomainCreateXML() failed')
+libvirt.libvirtError: Failed to connect socket to '/var/run/libvirt/virtlogd-sock': No such file or directory
+```
+
+
+
+[manual](https://guix.gnu.org/manual/en/html_node/Virtualization-Services.html)
+
+We forgot virtlogd, which Guix provides with the `virtlog-service-type`.
+
+```scheme
+(service virtlog-service-type)
+```
+
+One quick `guix deploy deploy.scm` from my laptop and we can try again:
+
+```
+Unable to complete install: 'Cannot get interface MTU on 'br0': No such device'
+
+Traceback (most recent call last):
+  File "/gnu/store/gjfwa4iyfczbv9znbnrip0d72mcdrg1i-virt-manager-4.1.0/share/virt-manager/virtManager/asyncjob.py", line 72, in cb_wrapper
+    callback(asyncjob, *args, **kwargs)
+  File "/gnu/store/gjfwa4iyfczbv9znbnrip0d72mcdrg1i-virt-manager-4.1.0/share/virt-manager/virtManager/createvm.py", line 2008, in _do_async_install
+    installer.start_install(guest, meter=meter)
+  File "/gnu/store/gjfwa4iyfczbv9znbnrip0d72mcdrg1i-virt-manager-4.1.0/share/virt-manager/virtinst/install/installer.py", line 695, in start_install
+    domain = self._create_guest(
+  File "/gnu/store/gjfwa4iyfczbv9znbnrip0d72mcdrg1i-virt-manager-4.1.0/share/virt-manager/virtinst/install/installer.py", line 637, in _create_guest
+    domain = self.conn.createXML(initial_xml or final_xml, 0)
+  File "/gnu/store/lpg9wdyr6b3v8x2yy79jiadv3mqb5ll8-python-libvirt-8.6.0/lib/python3.10/site-packages/libvirt.py", line 4442, in createXML
+    raise libvirtError('virDomainCreateXML() failed')
+libvirt.libvirtError: Cannot get interface MTU on 'br0': No such device
+```
+
+I used a nonexistant bridge device. Let's create a bridge
+https://guix.gnu.org/cookbook/en/html_node/Network-bridge-for-QEMU.html#Configuring-the-QEMU-bridge-helper-script
+
+`hot-desktop`
+```sh
+root@hot-desktop ~# nmcli con add type bridge con-name br0 ifname br0
+root@hot-desktop ~# nmcli con add type bridge-slave ifname enp2s0 master br0
+```
+
+Let's try again:
+
+```
+Unable to complete install: 'internal error: qemu unexpectedly closed the monitor: qemu-system-x86_64: -no-hpet: warning: -no-hpet is deprecated, use '-machine hpet=off' instead
+2024-01-16T00:54:03.810893Z qemu-system-x86_64: -blockdev {"driver":"file","filename":"/root/gkfpsjjw0xps6gvjvw3jpnlb2z5kzhqp-disk-image","node-name":"libvirt-1-storage","auto-read-only":true,"discard":"unmap"}: Could not open '/root/gkfpsjjw0xps6gvjvw3jpnlb2z5kzhqp-disk-image': Permission denied'
+
+Traceback (most recent call last):
+  File "/gnu/store/gjfwa4iyfczbv9znbnrip0d72mcdrg1i-virt-manager-4.1.0/share/virt-manager/virtManager/asyncjob.py", line 72, in cb_wrapper
+    callback(asyncjob, *args, **kwargs)
+  File "/gnu/store/gjfwa4iyfczbv9znbnrip0d72mcdrg1i-virt-manager-4.1.0/share/virt-manager/virtManager/createvm.py", line 2008, in _do_async_install
+    installer.start_install(guest, meter=meter)
+  File "/gnu/store/gjfwa4iyfczbv9znbnrip0d72mcdrg1i-virt-manager-4.1.0/share/virt-manager/virtinst/install/installer.py", line 695, in start_install
+    domain = self._create_guest(
+  File "/gnu/store/gjfwa4iyfczbv9znbnrip0d72mcdrg1i-virt-manager-4.1.0/share/virt-manager/virtinst/install/installer.py", line 637, in _create_guest
+    domain = self.conn.createXML(initial_xml or final_xml, 0)
+  File "/gnu/store/lpg9wdyr6b3v8x2yy79jiadv3mqb5ll8-python-libvirt-8.6.0/lib/python3.10/site-packages/libvirt.py", line 4442, in createXML
+    raise libvirtError('virDomainCreateXML() failed')
+libvirt.libvirtError: internal error: qemu unexpectedly closed the monitor: qemu-system-x86_64: -no-hpet: warning: -no-hpet is deprecated, use '-machine hpet=off' instead
+2024-01-16T00:54:03.810893Z qemu-system-x86_64: -blockdev {"driver":"file","filename":"/root/gkfpsjjw0xps6gvjvw3jpnlb2z5kzhqp-disk-image","node-name":"libvirt-1-storage","auto-read-only":true,"discard":"unmap"}: Could not open '/root/gkfpsjjw0xps6gvjvw3jpnlb2z5kzhqp-disk-image': Permission denied
+```
+
+A quick `ls -l` shows I forgot to mark my disk image as writable.
+
+```
+root@hot-desktop ~# ls -l
+total 1951812
+-r--r--r-- 1 root root 1998647296 Jan 15 22:03 gkfpsjjw0xps6gvjvw3jpnlb2z5kzhqp-disk-image
+root@hot-desktop ~# chmod +w gkfpsjjw0xps6gvjvw3jpnlb2z5kzhqp-disk-image 
+root@hot-desktop ~# ls -l
+total 1951812
+-rw-r--r-- 1 root root 1998647296 Jan 15 22:03 gkfpsjjw0xps6gvjvw3jpnlb2z5kzhqp-disk-image
+root@hot-desktop ~# 
+```
+
+Fixing this I still had the issue, the solution was both ensuring writable and copying to /var/lib/libvirt/images
+todo rootless stuff
+https://github.com/jedi4ever/veewee/issues/996
+
+
+
+```
+Viewer was disconnected.
+Encountered SPICE error-link
+
+SSH tunnel error output: sh: line 1: nc: command not found
+```
+
+The issue here is clear: we need netcat!
+
+```sh
+root@hot-desktop ~# guix install netcat
+```
+
+I found I had to reconnect libvirt after installing. guix install requires guix profile to be resourced, which is accomplished by reconnecting libvirt 
+
+Also consider how I could have added `netcat` to my operating system declaration, then reconfigured and reconnected.
+
+`system.scm`
+```scheme
+(packages
+  (append (list netcat)
+          %base-packages))
+```
+
+
+The "NIC" entry of the "Show virtual hardware details" menu shows a MAC address, but the IP address is "Unknown". What gives?
+
+```sh
+root@hot-desktop ~# ip a
+...
+12: br0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 1e:69:53:53:75:8a brd ff:ff:ff:ff:ff:ff
+...
+root@hot-desktop ~# nmcli
+enp3s0: connected to Wired connection 1
+        "Realtek RTL8111/8168/8411"
+        ethernet (r8169), FC:AA:14:B0:1B:64, hw, mtu 1500
+        ip4 default
+        inet4 192.168.0.5/24
+        route4 192.168.0.0/24 metric 100
+        route4 default via 192.168.0.1 metric 100
+        inet6 fe80::b1f1:c5fb:924a:718e/64
+        route6 fe80::/64 metric 1024
+
+lo: connected (externally) to lo
+        "lo"
+        loopback (unknown), 00:00:00:00:00:00, sw, mtu 65536
+        inet4 127.0.0.1/8
+        inet6 ::1/128
+
+wg0: connected (externally) to wg0
+        "wg0"
+        wireguard, sw, mtu 1420
+        inet4 10.0.0.2/32
+        route4 10.0.0.9/32 metric 0
+
+br0: connecting (getting IP configuration) to br0
+        "br0"
+        bridge, 1E:69:53:53:75:8A, sw, mtu 1500
+
+vnet6: unmanaged
+        "vnet6"
+        tun, FE:54:00:3D:81:FF, sw, mtu 1500
+
+DNS configuration:
+        servers: 192.168.0.1 166.102.165.13 207.91.5.20
+        interface: enp3s0
+
+Use "nmcli device show" to get complete information about known devices and
+"nmcli connection show" to get an overview on active connection profiles.
+
+Consult nmcli(1) and nmcli-examples(7) manual pages for complete usage details.
+```
+
+Looks like our bridge isn't quite working.
+https://wiki.archlinux.org/title/network_bridge
+
+Rebooting seemed to fix things lol
+
+```sh
+root@hot-desktop ~# herd stop root
+Connection to hot-desktop.wg.griffinht.com closed by remote host.
+Connection to hot-desktop.wg.griffinht.com closed.
+```
+
+```sh
+root@hot-desktop ~# nmcli
+br0: connected to br0
+        "br0"
+        bridge, FC:AA:14:B0:1B:64, sw, mtu 1500
+        ip4 default
+        inet4 192.168.0.5/24
+        route4 192.168.0.0/24 metric 425
+        route4 default via 192.168.0.1 metric 425
+        inet6 fe80::970:fd84:ffb7:c66/64
+        route6 fe80::/64 metric 1024
+
+lo: connected (externally) to lo
+        "lo"
+        loopback (unknown), 00:00:00:00:00:00, sw, mtu 65536
+        inet4 127.0.0.1/8
+        inet6 ::1/128
+
+wg0: connected (externally) to wg0
+        "wg0"
+        wireguard, sw, mtu 1420
+        inet4 10.0.0.2/32
+        route4 10.0.0.9/32 metric 0
+
+enp3s0: connected to bridge-slave-enp3s0
+        "Realtek RTL8111/8168/8411"
+        ethernet (r8169), FC:AA:14:B0:1B:64, hw, mtu 1500
+        master br0
+
+DNS configuration:
+        servers: 192.168.0.1 166.102.165.13 207.91.5.20
+        interface: br0
+
+Use "nmcli device show" to get complete information about known devices and
+"nmcli connection show" to get an overview on active connection profiles.
+
+Consult nmcli(1) and nmcli-examples(7) manual pages for complete usage details.
+```
+
+I think this is what 
+https://wiki.archlinux.org/title/network_bridge#With_NetworkManager
+accomplishes without rebooting
