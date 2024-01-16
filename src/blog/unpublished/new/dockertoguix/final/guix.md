@@ -1,3 +1,11 @@
+REF
+https://github.com/pjotrp/guix-notes/blob/master/HACKING.org
+https://guix.gnu.org/en/blog/2023/from-development-environments-to-continuous-integrationthe-ultimate-guide-to-software-development-with-guix/
+https://guix.gnu.org/en/blog/2018/a-packaging-tutorial-for-guix/
+
+
+TODO
+todo which binary check why a binary is installed
 https://www.futurile.net/
     so many cool guix tricks!
     the goat!
