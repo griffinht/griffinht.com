@@ -144,11 +144,22 @@ image.img2 *    83968 3306119 3222152  1.5G 83 Linux
 
 It worked! We can see our image has a small EFI partition at the beginning of the disk, as well as a primary bootable Linux partition which contains our system. I'm not 
 
+todo mispell or dont define base file system what happens?
+todo ext4 vs btrfs and how to do that from operating system?
+todo efi vs no efi, mention different guix --image-type
+
+qcow2
+hybrid
+efi only
+bios only
+iso9660 (no resize)
+
 ```
 building /gnu/store/8c38wdkr9pfs5mrdgi4p6k4pzg8g9kcy-disk-image.drv...
 \builder for `/gnu/store/8c38wdkr9pfs5mrdgi4p6k4pzg8g9kcy-disk-image.drv' failed with exit code 1
 build of /gnu/store/8c38wdkr9pfs5mrdgi4p6k4pzg8g9kcy-disk-image.drv failed
 View build log at '/var/log/guix/drvs/8c/38wdkr9pfs5mrdgi4p6k4pzg8g9kcy-disk-image.drv.gz'.
+```
 
 ```
 $ guix system image --save-provenance --image-type=qcow2
@@ -156,36 +167,64 @@ $ guix system image --save-provenance --image-type=qcow2
 $ qemu-img convert -f qcow2 -O raw my-image.qcow2 my-image.img
 ```
 
-I did try to install an iso9660 file and was successfully able to boot to the operating system. However, I wasn't able to expand the partition thanks the way the iso9660 specification works. Instead, my partition was stuck at whatever size the installation image, about 1.5G out of the 10G on my VPs. This does not make for a very usuably system. Normally installing with an iso9660 image is fine when the image is mounted to some kind of removable media, such as a flash drive. This is how many install their operating systems to physical machines - they take a thumb drive loaded with an iso9660 image and plug it in to their machine. Then, the installation disk installs itself to the main system's drive. However, we are writing directly to the drive which also removes the installation step we are already doing it
+> I did try to install an iso9660 file and was successfully able to boot to the operating system. However, I wasn't able to expand the partition thanks the way the iso9660 specification works. Instead, my partition was stuck at whatever size the installation image, about 1.5G out of the 10G on my VPs. This does not make for a very usuably system. Normally installing with an iso9660 image is fine when the image is mounted to some kind of removable media, such as a flash drive. This is how many install their operating systems to physical machines - they take a thumb drive loaded with an iso9660 image and plug it in to their machine. Then, the installation disk installs itself to the main system's drive. However, we are writing directly to the drive which also removes the installation step we are already doing it
+
+# Copying the disk image to the remote system
+
+Armed with our disk image, let's copy it to the VPS via the rescue system with a clever invocation of `ssh`:
 
 ```
 rescue # logout
 $ ssh root@my-vps 'cat > /dev/vda' < my-image.img
 ```
 
-This command will `ssh` in to the rescue machine, then run `cat > /dev/vda`. This has `ssh` send our `my-image.img` file to the remote server, outputting to `cat`, which writes to `/dev/vda`. Once this step is done, we are actually ready to boot in to the real system! However, let's first resize the disk partition to take up the full disk, instead of the default whcih is whatever
+This command will `ssh` in to the rescue machine, then run `cat > /dev/vda`. This has `ssh` send our `my-image.img` file to the remote server, outputting to `cat`, which writes to `/dev/vda`.
 
-From the RackNerd control panel I disabled "Rescue Mode" and the system rebooted back to the normal vps. After this, my new system booted no problem and I was good to go.
+Once this completes we are ready to boot in to the system! However, let's first resize the disk partition to take up the entire disk.
 
-TODO why do we have to resize
-YOU VS I?? TENSE - past
-However, before trying to boot to the new system, I wanted to resize the new filesystem to take up the entire disk. The partition initially only takes around 1.5G of space, as shown above in the `fdisk -l image.img` output. To use more space, I needed to grow the partition. A partition cannot be resized when the system is mounted and in use, which is why I want to do this process now.
+# Expanding the partition and filesystem
 
-Note the first time I tried resizing I ended up failing miserably. I kept getting weird superblock errors. The issue was that I had installed Guix from a `iso9660` image file, which can't really be resized with these tools. ISO images are designed to be write once and read only. This is why I would avoid attempting to install them as a real system. It may be technically possible to grow an ISO image with a tool like `xorriso` [manpage](https://www.gnu.org/software/xorriso/man_1_xorriso.html), but I personally haven't tried.
+The disk image only takes around 1.5GB of space initially. The system won't be able to use any more space unless the partition (and underlying filesystem) is resized. This must be done while the disk is not mounted, which means we should do this while in rescue mode before booting the new system.
 
-Resizing the filesystem was as easy as deleting the old partition, creating a new larger partition, and using `resize2fs` to resize the filesystem. There are many guides to resizing filesystems. I'd also recommend a tool like `fdisk` or `cfdisk` to manipulate partitions. Make sure the new partition has the same start sector, sector size, and [partition ID](https://en.wikipedia.org/wiki/Partition_type) (ID 83 for Linux). Don't forget to set the bootable flag, and if prompted, say yes to changing the existing ext4 signature.
+## Expanding the partition
 
-```
+I like using `cfdisk`, but `fdisk` or anything else works fine here. `cfdisk` has a neat little "Resize" button which makes this process painless.
+
+I found that the rescue system had an ancient version of `cfdisk` from util-linux 2.29.2. This version doesn't have the "Resize" button, which meant I had to manually delete the old partition, then create a new larger partition. Make sure the new partition is a primary partition with the same start sector, sector size, and [partition ID](https://en.wikipedia.org/wiki/Partition_type) (ID 83 for Linux). Don't forget to set the bootable flag (attribute 80), and if prompted, say yes to changing the existing ext4 signature.
+
+```sh
 rescue # cfdisk
 ...
 Syncing disks.
+```
+
+## Expanding the filesystem
+
+> if you used a non resizable file system (like `iso9660`), then this will not work!
+
+The last step is to resize the actual filesystem contained within the partition. I will be using the `resize2fs` tool to resize my `ext4` filesystem, which Guix created from my operating declaration.
+
+todo if i make btrfs then will guix make it btrfs???
+
+```sh
 rescue # resize2fs /dev/vda2
 resize2fs 1.43.4 (31-Jan-2017)
 Resizing the filesystem on /dev/vda2 to 2610944 (4k) blocks.
 The filesystem on /dev/vda2 is now 2610944 (4k) blocks long.
 ```
 
-Success! If I wanted to ensure everything worked, then I could have tried mounting the `/dev/vda2` partition somewhere on the rescue machine, then checked the size with something like `df -Th`. I disabled "Rescue Mode" from the RackNerd control panel and my new system began to boot.
+Success! If I wanted to ensure everything worked from the rescue machine, then I could have tried mounting the `/dev/vda2` partition, then checked the size with something like `df -Th`.
+
+# Booting the new system
+
+From the RackNerd control panel I disabled "Rescue Mode" and the system booted to my new system without a hitch.
+
+# Managing the Guix system
+
+Guix allows us to do a bunch of neat things with the new system.
+
+introduce guix deploy briefly here, then link to a full blog post somewhere idk or just the manual refernce not everything needs a blog post lol
+Let's redeploy 
 
 ```
 $ guix deploy deploy.scm
@@ -209,7 +248,7 @@ Connection to my-vps closed by remote host.
 Connection to my-vps closed.
 ```
 
-The system should come back online momentarily. We can also stop the system ((manual)[https://www.gnu.org/software/shepherd/manual/html_node/Invoking-halt.html]) with the following command:
+The system should come back online momentarily. We can also shut down the system ((manual)[https://www.gnu.org/software/shepherd/manual/html_node/Invoking-halt.html]) with the following command:
 
 ```
 $ herd power-off shepherd
