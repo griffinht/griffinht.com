@@ -345,12 +345,6 @@ lo: connected (externally) to lo
         inet4 127.0.0.1/8
         inet6 ::1/128
 
-wg0: connected (externally) to wg0
-        "wg0"
-        wireguard, sw, mtu 1420
-        inet4 10.0.0.2/32
-        route4 10.0.0.9/32 metric 0
-
 br0: connecting (getting IP configuration) to br0
         "br0"
         bridge, 1E:69:53:53:75:8A, sw, mtu 1500
@@ -397,12 +391,6 @@ lo: connected (externally) to lo
         loopback (unknown), 00:00:00:00:00:00, sw, mtu 65536
         inet4 127.0.0.1/8
         inet6 ::1/128
-
-wg0: connected (externally) to wg0
-        "wg0"
-        wireguard, sw, mtu 1420
-        inet4 10.0.0.2/32
-        route4 10.0.0.9/32 metric 0
 
 enp3s0: connected to bridge-slave-enp3s0
         "Realtek RTL8111/8168/8411"
