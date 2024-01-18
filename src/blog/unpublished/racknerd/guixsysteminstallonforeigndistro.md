@@ -1,3 +1,6 @@
+todo locking down racknerd? does setting a root password protect against vnc access? vnc bruteforce?
+
+
 https://guix.gnu.org/cookbook/en/html_node/Running-Guix-on-a-Linode-Server.html
 https://stumbles.id.au/getting-started-with-guix-deploy.html
 

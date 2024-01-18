@@ -246,7 +246,10 @@ Traceback (most recent call last):
 libvirt.libvirtError: Cannot get interface MTU on 'br0': No such device
 ```
 
-I used a nonexistant bridge device. Let's create a bridge
+I used a nonexistant bridge device. Let's create a bridge. 
+NetworkManager makes this whole process very easy. I like using `nmtui` from the terminal. A bridge can be created from the "Edit a connection" menu.
+
+We need a bridge. Also make a bridge slave with the ethernet device todo
 https://guix.gnu.org/cookbook/en/html_node/Network-bridge-for-QEMU.html#Configuring-the-QEMU-bridge-helper-script
 
 `hot-desktop`
@@ -422,3 +425,10 @@ Consult nmcli(1) and nmcli-examples(7) manual pages for complete usage details.
 I think this is what 
 https://wiki.archlinux.org/title/network_bridge#With_NetworkManager
 accomplishes without rebooting
+
+Anyways I found that I had to wait ~30 seconds for the VM to get an IPv4 address.
+disable stp from nmtui
+
+I found I had to reboot the VM host for the changes to go in to effect.
+
+https://www.happyassassin.net/posts/2014/07/23/bridged-networking-for-libvirt-with-networkmanager-2014-fedora-21/
