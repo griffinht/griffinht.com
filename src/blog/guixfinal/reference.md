@@ -53,7 +53,7 @@ GNU SYSTEM EXAMPLES OMG!!!
 
 
 https://jade.fyi/blog/optimizing-nix-docker/
-
+https://config.daviwil.com/systems
 
 # DOCUMENTATION
 https://www.draketo.de/proj/guile-basics/

@@ -432,3 +432,8 @@ disable stp from nmtui
 I found I had to reboot the VM host for the changes to go in to effect.
 
 https://www.happyassassin.net/posts/2014/07/23/bridged-networking-for-libvirt-with-networkmanager-2014-fedora-21/
+
+
+
+
+todo link to iaac
