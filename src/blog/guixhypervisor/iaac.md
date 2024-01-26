@@ -1,3 +1,7 @@
+# pipeline
+ci somewhere builds and tests vms defined here, then publishes the resulting image to the web? or maybe i should do direct to machine first? hmmm idk
+
+
 # needs
 - iaac (declarative code)
 - quick iteration
@@ -48,10 +52,119 @@ https://registry.terraform.io/providers/dmacvicar/libvirt/latest/docs/resources/
 # what we need:
 
 get the disk/filesystem on the vm host
+use a 
 
 ```sh
 virt-install --import --disk/--filesystem
 ```
 
 can i avoid using virt-install? and stick to virsh?
+
+# getting a repl! my favorite!
+
+```sh
+virsh --connect qemu+ssh://root@hot-desktop.wg.griffinht.com/system
+```
+
+todo make sure domain is autostarted at boot!
+
+
+
+# getting a disk image
+
+## creating
+todo link to guix blog post
+todo link to others
+
+I suppose this is where `cloud-init`, and OS specific mechanisms such as Debian's preseed (i don't like this todo link?), butane ignite coreos
+https://calgaryrhce.ca/posts/2022-07-07-fully-autonomous-containerized-deployment/
+todo link other "old way"
+https://nbailey.ca/post/kvm-ansible-automation/
+
+
+## testing
+we can test this vm image before we deploy it
+there are a bunch of different ways to do this but qemu is nice and quick and easy
+
+# getting a domain configuration xml
+
+## creating
+best:
+virt-install --disk size=10 --osinfo linux2022 --print-xml
+
+there are a bunch of different ways to do this
+virt-install does a lot for us which is nice - its the same that virt-manager does i think
+
+```sh
+virt-install --print-xml
+```
+
+## testing
+the xml can be validated with uhhh
+doesn't virt install do this for us? well idk
+
+# sending the disk image to the hypervisor
+
+i think virt-install --disk path=http://example.com does this for me
+dont forget to specify the size!
+
+# sending the domain config to the hypervisor
+
+same, i think it is trivial to let virt-install/virsh handle this
+
+# creating "defining" the domain
+
+    this definition will persist across hypervisor restarts
+
+virsh define <domain>
+
+# starting the domain
+
+virsh start <domain>
+
+# stopping the domain
+
+    this is like pressing the power button on a physical machine
+
+virsh shutdown <domain>
+
+# forcefully stopping the domain
+
+    this is like pulling the power plug on a physical machine
+
+virsh destroy <domain>
+
+# deleting the domain
+
+virsh undefine <domain>
+
+# autostart
+
+https://serverfault.com/a/397890
+
+# updating the domain image
+
+many systems are capable of updating themselves (`apt update && apt upgrade`) without interruptions. however, if we want to change the image we can
+
+virsh shutdown <domain>
+manually edit the file?
+virsh start <domain>
+
+# updating the domain config
+
+We can use `virsh define` again to redefine an updated XML configuration. Per [`virsh(1)`](tdo link), the domain must be restart for changes to go in to effect.
+
+virsh define
+
+If domain is already running, the changes will take effect on the next boot.
+
+# live updating the domain
+
+https://www.libvirt.org/manpages/virsh.html#device-commands
+
+certain characteristics of the domain can be updated without restarting, don't forget to make changes persisten with both --live --config
+
+https://www.libvirt.org/manpages/virsh.html#update-device
+
+virsh update-device
 

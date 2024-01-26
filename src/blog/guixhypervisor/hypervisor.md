@@ -1,3 +1,6 @@
+https://search.marginalia.nu/search?query=homelab+vm+hypervisor&js=&adtech=&profile=&recent=
+
+sshd vs ssh? libvirtd vs libvirt
 am i sure i didn't already make a post about this lol
 https://news.ycombinator.com/item?id=27006354
 
@@ -10,6 +13,16 @@ https://news.ycombinator.com/item?id=27006354
 why not truenas, freenas? unraid? debian? proxmox? idk there are a bunch of others
 
 I want a machine that can run any operating system as a virtual machine. I want to manage the machine remotely. I also don't want to manage the machine - I want updates and things to happen magically idk. I also want the machine to manage networking (each VM gets a real IP address on my LAN0 and storage (two hard drives in btrfs raid1).
+
+Instead of having to pick a decent operating system, I could simply have all of them. Installing Debian and CoreOS wouldn't mean I had to physically pick a machine I had laying around and install the operating system - I could do everything from one host and without being physically present! 
+
+## network
+
+I also still wanted to be able to have multiple network addresses on my LAN. This meant that each VM would have its own MAC address and link-local IP address, which I could then manage from my router, just like if the machines were physically connected to the network.
+
+## storage
+
+It would also be nice to centrally manage storage. I have a BTRFS drive array which I store all my persistent data to todo.
 
 # Background
 
@@ -437,3 +450,151 @@ https://www.happyassassin.net/posts/2014/07/23/bridged-networking-for-libvirt-wi
 
 
 todo link to iaac
+
+# accessing libvirt remotely via `ssh`
+
+Assuming I can log in to my hypervisor via `ssh` with `ssh root@host`, then I can use the following URI to connect to libvirt:
+
+```
+qemu+ssh://root@host/system
+```
+
+[reference](https://libvirt.org/uri.html)
+
+This URI can be passed to tools like `virsh`:
+
+```
+virsh --connect qemu+ssh://root@host/system
+```
+
+
+I like using [`virt-manager`](https://virt-manager.org/), which is a nice GUI for managing virtual machines with libvirt. All I need to do is `File` > `Add connection...` and I get a prompt to configure the connection URI.
+
+screenshot here
+
+# system vs session
+
+What is that `/system` in the URI? This has the program connect to the `system` hypervisor, as opposed to the `session` hypervisor. What's the difference? Which one do I want?
+https://blog.wikichoon.com/2016/01/qemusystem-vs-qemusession.html
+https://wiki.libvirt.org/FAQ.html#what-is-the-difference-between-qemu-system-and-qemu-session-which-one-should-i-use
+
+session can't be autostarted
+
+# rootless
+
+All I want is to be able to create and destroy some virtual machines. Do I really need. What if I wanted to have some other system (maybe a continuous deployment server) manage some virtual machines. Do I really need to provide full root access?
+
+This technique is also common on the desktop, where the user may want to run some virtual machines without root access.
+
+[ref](https://blog.wikichoon.com/2016/01/qemusystem-vs-qemusession.html)
+[ref](https://wiki.libvirt.org/SSHSetup.html#verify-it-works)
+
+
+## creating a non root user
+
+Currently, our hypervisor only has the root user. Let's make a user called `` and add my `ssh` key.
+
+`system.scm`
+
+```scheme
+ (users
+   (append
+     (list
+       (user-account
+         (name "libvirt")
+         (group "users")))
+         ;(supplementary-groups
+         ;  (list "libvirt")))
+     %base-user-accounts))
+```
+
+```scheme
+ (openssh-configuration
+  ...
+  (authorized-keys
+   `(("root" ,ssh-public-key)
+     ("libvirt" ,ssh-public-key))))
+```
+
+Let's update the hypervisor with the new configuration:
+
+```sh
+$ guix deploy deploy.scm
+```
+
+> hey! the root user and regular user have the same ssh key! yes, but imagine the regular user having the ssh key of a continuous deployment server or unprivileged developer machine
+
+I can now use something like `virsh` to test out the connection:
+
+```sh
+$ virsh --connect qemu+ssh://libvirt@host/system
+error: failed to connect to the hypervisor
+error: End of file while reading data: virt-ssh-helper: cannot connect to '/var/run/libvirt/libvirt-sock': Failed to connect socket to '/var/run/libvirt/libvirt-sock': Permission denied: Input/output error
+```
+
+We tried to connect to the system `libvirtd` as a regular user. I could allow this by adding my `libvirt` user to the `libvirt` group [docs](), but the whole point of this setup is to run with minimal privileges. All we have done so far is create a regular old Linux user called `libvirt` todo use `my-user` instead? I'd rather not expose the privileged system `libvirtd` to this user (why not, what security isses? compare to docker).
+
+```sh
+$ virsh --connect qemu+ssh://libvirt@host/session
+Welcome to virsh, the virtualization interactive terminal.
+
+Type:  'help' for help with commands
+       'quit' to quit
+
+virsh # 
+```
+
+It worked! Let's try making a VM. I'm also going to switch to `virt-manager` at this point because I like the GUI. I got a warning when trying to create a new VM that KVM was not working on the libvirt user session. Let's verify with `virsh`:
+
+```sh
+$ virsh --connect qemu+ssh://libvirt@host/session capabilities | grep kvm
+$ virsh --connect qemu+ssh://root@host/system capabilities | grep kvm
+      <baselabel type='kvm'>+65534:+984</baselabel>
+      <domain type='kvm'/>
+      <domain type='kvm'/>
+```
+
+We can see that the root system connection has KVM access, but the `libvirt` user session does not. We can fix this by adding our `libvirt` user to the `kvm` group:
+
+```scheme
+(user-account
+ (name "libvirt")
+ ...
+ (supplementary-groups
+   (list "kvm"))))
+```
+
+```sh
+$ guix deploy deploy.scm
+```
+
+I found that after the `guix deploy` I had to restart the hypervisor for the changes to take effect. One reboot later and we have this:
+
+```sh
+virsh --connect qemu+ssh://libvirt@host/session capabilities | grep kvm
+      <domain type='kvm'/>
+      <domain type='kvm'/>
+```
+
+It's time to spin up a VM:
+
+
+## securirt 1
+how is this more secure than simply allowing root access?
+isn't this like creating an unprivileged docker user then exposing the system docker daemon? effectively providing root?
+what does this protect against?
+
+https://wiki.libvirt.org/FAQ.html#what-is-the-difference-between-qemu-system-and-qemu-session-which-one-should-i-use
+https://libvirt.org/daemons.html
+
+## security
+https://libvirt.org/auth.html
+https://libvirt.org/acl.html
+Is this really more secure? For example, if the system Docker daemon was exposed to the user ([docs](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-usera)), then the user effectively has root-level privileges. This is different from "rootless" Docker ([docs](https://docs.docker.com/engine/security/rootless/), which does have security benefits. allow users to create and destroy containers without root access to the system.
+
+
+https://libvirt.org/acl.html
+https://wiki.libvirt.org/SSHSetup.html#verify-it-works
+
+https://libvirt.org/kbase/secureusage.html
+https://blog.wikichoon.com/2016/01/qemusystem-vs-qemusession.html

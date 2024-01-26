@@ -714,6 +714,9 @@ The [manual](https://guix.gnu.org/manual/en/html_node/Invoking-guix-pack.html) s
 
 #### as a tarball
 
+todo!
+https://github.com/nix-community/nixos-generators
+
 ```
 $ guix pack --format=tarball --manifest=manifest.scm
 ```
