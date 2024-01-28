@@ -61,7 +61,7 @@ First, let's generate our system image, which will be installed to the VPS. The 
 `bootstrap.scm`
 ```
 (use-modules (gnu))
-(use-service-modules networking ssh)
+(use-service-modules networking ssh desktop)
 (use-package-modules bootloaders ssh)
 
 (operating-system
@@ -79,7 +79,9 @@ First, let's generate our system image, which will be installed to the VPS. The 
                           (permit-root-login `prohibit-password)
                           (authorized-keys
                            ;; authorize our public ssh key with the root user
-                           `(("root" ,(local-file "id_ed25519.pub")))))))
+                           `(("root" ,(local-file "id_ed25519.pub"))))))
+               ; make shutdown and reboot work
+               (service elogind-service-type)) 
           %base-services)))
 ```
 
@@ -221,6 +223,13 @@ Success! If I wanted to ensure everything worked from the rescue machine, then I
 # Booting the new system
 
 From the RackNerd control panel I disabled "Rescue Mode" and the system booted to my new system without a hitch.
+
+# Managing the system from the control panel
+
+Why doesn't the shut down button work? This is we forget the `elogind-service`
+                                
+(use-service-modules desktop)
+(service elogind-service-type)
 
 # Managing the Guix system
 
