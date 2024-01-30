@@ -76,6 +76,12 @@ todo make sure domain is autostarted at boot!
 todo link to guix blog post
 todo link to others
 
+If the VM image is too small, then consider resizing it. The libvirt storage, partition, and filesystem will all need to be resized. todo how
+
+`guix system image --image-size`
+
+`qcow2` is nice here because the disk format supports "spare partitions". This means a 30G partition will not take up 30G in storage on the hypervisor todo
+
 I suppose this is where `cloud-init`, and OS specific mechanisms such as Debian's preseed (i don't like this todo link?), butane ignite coreos
 https://calgaryrhce.ca/posts/2022-07-07-fully-autonomous-containerized-deployment/
 todo link other "old way"
