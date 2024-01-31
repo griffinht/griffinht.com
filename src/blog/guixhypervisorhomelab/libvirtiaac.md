@@ -1,3 +1,5 @@
+GUIX DELPOT GUIX DEPLOY
+
 # pipeline
 ci somewhere builds and tests vms defined here, then publishes the resulting image to the web? or maybe i should do direct to machine first? hmmm idk
 

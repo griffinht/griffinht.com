@@ -19,6 +19,8 @@ Import these two modules:
 
 Add these two services and the to your `operating-system` declaration.
 
+todo make this a shepherd service???
+
 ```scm
 (operating-system
  (services
