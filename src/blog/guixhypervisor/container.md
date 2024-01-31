@@ -8,3 +8,8 @@ why not coreos? debian?
 
 docker
 podman
+
+https://github.com/containers/podman/blob/main/docs/tutorials/rootless_tutorial.md
+https://opensource.com/article/19/2/how-does-rootless-podman-work
+
+wireguard in podman rootless?

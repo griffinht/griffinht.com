@@ -11,7 +11,31 @@ https://news.ycombinator.com/item?id=27006354
 
 
 # todo find other people doing this with guix or nix
+https://joekarlsson.com/2023/09/how-to-get-started-building-a-homelab-server-in-2024/
 
+# features
+
+Starting with the 10 year old desktop I have, I'd like to:
+- run any operating system
+    - remote management
+        - ssh
+        - libvirt
+            - virt-manager
+            - virsh
+    - wireguard
+        - why not in a vm?
+    - bridge networking
+        - one physical device, multiple network interfaces? ips?
+        - basically as if i had multiple physical devices attached to my local network
+    - KVM
+    - disk array
+
+# non feeature
+- peristent storage
+
+# principles
+i'd like to try to follow the principle of least power. For example, I could run a web server directly from the hypervisor, but I could also run the web server in a VM on the hypervisor. I'd prefer the latter, todo more examples
+look at ovirt proxmox and see what they do that i want to offload
 
 # Overview
 
@@ -658,6 +682,8 @@ https://wiki.libvirt.org/FAQ.html#what-is-the-difference-between-qemu-system-and
 https://libvirt.org/daemons.html
 
 ## security
+todo irrelevant now lol
+
 https://libvirt.org/auth.html
 https://libvirt.org/acl.html
 Is this really more secure? For example, if the system Docker daemon was exposed to the user ([docs](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-usera)), then the user effectively has root-level privileges. This is different from "rootless" Docker ([docs](https://docs.docker.com/engine/security/rootless/), which does have security benefits. allow users to create and destroy containers without root access to the system.
