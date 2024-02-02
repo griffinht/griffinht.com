@@ -1,3 +1,5 @@
+https://www.reddit.com/r/GUIX/comments/13tudtn/getting_podman_working_with_rootless_containers/
+https://www.reddit.com/r/NixOS/comments/12r4knb/extreme_noob_question_on_getting_podman_to_work/
 why not coreos? debian?
 
 # Podman from scratch on a Guix system
