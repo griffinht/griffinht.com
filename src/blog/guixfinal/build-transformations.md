@@ -139,3 +139,8 @@ how can I do this in debian?
 # the gentoo way?
 
 these package transformations seem like they might be awfully similar to Gentoo's USE flags - are they? idk
+
+
+
+
+todo email futurile person telling them how i used configure flags with nginx
