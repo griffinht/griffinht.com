@@ -1,0 +1,38 @@
+docker image                                                                                                            
+guix container                                                                                                          
+vm                                                                                                                      
+                                                                                                                        
+this makes it fairly easy to write some integration tests if you wanted to - nginx example!!!! or maybe python simple se
+rvice type?!?                                                                                                           
+todo mention other tools for unit testing vm images??                                                                   
+                                                                                                                        
+publish the rocker image!!!! and vm image!!!                                                                            
+                                                                                                                        
+thanks to us declaring our operating system as guile code, we can trivially make the fields customizable                
+                                                                                                                        
+here we are making a dummy ssh key, which we can use to make sure we can log in                                         
+                                                                                                                        
+this is where a tooo like ansible would normally take over to set up various ssh keys and user accounts or maybe pressed
+ or cloud unit                                                                                                          
+                                                                                                                        
+the other (better) option is to simply generate the actual disk image and skip the install process                      
+                                                                                                                        
+now that we have our disk image, the next step is to copy it to the physical machine                                    
+                                                                                                                        
+the easiest way for me is to plug in the ssd via a usb data adapter and cp                                              
+                                                                                                                        
+neat trick: if the ssd has an existing operating system installed, we can boot to it with army -hda cool!               
+another way would be to grab any old “live cd”, copy it to a thumb drive, boot to the thumb drive, and use the live syst
+em to copy the image to the drive over the network                                                                      
+                                                                                                                        
+this trchnique also works great for installing any operating system on a cloud vpses, see here to see how i did it with 
+my racknerd vps                                                                                                         
+                                                                                                                        
+                                                                                                                        
+ssh guix guix update                                                                                                    
+but guix has a better way                                                                                               
+guix deploy                                                                                                             
+                                                                                                                        
+this also has limited support for cloud environments - digital ocean                                                    
+                                                                                                                        
+check out nix ops    

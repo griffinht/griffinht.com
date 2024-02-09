@@ -1,3 +1,5 @@
+https://dustinspecker.com/posts/ubuntu-vm-pulumi-libvirt/
+
 GUIX DELPOT GUIX DEPLOY
 
 # pipeline

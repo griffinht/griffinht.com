@@ -673,6 +673,7 @@ https://www.libvirt.org/manpages/libvirtd.html#when-run-as-non-root
 https://guix.gnu.org/blog/2020/gnu-shepherd-user-services/
 https://guix.gnu.org/manual/en/html_node/Shepherd-Services.html
 
+
 ## securirt 1
 how is this more secure than simply allowing root access?
 isn't this like creating an unprivileged docker user then exposing the system docker daemon? effectively providing root?
