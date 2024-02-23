@@ -126,6 +126,10 @@ $ guix shell --manifest=manifest.scm
 
 That's it!
 
+## updating the package
+
+Looks like our `nginx` package is running version v2.blah. I'd like to update to a more recent version - todo
+
 # the docker way
 
 this seems to be non trivial with docker - for example, this user was trying to add brotli

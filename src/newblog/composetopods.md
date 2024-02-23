@@ -104,6 +104,8 @@ publish
 
 Imperative with `podman pod create` todo link docs
 
+note that the pod must be listening on all interfaces (0.0.0.0), not just localhost
+
 `podman pod create --publish ... todo`
 
 Declarative as a Kubernetes Pod definition
@@ -126,9 +128,24 @@ podman pod create alpine wget system:8080
 <output>
 ```
 
-## container to other pod
+dont think this works lol
+
+actually it does! cat /etc/hosts shows host.containers.internal which works
+
+## container to other pod/pod to pod
 todo
 
+looks like all the pods are in the same podman network
+but there is no container discoverey, only static /etc/host entries for local containers in a pod
+
+this means we can manually find the ip of a container and access it from a different pod but we can't do automatic dns stuff
+
+so yeah idk how to do that yet lol
+
+can however use host.container.internal!
+pod -> host -> other pod
+
+# other
 
 
 show the graphs comparing pods vs regular!
@@ -148,6 +165,11 @@ authelia -> localhost:6893
 wowza!
 
 ## fine grained networking - no internet access
+## disabling internet access
+
+often times I run containers which do not require internet access. if they don't need to reach out to the internet, then I don't want them to be able to.
+
+
 
 # todo configmap for configuration??
 
@@ -166,6 +188,21 @@ HEALTHCHECK is not supported for OCI image format and will be ignored. Must use 
 
 `podman kube generate` doesn't only generate Kubernetes Pod definitions - it can also create [deployment](todo) and [daemonste](todo) configs.
 
+do i want to be able to deploy nginx alone or always with oauth2 proxy
+can i deploy containers alone within a pod?
+
+# development
+
+podman pod logs --follow podname
+todo --watch (only in recent podman versions)
+
+prevent broken configs from restarting endlessly
+
+```yaml
+spec:
+  restartPolicy: never
+```
+
 # conclusion
 
 I think I am going to stop using docker compose now thanks to `podman pod` and `podman kube play`. While the original issue I had with docker compose would have been trivial to fix, I am still glad I didn't fix it and instead tried to jumped ship. These newer tools feel much more modern and polished. This contrasts to the experience I had with `podman-compose` (link), which I found to be buggy and inactively maintained. I also like how I am one step closer to kubernetes without actually using any kubernetes - I think this is a big positive in terms of flexiblity of future deployments. I could deploy this stack on a full k8s cluster, or even a baby kind or k3s idk but this opens up all these options to me, where docker compose kept me entrapped within docker compose. This gets me closer to rolling deployments, high availability, blah blah blah
@@ -176,3 +213,8 @@ not to mention the networking is soo much better i think?
 
 and it makes it ridiculosly easy to deploy to a rootless podman host - check out my setup post on this
 but what if i want to deploy to docker still? meh idk if i can todo
+
+
+
+# recent dev
+https://github.com/containers/podman/issues/16955
