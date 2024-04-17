@@ -1,0 +1,8 @@
+(post
+ :title "Hello, World!"
+ :date (make-date* 2015 10 15)
+ :tags '("hello")
+
+ (h1 [Hello, World!])
+
+ (p [This is my very first Skribe document!]))

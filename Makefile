@@ -1,10 +1,10 @@
-default: docker
-.PHONY: build # otherwise Make will relate the build target to the build output directory and won't run the build target
+HAUNT=guix shell --manifest=manifest.scm -- haunt
 
 clean:
 	rm -r build
-docker:
-	docker build --tag griffinht/griffinht.com:latest .
 
 build:
-	inline-website.py
+	${HAUNT} build
+
+serve:
+	${HAUNT} serve
