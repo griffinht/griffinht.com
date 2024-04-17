@@ -1,0 +1,6 @@
+# webhook -hooks hook.yml -verbose
+- id: build
+  execute-command: echo
+  pass-arguments-to-command:
+    - source: header
+      name: X-Original-Path

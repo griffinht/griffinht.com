@@ -1,0 +1,8 @@
+# podman run --rm -it -v ./Caddyfile:/etc/caddy/Caddyfile:ro --net host caddy
+:9001 {
+    rewrite * /hooks/build
+    reverse_proxy /hooks/build http://localhost:9000 {
+        header_up X-Original-Path {path}
+        #uri add_query original_path={path}
+    }
+}

@@ -1,3 +1,10 @@
+---
+author: 'Griffin Tomaszewski'
+date: 'August 12, 2000'
+description: 'bruh moment'
+title: Webhook
+---
+
 adanh/webhook
     too limiting! i can't even pass binary files - only json or multipart form encoded :( and the config is annoying and bulky
     i want to run sh -c 'echo hello world'
