@@ -14,6 +14,9 @@ because pipelines aren't real and you don't need them!
 
 i created a general purpose job scheduler
 
+# healthceck
+vs monitoring vs logging
+
 ## git server
 - git push (only for me!)
     - can trigger jobs on push
@@ -40,10 +43,15 @@ i created a general purpose job scheduler
 - use cases
     - schedule a 
 
+either this
+# prom monitor job success or not?? uhhhh
+or that
+
 ## build server
 - can be triggered
     - manually
     - by the job system
+    https://man.sr.ht/builds.sr.ht/#integrations
 - secrets
     - can store secrets and provide them to running builds
     - probably secure?
