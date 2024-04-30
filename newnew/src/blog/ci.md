@@ -1,3 +1,7 @@
+---
+title: asdf
+---
+
 # terminaly
 server vs system
 
