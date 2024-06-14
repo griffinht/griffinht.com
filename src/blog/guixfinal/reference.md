@@ -1,3 +1,4 @@
+https://skip.house/blog/nix-in-practice/
 # minimal sized docker
 https://qsantos.fr/2023/09/25/tiny-docker-containers-with-rust/
 

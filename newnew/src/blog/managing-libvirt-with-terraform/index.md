@@ -1,0 +1,2 @@
+tofu init
+tofu plan
