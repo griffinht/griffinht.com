@@ -37,10 +37,11 @@ build() {
         return 0
     fi
     if [ -f "$input_dir/$file" ]; then
-        if [[ "$file" == *$templates_dir/* ]]; then
+        if [ "$WATCH" == true ] && [[ "$file" == *$templates_dir/* ]]; then
             echo template change, rebuilding...
+            # yes i hate this lol
             for subfile in "$input_dir/$(dirname "$file")/../"*.md; do
-                build "$subfile"
+                build "$(dirname "$(dirname "$file")")/$(basename "$subfile")"
             done
             return 0
         fi

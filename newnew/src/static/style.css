@@ -33,7 +33,7 @@ a:hover {
 /* a visited */
 
 body > header, body > footer {
-    background-image: url("static/background.webp");
+    background-image: url("background.webp");
     background-attachment: fixed;
     padding: 2em;
     display: flex;
@@ -61,4 +61,19 @@ body > * {
 
 body > * {
     cursor: initial;
+}
+
+#socials {
+    display: grid;
+    grid-template-columns: repeat(40, 1fr); /* Adjust the number of columns as needed */
+    grid-gap: 1em; /* Adjust the gap between grid items as needed */
+}
+
+#socials > a {
+    align-self: center
+}
+
+#socials > a > img {
+    width: 100%;
+    height: auto;
 }

@@ -1,7 +1,4 @@
-wcag
-https://github.com/w3c/wcag
-
-ogp
+open graph protocol
 https://ogp.me/
 
 
@@ -12,3 +9,10 @@ broken link checker
 
 # todo
 https://heerdebeer.org/Software/markdown/pandocomatic/
+
+
+# lint
+https://htmlhint-playground.netlify.app/
+https://html-validate.org/
+https://github.com/linthtml/linthtml
+https://github.com/w3c/wcag
