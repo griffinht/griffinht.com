@@ -19,3 +19,6 @@ buildd:
 serve:
 	echo http://localhost:8000
 	python3 -m http.server --directory build
+
+upload:
+	wrangler pages deploy build #--branch=master
