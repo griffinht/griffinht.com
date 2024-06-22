@@ -12,16 +12,17 @@ rss.xml: $(wildcard src/blog/*.md)
 
 BUILD=build
 
-$(BUILD): src build.sh
-	./build.sh build '$<' '$@'
+$(BUILD).%:
+	./build.sh '$*' src $(BUILD)
+
+$(BUILD): build.build src
 	touch '$@'
+
+watch: build.watch
 
 serve: $(BUILD)
 	@echo -e '\n\n\nlistening on http://localhost:8000'
 	python3 -m http.server --directory '$<'
-
-watch: $(BUILD)
-	./build.sh watch src '$<'
 
 upload: $(BUILD)
 	wrangler pages deploy \

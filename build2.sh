@@ -39,7 +39,11 @@ build() {
         return 0
     fi
 
-    echo "building file $file..."
+    if [ "$VERBOSE" == true ]; then
+        echo
+        echo "building file $file..."
+    fi
+
     if [ -f "$input_dir/$file" ]; then
         if [ "$WATCH" == true ] && [[ "$file" == *$templates_dir/* ]]; then
             echo template change, rebuilding...
@@ -57,9 +61,7 @@ build() {
         fi
     elif [ -d "$input_dir/$file" ]; then
         echo "$file (mkdir)"
-        set -x
         mkdir -p "$output_dir/$file"
-        set +x
         return 0
     else
         echo ERROR ERROR "$input_dir $file"
