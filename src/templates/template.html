@@ -4,17 +4,22 @@
         <title>hi</title>
         <meta charset="UTF-8"/>
         <link rel="stylesheet" href="static/style.css">
+        <style>
+body > header > * {
+    background-color: pink;
+}
+        </style>
     </head>
     <body>
-        <header>
+        <header style="display: flex; padding: 1em;">
             <h1><a href=".">griffinht.com</a></h1>
+
+            <nav style="display: flex; gap: 1em;">
+            {{#data.links}}
+                <div><a href="{{link}}">{{text}}</a></div>
+            {{/data.links}}
+            </nav>
         </header>
-        <nav>
-            <a href="about.html">about me</a>
-            <a href="blog/index.html">blog</a>
-            <a href="notes/index.html">notes</a>
-            <a href="https://git.griffinht.com">git</a>
-        </nav>
         <article>
         {{{file}}}
         </article>

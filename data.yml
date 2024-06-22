@@ -1,0 +1,11 @@
+hi: asdf
+hello: asdfasdf
+links:
+  - link: about.html
+    text: about me
+  - link: about.html
+    text: blog
+  - link: notes/index.html
+    text: notes
+  - link: https://git.griffinht.com
+    text: git

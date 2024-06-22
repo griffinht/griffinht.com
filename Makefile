@@ -20,17 +20,21 @@ $(BUILD): build.build src
 
 watch: build.watch
 
-serve: $(BUILD)
-	@echo -e '\n\n\nlistening on http://localhost:8000'
+serve.dumb: $(BUILD)
+	@echo -e '\n\n\n'
 	python3 -m http.server --directory '$<'
+
+serve: $(BUILD)
+	@echo -e '\n\n\n'
+	livereload '$<'
 
 upload: $(BUILD)
 	wrangler pages deploy \
-		'@<' #--branch=master
+		'$<' #--branch=master
 
 deploy: $(BUILD)
-	wrangle pages deploy \
-		'@<' \
-		--branch=
+	wrangler pages deploy \
+		'$<' \
+		--branch=dev
 clean:
 	rm -fr $(BUILD)
