@@ -13,7 +13,7 @@ rss.xml: $(wildcard src/blog/*.md)
 BUILD=build
 
 $(BUILD).%:
-	./build.sh '$*' src $(BUILD)
+	build.sh '$*' src $(BUILD)
 
 $(BUILD): build.build src
 	touch '$@'

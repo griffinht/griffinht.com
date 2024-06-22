@@ -10,7 +10,7 @@ build() {
     # find strip the $src from the output
     find "$src" -printf '%P\n' \
         | while read -r file; do
-        ./build2.sh "$file" "$src" "$@";
+        build2.sh "$file" "$src" "$@";
     done
 }
 
@@ -21,7 +21,7 @@ watch_() {
     src="${1?}"
 
     src_path="$(realpath "$src")"
-    ./build2.sh "${path#"$src_path"}" "$@"
+    build2.sh "${path#"$src_path"}" "$@"
 }
 
 watch() {
