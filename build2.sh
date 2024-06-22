@@ -18,30 +18,34 @@ copy() {
     cp "$1" "$2"
 }
 
-input_dir="src"
-output_dir="build"
 
 static_dir=static
 templates_dir=templates
 
 build() {
-    file="$1"
-    if [[ "$file" == *$static_dir ]]; then
+    file="${1?error: please specify a relative file path to build}"
+    shift
+    input_dir="${1?error: please specify an input directory}"
+    output_dir="${2?error: please specify an output directory}"
+
+    if [[ "$file" == *"$static_dir" ]]; then
         echo "$file ($static_dir)"
         if [ ! -L "$output_dir/$file" ]; then
-            ln -s "$(realpath $input_dir/"$file")" "$output_dir/$file"
+            ln -s "$(realpath "$input_dir/$file")" "$output_dir/$file"
         fi
         return 0
     fi
-    if [[ "$file" == *$static_dir* ]]; then
+    if [[ "$file" == *"$static_dir"* ]]; then
         return 0
     fi
+
+    echo "building file $file..."
     if [ -f "$input_dir/$file" ]; then
         if [ "$WATCH" == true ] && [[ "$file" == *$templates_dir/* ]]; then
             echo template change, rebuilding...
             # yes i hate this lol
             for subfile in "$input_dir/$(dirname "$file")/../"*.md; do
-                build "$(dirname "$(dirname "$file")")/$(basename "$subfile")"
+                build "$(dirname "$(dirname "$file")")/$(basename "$subfile")" "$@"
             done
             return 0
         fi
@@ -58,13 +62,9 @@ build() {
         set +x
         return 0
     else
-        echo ERROR ERROR "$file"
-        #return 1
+        echo ERROR ERROR "$input_dir $file"
+        return 1
     fi
 }
 
-base_dir="$1"
-changed="$2"
-#rm -r build
-mkdir -p build
-build "${changed#"$base_dir/"}"
+build "$@"

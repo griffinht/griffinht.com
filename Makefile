@@ -10,15 +10,26 @@ rss.xml: $(wildcard src/blog/*.md)
 		-s \
 		$^ > '$@'
 
-buildd:
-	rm -fr build
-	set -e && find src | while read -r file; do ./build2.sh $(PWD)/src "$(PWD)/$$file"; done
-	echo initial build complete
-	find src | WATCH=true entr ./build2.sh $(PWD)/src /_
+BUILD=build
 
-serve:
-	echo http://localhost:8000
-	python3 -m http.server --directory build
+$(BUILD): src build.sh
+	./build.sh build '$<' '$@'
+	touch '$@'
 
-upload:
-	wrangler pages deploy build #--branch=master
+serve: $(BUILD)
+	@echo -e '\n\n\nlistening on http://localhost:8000'
+	python3 -m http.server --directory '$<'
+
+watch: $(BUILD)
+	./build.sh watch src '$<'
+
+upload: $(BUILD)
+	wrangler pages deploy \
+		'@<' #--branch=master
+
+deploy: $(BUILD)
+	wrangle pages deploy \
+		'@<' \
+		--branch=
+clean:
+	rm -fr $(BUILD)
