@@ -11,18 +11,20 @@ markdown_to_html() {
 }
 
 html_to_page() {
-    if [ "$#" -gt 0 ]; then
-        data_file="${1?}"
-        data="$(yq -o json "$data_file")"
-    else
-        data='{}'
-    fi
-    jq --raw-input -n \
+    mustache "src/$templates_dir/template.html"
+}
+
+markdown_to_page() {
+    data="${1?}"
+
+    markdown_to_html \
+        | jq --raw-input --slurp \
         --argjson data "$data" \
-    '{
-        "file": input,
-        "data": $data
-    }' | mustache "src/$templates_dir/template.html"
+        '{
+            "file": .,
+            "data": $data
+        }' \
+        | html_to_page
 }
 #cat src/index.md | html_to_page src/data.yml
 
@@ -68,7 +70,8 @@ build() {
             echo "$data_file -> $output_file (template)"
             output="$output_dir/$output_file"
             if [ "$output_dir" == /dev/stdout ] || [ "$output_dir" == - ]; then output=/dev/stdout; fi
-            markdown_to_html < "$input_dir/$data_file" | html_to_page "$special_file" > "$output"
+            data="$(yq -o json "$special_file")"
+            markdown_to_page "$data" < "$input_dir/$data_file" > "$output"
             return "$?"
         fi
     elif [ -d "$input_dir/$data_file" ]; then
