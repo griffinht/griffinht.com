@@ -2,4 +2,5 @@
 ;; You can store it in a file that you may then pass to any 'guix' command
 ;; that accepts a '--manifest' (or '-m') option.
 
-(specifications->manifest (list "haunt"))
+(specifications->manifest
+  (list "jupyter" "pandoc"))

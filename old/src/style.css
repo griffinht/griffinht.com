@@ -1,0 +1,133 @@
+:root {
+    --accent-background: black;
+    --accent-lowlight: hsl(300, 100%, 25%);
+    --accent: hsl(300, 100%, 40%);
+    --accent-highlight: hsl(300, 100%, 75%);
+    --accent-foreground: white;
+        
+    --neutral-background: white;
+    --neutral-foreground: black;
+
+    --primary-background: black;
+    --primary: hsl(300, 100%, 50%);
+    --primary-foreground: white;
+    
+    --font: serif;
+    --font-title: sans-serif;
+}
+body {
+    margin: 0;
+    margin-bottom: 2em;
+
+    font-family: var(--font);
+    background-attachment: fixed;
+    background-image: url("background.webp");
+}
+
+
+a:link {
+    color: var(--accent)
+}
+a:visited {
+    color: var(--accent-lowlight)
+}
+
+code {
+    padding: 0.25em;
+    background: #eee;
+}
+
+pre {
+    padding: 1em;
+    background: #eee;
+    border-left: 2px solid var(--primary);
+    overflow-x: auto;
+}
+
+pre > code {
+    padding: unset;
+}
+
+h1 > a:link, h2 > a:link, h3 > a:link, h4 > a:link, h5 > a:link, h6 > a:link,
+h1 > a:visited, h2 > a:visited, h3 > a:visited, h4 > a:visited, h5 > a:visited, h6 > a:visited {
+    color: inherit;
+    text-decoration: none;
+}
+h1 > a:hover, h2 > a:hover, h3 > a:hover, h4 > a:hover, h5 > a:hover, h6 > a:hover {
+    text-decoration: underline;
+}
+
+
+.fragment > .fragmentAnchor {
+    color: initial;
+    visibility: hidden;
+    text-decoration: none;
+}
+.fragment:hover > .fragmentAnchor {
+    visibility: visible;
+}
+
+
+
+header, nav, footer {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    margin: 2em;
+    padding: 1em;
+    font-family: var(--font-title);
+}
+
+footer {
+    margin-top: auto;
+}
+nav {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: black;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+
+
+article {
+    background-color: var(--neutral-background);
+    max-width: 60em;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2em;
+}
+.spacer {
+    padding-left: 2em;
+    padding-right: 2em;
+}
+/* collapse on smaller devices */
+@media (max-width: 45em) {
+    .spacer {
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
+    article {
+        padding: 0.5em;
+    }
+}
+
+img {
+    width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+.markdown {
+    background-color: var(--neutral-background);
+    max-width: 60em;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2em;
+}
