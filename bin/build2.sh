@@ -17,7 +17,7 @@ html_to_page() {
     else
         data='{}'
     fi
-    yq -o json | jq -n \
+    jq --raw-input -n \
         --argjson data "$data" \
     '{
         "file": input,
