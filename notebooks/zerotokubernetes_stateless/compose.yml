@@ -1,0 +1,5 @@
+services:
+    searx:
+        image: searxng/searxng
+        ports:
+            - 8080:8080
