@@ -57,14 +57,6 @@ build() {
     fi
 
     if [ -f "$input_dir/$data_file" ]; then
-        if [ "$WATCH" == true ] && [[ "$data_file" == *$templates_dir/* ]]; then
-            echo template change, rebuilding...
-            # yes i hate this lol
-            for subfile in "$input_dir/$(dirname "$data_file")/../"*.md; do
-                build "$(dirname "$(dirname "$data_file")")/$(basename "$subfile")" "$@"
-            done
-            return 0
-        fi
         if [[ "$data_file" == *.md ]]; then
             output_file="${data_file%.md}.html"
             echo "$data_file -> $output_file (template)"

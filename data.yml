@@ -3,9 +3,11 @@ hello: asdfasdf
 links:
   - link: about.html
     text: about me
-  - link: about.html
+  - link: uses/
+    text: uses
+  - link: blog/
     text: blog
-  - link: notes/index.html
+  - link: notes/
     text: notes
   - link: https://git.griffinht.com
     text: git

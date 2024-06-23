@@ -18,7 +18,7 @@ $(BUILD).%:
 $(BUILD): build.build src
 	touch '$@'
 
-watch: build.watch
+watch: build.watch $(BUILD)
 
 serve.dumb: $(BUILD)
 	@echo -e '\n\n\n'

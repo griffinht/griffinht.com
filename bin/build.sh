@@ -21,7 +21,8 @@ watch_() {
     src="${1?}"
 
     src_path="$(realpath "$src")"
-    build2.sh "${path#"$src_path"}" "$@"
+    path="${path#"$src_path"}" 
+    build2.sh "$path" "$@"
 }
 
 watch() {

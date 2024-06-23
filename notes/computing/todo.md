@@ -1,0 +1,2 @@
+- get docker compose up
+- deploy apps and serverless stuff
