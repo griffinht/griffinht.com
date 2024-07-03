@@ -1,0 +1,1 @@
+web check https://news.ycombinator.com/item?id=40757951

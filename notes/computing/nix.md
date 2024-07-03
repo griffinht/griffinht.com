@@ -1,0 +1,1 @@
+https://www.youtube.com/watch?v=WJZgzwB3ziE nix for startups

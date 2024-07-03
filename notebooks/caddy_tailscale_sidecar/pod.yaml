@@ -15,29 +15,11 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-    name: iperf3
-spec:
-    containers:
-      - name: iperf3
-        image: networkstatic/iperf3
-        args:
-          - --server
----
-apiVersion: v1
-kind: Pod
-metadata:
     name: caddy
 spec:
     containers:
       - name: caddy
         image: caddy/caddy
----
-apiVersion: v1
-kind: Pod
-metadata:
-    name: tailscale
-spec:
-    containers:
       - name: tailscale
         image: ghcr.io/tailscale/tailscale:latest
         env:

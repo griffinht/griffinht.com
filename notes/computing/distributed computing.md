@@ -1,0 +1,2 @@
+not [[centralized computing]] 
+[[kubernetes]]

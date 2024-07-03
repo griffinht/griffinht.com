@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>notebook</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div class="cell code" data-execution_count="13"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>%cd tailscale_all</code></pre>
+<div class="output stream stdout">
+<pre><code>/home/griffin/git/griffinht.com/notebooks/tailscale_all
+</code></pre>
+</div>
+</div>
+<div class="cell code"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>Prereqs:
+You will need a Kubernetes
+I tried this using Kind and it did not work!
+Minikube worked
+Haven&#39;t tried with k3d yet.</code></pre>
+</div>
+<div class="cell code" data-execution_count="31"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>%%writefile pod.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tailscale-state
+spec:
+  accessModes:
+    # read/write from a single node
+    # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
+    - ReadWriteOnce
+  # todo idk where the docs are for this - i just guessed
+  resources:
+    requests:
+      storage: 10Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+    name: caddy
+spec:
+    containers:
+      - name: iperf3
+        image: networkstatic/iperf3
+        args:
+          - --server
+      - name: caddy
+        image: caddy/caddy
+      - name: tailscale
+        image: ghcr.io/tailscale/tailscale:latest
+        env:
+          # disable Kubernetes secrets and use OAuth login instead
+          - name: TS_KUBE_SECRET
+            value: &quot;&quot;
+          - name: TS_STATE_DIR
+            value: &quot;/var/lib/tailscale&quot;
+        volumeMounts:
+          - name: tailscale-state
+            mountPath: &quot;/var/lib/tailscale&quot;
+    volumes:
+      - name: tailscale-state
+        persistentVolumeClaim:
+          claimName: tailscale-state
+</code></pre>
+<div class="output stream stdout">
+<pre><code>Overwriting pod.yaml
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="34"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>%%sh
+kubectl apply -f pod.yaml</code></pre>
+<div class="output stream stdout">
+<pre><code>persistentvolumeclaim/tailscale-state created
+pod/caddy created
+</code></pre>
+</div>
+</div>
+<div class="cell markdown"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<p>Tip: If your pod is taking a while to come up, check out
+<code>kubectl describe</code></p>
+</div>
+<div class="cell code" data-execution_count="24"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>%%sh
+kubectl describe pod caddy</code></pre>
+<div class="output stream stdout">
+<pre><code>Name:             caddy
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             gk3-my-cluster-pool-3-31f1207c-nfrt/10.142.0.7
+Start Time:       Sun, 23 Jun 2024 18:25:21 -0400
+Labels:           &lt;none&gt;
+Annotations:      autopilot.gke.io/resource-adjustment:
+                    {&quot;input&quot;:{&quot;containers&quot;:[{&quot;name&quot;:&quot;iperf3&quot;},{&quot;name&quot;:&quot;caddy&quot;},{&quot;name&quot;:&quot;tailscale&quot;}]},&quot;output&quot;:{&quot;containers&quot;:[{&quot;limits&quot;:{&quot;cpu&quot;:&quot;500m&quot;,&quot;ephemer...
+                  autopilot.gke.io/warden-version: 2.9.37
+Status:           Running
+SeccompProfile:   RuntimeDefault
+IP:               10.15.0.133
+IPs:
+  IP:  10.15.0.133
+Containers:
+  iperf3:
+    Container ID:   containerd://b2bc732be4b3a938eea50dae2bb9e5dbdf8e14099c6fcf5d9a8c94dcaa501dd6
+    Image:          networkstatic/iperf3
+    Image ID:       docker.io/networkstatic/iperf3@sha256:148ec0389185caa366802a996ccded1bcde221a257f3eb44f291a7ac765f4ed4
+    Port:           &lt;none&gt;
+    Host Port:      &lt;none&gt;
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Sun, 23 Jun 2024 18:26:34 -0400
+      Finished:     Sun, 23 Jun 2024 18:26:34 -0400
+    Ready:          False
+    Restart Count:  3
+    Limits:
+      cpu:                500m
+      ephemeral-storage:  1Gi
+      memory:             2Gi
+    Requests:
+      cpu:                500m
+      ephemeral-storage:  1Gi
+      memory:             2Gi
+    Environment:          &lt;none&gt;
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-hmdtl (ro)
+  caddy:
+    Container ID:   containerd://5f57020a636e26b015f2254443e358615f84b59b2cd4cb96b68dd149306ac94a
+    Image:          caddy/caddy
+    Image ID:       docker.io/caddy/caddy@sha256:93bce93e51020d5d1c8ca4ab6b0b73af0045f0e97c272784497e02b4ad30ad20
+    Port:           &lt;none&gt;
+    Host Port:      &lt;none&gt;
+    State:          Running
+      Started:      Sun, 23 Jun 2024 18:25:43 -0400
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:                500m
+      ephemeral-storage:  1Gi
+      memory:             2Gi
+    Requests:
+      cpu:                500m
+      ephemeral-storage:  1Gi
+      memory:             2Gi
+    Environment:          &lt;none&gt;
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-hmdtl (ro)
+  tailscale:
+    Container ID:   containerd://e066c4616da630a2d3051c757ad722d2b7257c4d7264e13e7a94c771093994c8
+    Image:          ghcr.io/tailscale/tailscale:latest
+    Image ID:       ghcr.io/tailscale/tailscale@sha256:a0d1a9ed2abfacf905c0e3423aea00181064162e548f875f422a03924b9cc5c4
+    Port:           &lt;none&gt;
+    Host Port:      &lt;none&gt;
+    State:          Running
+      Started:      Sun, 23 Jun 2024 18:25:45 -0400
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:                500m
+      ephemeral-storage:  1Gi
+      memory:             2Gi
+    Requests:
+      cpu:                500m
+      ephemeral-storage:  1Gi
+      memory:             2Gi
+    Environment:
+      TS_KUBE_SECRET:  
+      TS_STATE_DIR:    /var/lib/tailscale
+    Mounts:
+      /var/lib/tailscale from tailscale-state (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-hmdtl (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  tailscale-state:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  tailscale-state
+    ReadOnly:   false
+  kube-api-access-hmdtl:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       &lt;nil&gt;
+    DownwardAPI:             true
+QoS Class:                   Guaranteed
+Node-Selectors:              &lt;none&gt;
+Tolerations:                 kubernetes.io/arch=amd64:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason                  Age                From                                   Message
+  ----     ------                  ----               ----                                   -------
+  Warning  FailedScheduling        2m34s              gke.io/optimize-utilization-scheduler  0/2 nodes are available: 2 Insufficient cpu, 2 Insufficient memory. preemption: 0/2 nodes are available: 2 No preemption victims found for incoming pod.
+  Normal   TriggeredScaleUp        2m29s              cluster-autoscaler                     pod triggered scale-up: [{https://www.googleapis.com/compute/v1/projects/griffinht-cloudlab/zones/us-east1-d/instanceGroups/gk3-my-cluster-pool-3-31f1207c-grp 0-&gt;1 (max: 1000)}]
+  Normal   Scheduled               85s                gke.io/optimize-utilization-scheduler  Successfully assigned default/caddy to gk3-my-cluster-pool-3-31f1207c-nfrt
+  Normal   SuccessfulAttachVolume  80s                attachdetach-controller                AttachVolume.Attach succeeded for volume &quot;pvc-9e79f40c-c724-473b-afa3-87d60242de69&quot;
+  Normal   Pulling                 69s                kubelet                                Pulling image &quot;caddy/caddy&quot;
+  Normal   Pulled                  69s                kubelet                                Successfully pulled image &quot;networkstatic/iperf3&quot; in 7.322s (7.322s including waiting)
+  Normal   Pulling                 63s                kubelet                                Pulling image &quot;ghcr.io/tailscale/tailscale:latest&quot;
+  Normal   Pulled                  63s                kubelet                                Successfully pulled image &quot;caddy/caddy&quot; in 5.456s (5.456s including waiting)
+  Normal   Created                 63s                kubelet                                Created container caddy
+  Normal   Started                 63s                kubelet                                Started container caddy
+  Normal   Pulled                  61s                kubelet                                Successfully pulled image &quot;ghcr.io/tailscale/tailscale:latest&quot; in 1.87s (1.87s including waiting)
+  Normal   Created                 61s                kubelet                                Created container tailscale
+  Normal   Started                 61s                kubelet                                Started container tailscale
+  Normal   Pulled                  60s                kubelet                                Successfully pulled image &quot;networkstatic/iperf3&quot; in 413ms (413ms including waiting)
+  Normal   Created                 42s (x3 over 69s)  kubelet                                Created container iperf3
+  Normal   Pulled                  42s                kubelet                                Successfully pulled image &quot;networkstatic/iperf3&quot; in 442ms (442ms including waiting)
+  Normal   Started                 41s (x3 over 69s)  kubelet                                Started container iperf3
+  Warning  BackOff                 28s (x4 over 58s)  kubelet                                Back-off restarting failed container iperf3 in pod caddy_default(55140569-cf19-4f6f-9b8a-b751d25a1a4c)
+  Normal   Pulling                 13s (x4 over 76s)  kubelet                                Pulling image &quot;networkstatic/iperf3&quot;
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="28"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>%%sh
+iperf3 -c caddy</code></pre>
+<div class="output stream stdout">
+<pre><code>Connecting to host caddy, port 5201
+[  5] local 100.99.123.66 port 39614 connected to 100.123.205.111 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  11.8 MBytes  98.5 Mbits/sec  1608    186 KBytes       
+[  5]   1.00-2.00   sec  8.12 MBytes  68.2 Mbits/sec    0    211 KBytes       
+[  5]   2.00-3.00   sec  8.25 MBytes  69.2 Mbits/sec    0    239 KBytes       
+[  5]   3.00-4.00   sec  9.62 MBytes  80.7 Mbits/sec    5    199 KBytes       
+[  5]   4.00-5.00   sec  6.88 MBytes  57.7 Mbits/sec   11    159 KBytes       
+[  5]   5.00-6.00   sec  8.25 MBytes  69.2 Mbits/sec    0    187 KBytes       
+[  5]   6.00-7.00   sec  8.12 MBytes  68.2 Mbits/sec    0    216 KBytes       
+[  5]   7.00-8.00   sec  9.62 MBytes  80.7 Mbits/sec   25    174 KBytes       
+[  5]   8.00-9.00   sec  8.12 MBytes  68.2 Mbits/sec    0    204 KBytes       
+[  5]   9.00-10.00  sec  8.25 MBytes  69.2 Mbits/sec    0    227 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-10.00  sec  87.0 MBytes  73.0 Mbits/sec  1649             sender
+[  5]   0.00-10.03  sec  84.4 MBytes  70.6 Mbits/sec                  receiver
+
+iperf Done.
+</code></pre>
+</div>
+</div>
+<div class="cell markdown"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<p>It works! We added <code>iperf3</code> to our pod, and connected to
+it via Tailscale.</p>
+<p>I want to separate the two.</p>
+</div>
+<div class="cell code" data-execution_count="10"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>%%writefile pod.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tailscale-state
+spec:
+  accessModes:
+    # read/write from a single node
+    # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
+    - ReadWriteOnce
+  # todo idk where the docs are for this - i just guessed
+  resources:
+    requests:
+      storage: 10Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+    name: iperf3
+spec:
+    containers:
+      - name: iperf3
+        image: networkstatic/iperf3
+        args:
+          - --server
+---
+apiVersion: v1
+kind: Pod
+metadata:
+    name: caddy
+spec:
+    containers:
+      - name: caddy
+        image: caddy/caddy
+---
+apiVersion: v1
+kind: Pod
+metadata:
+    name: tailscale
+spec:
+    containers:
+      - name: tailscale
+        image: ghcr.io/tailscale/tailscale:latest
+        env:
+          # disable Kubernetes secrets and use OAuth login instead
+          - name: TS_KUBE_SECRET
+            value: &quot;&quot;
+          - name: TS_STATE_DIR
+            value: &quot;/var/lib/tailscale&quot;
+        volumeMounts:
+          - name: tailscale-state
+            mountPath: &quot;/var/lib/tailscale&quot;
+    volumes:
+      - name: tailscale-state
+        persistentVolumeClaim:
+          claimName: tailscale-state
+</code></pre>
+<div class="output stream stdout">
+<pre><code>Overwriting pod.yaml
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="11"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! kubectl apply -f pod.yaml</code></pre>
+<div class="output stream stdout">
+<pre><code>persistentvolumeclaim/tailscale-state unchanged
+pod/iperf3 unchanged
+pod/caddy unchanged
+pod/tailscale configured
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="8"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! tailscale status | grep tailscale</code></pre>
+<div class="output stream stdout">
+<pre><code>100.113.140.69  tailscale            griffinht@   linux   -
+</code></pre>
+</div>
+</div>
+<div class="cell markdown"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<p>Great! Now Tailscale shows up in its own pod as the "tailscale"
+hostname. We could also change the hostname if we wanted to, but I'll
+leave it like this for now.</p>
+</div>
+<div class="cell code" data-execution_count="9"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! curl tailscale:80</code></pre>
+<div class="output stream stdout">
+<pre><code>curl: (7) Failed to connect to tailscale port 80 after 95 ms: Couldn&#39;t connect to server
+</code></pre>
+</div>
+</div>
+<div class="cell markdown"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<p>As we saw in the Podman pod lab todo. Caddy and Iperf3 are no longer
+in the same pod as Tailscale, and can't be reached via localhost. Let's
+try to reach Caddy from Tailscale, like we would in Docker Compose. todo
+docker compose lab</p>
+</div>
+<div class="cell code" data-execution_count="27"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! kubectl exec tailscale -- wget caddy:80</code></pre>
+<div class="output stream stdout">
+<pre><code>wget: bad address &#39;caddy:80&#39;
+command terminated with exit code 1
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="29"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! kubectl get pods -o wide</code></pre>
+<div class="output stream stdout">
+<pre><code>NAME        READY   STATUS    RESTARTS   AGE   IP            NODE                 NOMINATED NODE   READINESS GATES
+caddy       1/1     Running   0          13h   10.244.0.11   kind-control-plane   &lt;none&gt;           &lt;none&gt;
+iperf3      1/1     Running   0          13h   10.244.0.10   kind-control-plane   &lt;none&gt;           &lt;none&gt;
+tailscale   1/1     Running   0          27m   10.244.0.14   kind-control-plane   &lt;none&gt;           &lt;none&gt;
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="32"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! kubectl exec tailscale -- wget 10.244.0.11:80</code></pre>
+<div class="output stream stdout">
+<pre><code>Connecting to 10.244.0.11:80 (10.244.0.11:80)
+saving to &#39;index.html&#39;
+index.html           100% |********************************| 12256  0:00:00 ETA
+&#39;index.html&#39; saved
+</code></pre>
+</div>
+</div>
+<div class="cell markdown"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<p>Found it! Caddy is still accessible from the Tailscale pod, but
+doesn't seem to have any DNS name it would if we were in Docker land.
+todo link to docker lab?</p>
+<p>Isolation? What if I wanted to isolate my pods? todo <a
+href="https://kubernetes.io/docs/concepts/services-networking/network-policies/"
+class="uri">https://kubernetes.io/docs/concepts/services-networking/network-policies/</a></p>
+<h1 id="introducing-services">Introducing Services</h1>
+</div>
+<div class="cell markdown">
+<p>todo tailscale cast</p>
+</div>
+<div class="cell code" data-execution_count="50"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>%%writefile pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+    name: iperf3
+    labels:
+      app: iperf3
+spec:
+    containers:
+      - name: iperf3
+        image: networkstatic/iperf3
+        args:
+          - --server
+---
+apiVersion: v1
+kind: Pod
+metadata:
+    name: caddy
+    labels:
+      app: caddy
+spec:
+    containers:
+      - name: caddy
+        image: caddy/caddy
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: caddy
+spec:
+    selector:
+        app: caddy
+    ports:
+      - protocol: TCP
+        port: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: iperf3
+spec:
+    selector:
+        app: iperf3
+    ports:
+      - protocol: TCP
+        port: 5201
+        # todo does iperf also need UDP?
+---</code></pre>
+<div class="output stream stdout">
+<pre><code>Overwriting pod.yaml
+</code></pre>
+</div>
+</div>
+<div class="cell markdown"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<p>I just added the labels <code>app: caddy</code> and
+<code>app: iperf3</code> to the respective pods. In the Service, I am
+using those labels to target my apps.</p>
+<p>Think this looks complex? Think again! Check out my lab on
+container-container networking in Docker Compose. I haven't created it
+yet but I want to! This <a
+href="https://kubernetes.io/docs/concepts/services-networking/service/">Service</a>
+definition may seem complex, but so is todo.</p>
+<p>Think of a service as an exposed port in Docker. The ser actually not
+really</p>
+<p>This medium article on <a
+href="https://medium.com/@extio/mastering-kubernetes-pod-to-pod-communication-a-comprehensive-guide-46832b30556b">Mastering
+Kubernetes Pod-to-Pod Communication</a> was also great.</p>
+</div>
+<div class="cell code" data-execution_count="51"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! kubectl apply -f pod.yaml</code></pre>
+<div class="output stream stdout">
+<pre><code>pod/iperf3 unchanged
+pod/caddy unchanged
+service/caddy created
+service/iperf3 created
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="44"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! kubectl exec tailscale -- wget caddy-service:80</code></pre>
+<div class="output stream stdout">
+<pre><code>Connecting to caddy-service:80 (10.96.43.142:80)
+saving to &#39;index.html&#39;
+index.html           100% |********************************| 12256  0:00:00 ETA
+&#39;index.html&#39; saved
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="45"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! curl tailscale:80</code></pre>
+<div class="output stream stdout">
+<pre><code>curl: (7) Failed to connect to tailscale port 80 after 488 ms: Couldn&#39;t connect to server
+</code></pre>
+</div>
+</div>
+<div class="cell markdown"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<p>It works! But as expected, we still can't reach Caddy by connecting
+directly to Tailscale.</p>
+<p>Just like in the Docker lab, there are two solutions: The first is to
+configure Tailscale act as a reverse proxy to Caddy. Since we can reach
+Tailscale and Tailscale can reach Caddy, we can have Tailscale reverse
+proxy our HTTP requests to Caddy for us.</p>
+<p>However, this would only work for one service at a time, and at that
+point we might as well leave Tailscale in the Caddy pod. I want to be
+able to access iperf3 and Caddy. I could run two Tailscales in each pod,
+but I'd rather have one Tailscale instance act as a VPN for me.</p>
+</div>
+<div class="cell code" data-execution_count="54"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! kubectl get services caddy iperf3</code></pre>
+<div class="output stream stdout">
+<pre><code>NAME     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+caddy    ClusterIP   10.96.103.205   &lt;none&gt;        80/TCP     35s
+iperf3   ClusterIP   10.96.141.159   &lt;none&gt;        5201/TCP   34s
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="125"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>%%writefile pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+    name: tailscale
+spec:
+    containers:
+      - name: tailscale
+        image: ghcr.io/tailscale/tailscale:latest
+        env:
+          # disable Kubernetes secrets and use OAuth login instead
+          - name: TS_KUBE_SECRET
+            value: &quot;&quot;
+          - name: TS_USERSPACE
+            value: &quot;false&quot;
+          - name: TS_DEST_IP
+            value: &quot;10.96.0.0/16&quot;
+        volumeMounts:
+          - name: tun-device
+            mountPath: /dev/net/tun
+        securityContext:
+          capabilities:
+            add:
+              - NET_ADMIN
+    volumes:
+      - name: tun-device
+        hostPath:
+          path: /dev/net/tun</code></pre>
+<div class="output stream stdout">
+<pre><code>Overwriting pod.yaml
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="126"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! kubectl apply --force -f pod.yaml</code></pre>
+<div class="output stream stdout">
+<pre><code>pod/tailscale configured
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="124"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! kubectl logs tailscale</code></pre>
+<div class="output stream stdout">
+<pre><code>boot: 2024/06/24 13:31:56 Failed to enable IP forwarding: invalid cluster destination IP: ParseAddr(&quot;10.96.0.0/16&quot;): unexpected character (at &quot;/16&quot;)
+boot: 2024/06/24 13:31:56 To run tailscale as a proxy or router container, IP forwarding must be enabled.
+boot: 2024/06/24 13:31:56 You can either set the sysctls as a privileged initContainer, or run the tailscale container with privileged=true.
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="107"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! nix profile install nixpkgs#k3d</code></pre>
+<div class="output stream stdout">
+<pre><code>1 copied (18.0 MiB), 5.0 MiB DL]/18.0 MiB), 5.0 MiB DL] fetching k3d-5.6.0 from ht</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="106"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! minikube start</code></pre>
+<div class="output stream stdout">
+<pre><code>😄  minikube v1.33.1 on Debian 12.5
+    ▪ MINIKUBE_WANTUPDATENOTIFICATION=false
+✨  Automatically selected the docker driver
+📌  Using rootless Docker driver
+👍  Starting &quot;minikube&quot; primary control-plane node in &quot;minikube&quot; cluster
+🚜  Pulling base image v0.0.44 ...
+💾  Downloading Kubernetes v1.30.0 preload ...
+    &gt; preloaded-images-k8s-v18-v1...:  342.90 MiB / 342.90 MiB  100.00% 19.89 M
+    &gt; gcr.io/k8s-minikube/kicbase...:  481.58 MiB / 481.58 MiB  100.00% 16.20 M
+🔥  Creating docker container (CPUs=2, Memory=3400MB) ...ponents...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use &quot;minikube&quot; cluster and &quot;default&quot; namespace by default
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="111"
+data-vscode="{&quot;languageId&quot;:&quot;plaintext&quot;}">
+<pre
+class="/gnu/store/1w5v338qk5m8khcazwclprs3znqp6f7f-python-3.10.7/bin/python3"><code>! kubectl config current-context</code></pre>
+<div class="output stream stdout">
+<pre><code>minikube
+</code></pre>
+</div>
+</div>
+</body>
+</html>
