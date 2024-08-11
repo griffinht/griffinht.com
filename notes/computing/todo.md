@@ -1,5 +1,9 @@
 TMRW
 
+
+# postgres
+https://onlineornot.com/self-hosting-vs-managed-services-deciding-how-host-your-database
+
 # overall
 k3s
 docker compose
