@@ -4,7 +4,24 @@ layout: page.njk
 description: this is griffin's cool website
 ---
 
-hello there
+welcome to griffin's website
+
+[about](./about)
+
+[now](./now)
+
+[music](./music)
+
+[projects](./music)
+<!-- [software](./usee) -->
+
+[uses](./uses)
+
+[homelab](./homelab)
+
+[colophon](./colophon)
+
+
 
 
 
