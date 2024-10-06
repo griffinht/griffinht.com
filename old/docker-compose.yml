@@ -1,7 +1,0 @@
-services:
-    build:
-        image: griffinht/inline-website
-        volumes:
-            - ./src:/src
-            - ./build:/build
-        command: --output build src

@@ -3,17 +3,97 @@ what do I use?
 
 # hardware
 
-💻 macca (2022 Macbook Air M2)
+## in my pocket
+
+📱 shattered-phone (2018 iPhone XR) 🍎
+
+(laggy, shattered back glass panel)
+
+previous iterations
+
+2016 iPhone 7
+(jailbroken, cracked front screen)
+
+2010 iPhone 4
+
+next iteration?
+
+apple intelligence seems cool
+
+not interested in an android, since iPhone has been keeping me happy
+
+linux phones will probably never happen, and will probably always be several years worse than their iPhone and Android counterparts
+
+## on my wrist
+
+## around my ears
+
+## on the go
+
+💻 macca (2022 Macbook Air M2) 🍎
+
+(brand spankin' new 😇)
+
+previous iterations
+
+(broken keyboard 😡)
+
+2010 HP Envy 14 Beats Edition
+
+(going strong, now part of the homelab)
+
+## at my desk
+
+🖥️ cool-desktop (2018 Ryzen 2700, 2017 GTX 1070Ti)
+
+previos iterations
+
+hot-desktop
+(now part of the homelab)
+
+<iframe src="https://gamer2810.github.io/steam-miniprofile/?accountId=76561198137199100"></iframe>
+
+[Steam](https://steamcommunity.com/id/griffinht/) [Minecraft](https://namemc.com/profile/griffinht.1)
+
+## developing
+
+I live in the terminal
 
 - delightful
 
-🖥️ cool-desktop (Ryzen 2700, GTX 1070ti)
 
 - powerful
 
-- 🐧 linux + declarative package manager (❄️  nix) + tiling window manager (🌴 sway)
+- 🐧 linux + declarative package manager (❄️  nix) + (🐏 guix) + tiling window manager (🌴 sway)
+
+- 🐧 windows 11 + declarative package manager (❄️  nix) + tiling window manager (🌴 sway)
+
+# 
+
+# in the kitchen
+
+Instant Pot
+
+Digital Thermometer Gun
+
+# in the living room
+
+speakers
+
+# at my workbench
+
+arduino
+led
+
+
+# software
+
 
 # services
+
+## in the cloud
+
+## on my hardware
 
 
 

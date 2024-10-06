@@ -4,23 +4,29 @@ layout: page.njk
 description: this is griffin's cool website
 ---
 
-welcome to griffin's website
+Hi! My name is Griffin Tomaszewski.
+
+I'm an undergraduate student at North Carolina State University studying Computer Science.
+
+Check out what I'm doing right now
+
+Hang out in my [Discord]()
+
+Look at what music I listen on Spotify
+
+
+
+check out my [digital garden](https://garden.griffinht.com)
+
+
+
+[projects](./music)
 
 [about](./about)
 
 [now](./now)
 
-[music](./music)
-
-[projects](./music)
-<!-- [software](./usee) -->
-
-[uses](./uses)
-
-[homelab](./homelab)
-
 [colophon](./colophon)
-
 
 
 
@@ -63,3 +69,8 @@ https://github-contributions.vercel.app/
 https://indieweb.org/wiki
 
 welcome
+
+
+
+look at this cool website lol
+https://dropofahat.zone

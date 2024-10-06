@@ -33,3 +33,8 @@ I have had other domains and websites before:
 - stzups.net
     - old personal brand
 
+
+# todo
+
+use excalidraw font
+pick a funny background color?
