@@ -1,3 +1,0 @@
-[submodule "pandoc-rss"]
-	path = pandoc-rss
-	url = https://github.com/chambln/pandoc-rss.git
