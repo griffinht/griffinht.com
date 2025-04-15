@@ -1,1 +1,0 @@
-https://martinfowler.com/tags/continuous%20delivery.html

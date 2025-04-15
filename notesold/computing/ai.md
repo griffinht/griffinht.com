@@ -1,1 +1,0 @@
-https://thenewstack.io/goodbye-manual-prompting-hello-programming-with-dspy/

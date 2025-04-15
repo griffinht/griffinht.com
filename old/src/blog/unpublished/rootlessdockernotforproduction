@@ -1,1 +1,0 @@
-rootless docker limits network bandwidth, is a pain to install, and provies marginal security benefits (when is there gonna be a root escape)
